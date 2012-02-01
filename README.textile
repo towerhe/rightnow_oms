@@ -1,0 +1,3 @@
+= RightnowOms
+
+Copyright 2011-2012 Beijing Menglifang Network Technology and Science Co.,Ltd. All rights reserved.
