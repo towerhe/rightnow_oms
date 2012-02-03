@@ -1,7 +1,6 @@
 class CreateRightnowOmsCarts < ActiveRecord::Migration
   def change
     create_table :rightnow_oms_carts do |t|
-      t.string :session_id
       t.string :state
       t.belongs_to :shopper, polymorphic: true
 

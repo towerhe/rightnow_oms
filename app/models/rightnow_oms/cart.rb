@@ -3,12 +3,16 @@ module RightnowOms
     acts_as_api
 
     belongs_to :shopper
+    has_many :cart_items
 
     api_accessible :default do |t|
-      t.add :session_id
       t.add :state
+      t.add :total
+      t.add :cart_items, template: :default
     end
 
-    validates :session_id, presence: true
+    def total
+      cart_items.map.sum(&:total_price) || 0
+    end
   end
 end
