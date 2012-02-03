@@ -14,5 +14,15 @@ module RightnowOms
     def total
       cart_items.map.sum(&:total_price) || 0
     end
+
+    def add_item(cartable, quantity = 1)
+      existing_item = cart_items.find_by_cartable(cartable)
+
+      if existing_item
+        existing_item.update_attributes(quantity: existing_item.quantity + quantity)
+      else
+        cart_items.create!(cartable: cartable, name: cartable.name, price: cartable.price, quantity: quantity)
+      end
+    end
   end
 end

@@ -4,20 +4,63 @@ describe RightnowOms::Cart do
   it { should belong_to :shopper }
   it { should have_many :cart_items }
 
+  subject { FactoryGirl.create(:cart) }
+
   describe '#total' do
     context 'with no items' do
-      subject { RightnowOms::Cart.new }
+      subject { FactoryGirl.build(:cart) }
 
       its(:total) { should == 0 }
     end
 
     context 'with items' do
-      let(:product) { Product.create(name: 'for_test', price: 10.55) }
-      subject { RightnowOms::Cart.create }
+      before { FactoryGirl.create(:cart_item, cart: subject) }
 
-      before { subject.cart_items.create(cartable: product, name: product.name, price: product.price, quantity: 1) }
+      let(:product) { FactoryGirl.build(:product) }
 
-      its(:total) { should == 10.55 }
+      its(:total) { should == product.price }
+    end
+  end
+
+  describe "#add_item" do
+    let(:product) { FactoryGirl.create(:product) }
+
+    context 'when product does not exist' do
+      before { subject.add_item(product) }
+
+      its(:total) { should == product.price }
+      its(:cart_items) { should have(1).item }
+
+      specify { subject.cart_items.first.cartable.should == product }
+      specify { subject.cart_items.first.name.should == product.name }
+      specify { subject.cart_items.first.price.should == product.price }
+      specify { subject.cart_items.first.quantity.should == 1 }
+      specify { subject.cart_items.first.total_price.should == product.price * 1 }
+    end
+
+    context 'when product exists' do
+      before { 2.times { subject.add_item(product) } }
+
+      its(:total) { should == product.price * 2 }
+      its(:cart_items) { should have(1).item }
+
+      specify { subject.cart_items.first.cartable.should == product }
+      specify { subject.cart_items.first.name.should == product.name }
+      specify { subject.cart_items.first.price.should == product.price }
+      specify { subject.cart_items.first.quantity.should == 2 }
+      specify { subject.cart_items.first.total_price.should == product.price * 2 }
+    end
+
+    context 'when adding two different products' do
+      let(:another_product) { FactoryGirl.create(:product, name: 'another product for test', price: 10) }
+
+      before do
+        subject.add_item(product)
+        subject.add_item(another_product)
+      end
+
+      its(:total) { should == product.price + another_product.price }
+      its(:cart_items) { should have(2).items }
     end
   end
 end
