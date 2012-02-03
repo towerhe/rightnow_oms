@@ -23,11 +23,11 @@ describe "Carts" do
       end
 
       context "when a cart with items exists" do
-        let(:product) { Product.create(name: 'for_test', price: 10.55) }
-        let(:cart) { RightnowOms::Cart.create }
+        let(:product) { FactoryGirl.build(:product) }
+        let(:cart) { FactoryGirl.create(:cart) }
 
         before do
-          cart.cart_items.create!(cartable: product, name: product.name, price: product.price, quantity: 1)
+          FactoryGirl.create(:cart_item, cart: cart)
           page.set_rack_session(cart_id: cart.id)
 
           page.visit '/rightnow_oms/cart.json'
