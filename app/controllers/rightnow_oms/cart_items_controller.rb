@@ -15,11 +15,6 @@ module RightnowOms
     end
 
     private
-    def load_cart
-      @cart = Cart.find_by_id(session[:cart_id]) || Cart.create
-      session[:cart_id] = @cart.id
-    end
-
     def find_cartable
       cartable_id = params[:cart_item][:cartable_id]
       cartable_type = params[:cart_item][:cartable_type]
