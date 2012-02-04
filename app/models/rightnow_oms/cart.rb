@@ -3,7 +3,7 @@ module RightnowOms
     acts_as_api
 
     belongs_to :shopper
-    has_many :cart_items
+    has_many :cart_items, dependent: :destroy
 
     api_accessible :default do |t|
       t.add :state

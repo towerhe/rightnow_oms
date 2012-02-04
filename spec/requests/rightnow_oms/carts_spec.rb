@@ -30,7 +30,7 @@ describe "Carts" do
           FactoryGirl.create(:cart_item, cart: cart)
           page.set_rack_session(cart_id: cart.id)
 
-          page.visit '/rightnow_oms/cart.json'
+          visit '/rightnow_oms/cart.json'
         end
 
         subject { JSON.parse(page.text)["cart"] }
@@ -42,6 +42,23 @@ describe "Carts" do
         specify { subject["cart_items"].first["quantity"].should == 1 }
         specify { subject["cart_items"].first["total_price"].should == (product.price * 1).to_s }
       end
+    end
+  end
+
+  describe 'DELETE /cart' do
+    before do
+      cart_item = FactoryGirl.create(:cart_item)
+      page.set_rack_session(cart_id: cart_item.cart.id)
+
+      page.driver.submit :delete, cart_path, format: :json
+    end
+
+    it 'removes the cart items' do
+      RightnowOms::CartItem.should_not be_exist
+    end
+
+    it 'removes the cart' do
+      RightnowOms::Cart.should_not be_exist
     end
   end
 end
