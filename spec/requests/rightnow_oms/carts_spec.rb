@@ -15,7 +15,7 @@ describe "Carts" do
         subject { response }
 
         it "creates a new cart" do
-          RightnowOms::Cart.all.should have(1).item
+          RightnowOms::Cart.all.should have(0).items
         end
 
         its(:status) { should == 200 }
