@@ -61,6 +61,7 @@ GEM
     factory_girl_rails (1.6.0)
       factory_girl (~> 2.5.0)
       railties (>= 3.0.0)
+    ffaker (1.12.1)
     ffi (1.0.11)
     hike (1.2.1)
     i18n (0.6.0)
@@ -152,6 +153,7 @@ PLATFORMS
 DEPENDENCIES
   capybara
   factory_girl_rails
+  ffaker
   jquery-rails
   pry
   rack_session_access
