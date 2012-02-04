@@ -3,6 +3,7 @@ PATH
   specs:
     rightnow_oms (0.0.1)
       acts_as_api
+      ember-rails
       rails (~> 3.1.3)
 
 GEM
@@ -53,6 +54,7 @@ GEM
       ffi (~> 1.0.6)
     coderay (1.0.5)
     diff-lcs (1.1.3)
+    ember-rails (0.2.2)
     erubis (2.7.0)
     factory_girl (2.5.0)
       activesupport
