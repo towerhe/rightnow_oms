@@ -20,12 +20,27 @@ describe 'CartItems' do
     specify { subject["total_price"].should == (product.price * 1).to_s }
   end
 
+  describe "PUT /cart/cart_items/{id}" do
+    let(:cart_item) { FactoryGirl.create(:cart_item) }
+    let(:quantity) { 2 }
+
+    before do
+      put cart_cart_item_path(cart_item), format: :json, cart_item: {
+        quantity: quantity
+      }
+    end
+
+    subject { JSON.parse(response.body)["cart_item"] }
+
+    specify { response.status.should == 200 }
+    specify { subject["quantity"].should == quantity }
+  end
+
   describe "DELETE /cart/cart_items/{id}" do
     context "when a cart item exists in a cart" do
       let(:cart_item) { FactoryGirl.create(:cart_item) }
 
-      before do
-        delete cart_cart_item_path(cart_item), format: :json end
+      before { delete cart_cart_item_path(cart_item), format: :json }
 
       subject { response }
 

@@ -39,6 +39,33 @@ describe RightnowOms::CartItemsController do
     end
   end
 
+  describe 'PUT update' do
+    let(:cart_item) { FactoryGirl.build(:cart_item) }
+    before { RightnowOms::CartItem.should_receive(:find).and_return(cart_item) }
+
+    context 'with valid params' do
+      before do
+        cart_item.should_receive(:update_attributes).and_return(true)
+
+        put :update, format: :json, use_route: :rightnow_oms
+      end
+
+      it { should respond_with :ok }
+      it { should respond_with_content_type /json/ }
+    end
+
+    context 'with invalid params' do
+      before do
+        cart_item.should_receive(:update_attributes).and_return(false)
+
+        put :update, format: :json, use_route: :rightnow_oms
+      end
+
+      it { should respond_with :unprocessable_entity }
+      it { should respond_with_content_type /json/ }
+    end
+  end
+
   describe 'DELETE destroy' do
     let(:cart_item) { FactoryGirl.build(:cart_item) }
 
