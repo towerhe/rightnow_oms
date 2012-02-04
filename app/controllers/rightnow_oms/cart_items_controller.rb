@@ -14,6 +14,13 @@ module RightnowOms
       end
     end
 
+    def destroy
+      cart_item = CartItem.find(params[:id])
+      cart_item.destroy
+
+      head :ok
+    end
+
     private
     def find_cartable
       cartable_id = params[:cart_item][:cartable_id]

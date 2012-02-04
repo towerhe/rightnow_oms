@@ -38,4 +38,17 @@ describe RightnowOms::CartItemsController do
       end
     end
   end
+
+  describe 'DELETE destroy' do
+    let(:cart_item) { FactoryGirl.build(:cart_item) }
+
+    before do
+      RightnowOms::CartItem.should_receive(:find).and_return(cart_item)
+      cart_item.should_receive(:destroy)
+
+      delete :destroy, use_route: :rightnow_oms
+    end
+
+    it { should respond_with :ok }
+  end
 end
