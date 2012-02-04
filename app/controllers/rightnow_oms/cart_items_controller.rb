@@ -4,6 +4,11 @@ module RightnowOms
     before_filter :load_cart_item, only: [:update, :destroy]
 
     def create
+      if @cart.new_record?
+        @cart.save
+        session[:cart_id] = @cart.id
+      end
+
       cart_item = @cart.add_item(find_cartable)
 
       respond_to do |format|

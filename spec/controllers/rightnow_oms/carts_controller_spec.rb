@@ -1,16 +1,14 @@
 require 'spec_helper'
 
 describe RightnowOms::CartsController do
-  describe '#show' do
-    context 'GET json' do
-      let(:format) { :json }
+  describe 'GET show' do
+    before(:each) do
+      RightnowOms::Cart.should_receive(:find_by_id).and_return(nil)
 
-      before(:each) do
-        get :show, format: :json, use_route: :rightnow_oms
-      end
-
-      it { should respond_with :ok }
-      it { should respond_with_content_type /json/ }
+      get :show, format: :json, use_route: :rightnow_oms
     end
+
+    it { should respond_with :ok }
+    it { should respond_with_content_type /json/ }
   end
 end
