@@ -1,5 +1,4 @@
 RightnowOms::Engine.routes.draw do
-  resource :cart do
-    resources :cart_items
-  end
+  resource :cart
+  resources :cart_items
 end

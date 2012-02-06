@@ -36,11 +36,6 @@ describe "Carts" do
         subject { JSON.parse(page.text)["cart"] }
 
         specify { subject["total"].should == "10.55" }
-        specify { subject["cart_items"].should have(1).item }
-        specify { subject["cart_items"].first["name"].should == product.name }
-        specify { subject["cart_items"].first["price"].should == product.price.to_s }
-        specify { subject["cart_items"].first["quantity"].should == 1 }
-        specify { subject["cart_items"].first["total_price"].should == (product.price * 1).to_s }
       end
     end
   end

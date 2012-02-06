@@ -1,7 +1,12 @@
 module RightnowOms
   class CartItemsController < ApplicationController
-    before_filter :load_cart, only: :create
+    before_filter :load_cart, only: [:index, :create]
     before_filter :load_cart_item, only: [:update, :destroy]
+
+    # TODO Unit test needed
+    def index
+      render_for_api :default, json: @cart.cart_items, root: :cart_items, status: :ok
+    end
 
     def create
       if @cart.new_record?

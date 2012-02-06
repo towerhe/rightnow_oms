@@ -1,0 +1,17 @@
+<div class="cart-bar">
+  <span>购物车 {{ cart.cartableCount }} 件</span>
+  <span>去结算 >></span>
+</div>
+
+<div class="cart-items">
+  <table>
+  {{#each cart.cartItems}}
+    <tr>
+      <td>{{ this.name }}</td>
+      <td>{{ this.price }}x{{ this.quantity }}</td>
+      <td>Delete</td>
+    </tr>
+  {{/each}}
+  </table>
+</div>
+
