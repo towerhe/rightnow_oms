@@ -73,25 +73,9 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
         store.didDeleteRecord(model)
     })
 
+  # Do not support batch deleting
   deleteRecords: (store, type, models) ->
-    if (get(this, 'bulkCommit') == false)
-      this._super(store, type, models)
-
-    root = this.rootForType(type)
-    plural = this.pluralize(root)
-    primaryKey = getPath(type, 'proto.primaryKey')
-
-    data = {}
-    data[plural] = models.map((model) ->
-      get(model, primaryKey)
-    )
-
-    this.ajax(this.buildUrl(type) + "/delete", "POST", {
-      data: data,
-      success: (json) ->
-        store.didDeleteRecords(models)
-    })
-
+    
   find: (store, type, id) ->
     url = ''
     root = this.rootForType(type)
