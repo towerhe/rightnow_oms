@@ -1,0 +1,5 @@
+<form>
+  <p>Name: {{ product.name }}</p>
+  <p>Price: ${{ product.price }}</p>
+  <button type="submit">Add To Cart</button>
+</form>

@@ -1,0 +1,15 @@
+%h1 Products
+
+#cart
+  %script{ type: 'text/x-handlebars'}
+    {{ view RightnowOms.ShowCartView }}
+
+#products
+  %script{ type: 'text/x-handlebars'}
+    {{ view App.ListProductsView }}
+
+:javascript
+  $(function() {
+    RightnowOms.cartController.load(#{@cart.as_api_response(:default).to_json.html_safe});
+    App.productsController.findAll();
+  });

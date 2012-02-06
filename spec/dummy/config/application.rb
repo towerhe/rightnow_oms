@@ -8,6 +8,8 @@ require "active_resource/railtie"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
+require "haml"
+
 Bundler.require
 require "rightnow_oms"
 

@@ -6,4 +6,14 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
+//
+//= require ./vendor/ember
+//= require ./vendor/ember-data
+//
+//= require rightnow_oms/application
+//
+//= require ./app/app
+//= require_tree ./app/models
+//= require_tree ./app/controllers
+//= require_tree ./app/views
+//= require_tree ./app/templates

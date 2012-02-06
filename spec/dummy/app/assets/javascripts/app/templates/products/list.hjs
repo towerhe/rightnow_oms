@@ -1,0 +1,4 @@
+{{#each products}}
+  {{ view App.ShowProductView productBinding="this" }}
+{{/each}}
+<div class="clear"></div>
