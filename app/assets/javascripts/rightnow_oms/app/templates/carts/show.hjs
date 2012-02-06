@@ -6,12 +6,9 @@
 <div class="cart-items">
   <table>
   {{#each cart.cartItems}}
-    <tr>
-      <td>{{ this.name }}</td>
-      <td>{{ this.price }}x{{ this.quantity }}</td>
-      <td>Delete</td>
-    </tr>
+    {{ view RightnowOms.ShowCartItemView cartItemBinding="this" }}
   {{/each}}
+    <tr><td colspan="3">总计：￥{{ cart.total }}</td></tr>
   </table>
 </div>
 

@@ -10,11 +10,19 @@ RightnowOms.Cart = DS.Model.extend
 
   cartableCount: (->
     count = 0
-    this.get('cartItems').forEach (item, index, self) ->
+    this.get('cartItems').forEach (item) ->
       count += item.get('quantity')
 
     count
   ).property("cartItems.@each.quantity")
+
+  total: (->
+    total = 0
+    this.get('cartItems').forEach (item) ->
+      total += parseFloat(item.get('price')) * item.get('quantity')
+
+    round(total, 2)
+  ).property("cartableCount")
 
   addCartItem: (item) ->
     cartItem = RightnowOms.CartItem.findByName(item.name)

@@ -8,3 +8,7 @@ RightnowOms.cartController = Ember.Object.create
 
   addCartItem: (item) ->
     this.get('content').addCartItem(item)
+
+  removeCartItem: (item) ->
+    item.deleteRecord()
+    RightnowOms.store.commit()
