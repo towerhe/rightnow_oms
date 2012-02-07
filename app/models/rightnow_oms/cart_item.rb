@@ -11,10 +11,10 @@ module RightnowOms
     validates :quantity, presence: true, numericality: { greater_than: 0 }
 
     api_accessible :default do |t|
+      t.add :id
       t.add :name
       t.add :price
       t.add :quantity
-      t.add :total_price
     end
 
     def total_price

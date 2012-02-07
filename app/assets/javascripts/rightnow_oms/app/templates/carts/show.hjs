@@ -1,0 +1,14 @@
+<div class="cart-bar">
+  <span>购物车 {{ cart.cartableCount }} 件</span>
+  <span><a href='/rightnow_oms/cart'>去结算 >></a></span>
+</div>
+
+<div class="cart-items">
+  <table>
+  {{#each cart.cartItems}}
+    {{ view RightnowOms.ShowCartItemView cartItemBinding="this" }}
+  {{/each}}
+    <tr><td colspan="3">总计：￥{{ cart.total }}</td></tr>
+  </table>
+</div>
+
