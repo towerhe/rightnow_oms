@@ -6,6 +6,7 @@ RightnowOms.cartController = Ember.Object.create
   reload: ->
     @set('content', RightnowOms.store.find(RightnowOms.Cart, @get('content').get('id')))
 
+  # item: a hash
   addCartItem: (item) ->
     @get('content').addCartItem(item)
 
