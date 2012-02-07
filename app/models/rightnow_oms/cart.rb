@@ -8,7 +8,6 @@ module RightnowOms
     api_accessible :default do |t|
       t.add :id
       t.add :state
-      t.add :total
     end
 
     def total

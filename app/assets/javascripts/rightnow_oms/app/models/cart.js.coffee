@@ -1,9 +1,6 @@
 store = RightnowOms.store
 
 RightnowOms.Cart = DS.Model.extend
-  total: DS.attr('string')
-  #cart_items: DS.hasMany(RightnowOms.CartItem, embedded: true)
-
   cartItems: (->
     RightnowOms.CartItem.all()
   ).property()
