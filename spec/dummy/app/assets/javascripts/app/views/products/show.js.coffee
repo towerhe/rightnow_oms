@@ -6,7 +6,7 @@ App.ShowProductView = Ember.View.extend
     e.preventDefault()
 
     self = this
-    product = this.get('product')
+    product = @get('product')
 
     RightnowOms.cartController.addCartItem
       'cartable_id': product.get('id')

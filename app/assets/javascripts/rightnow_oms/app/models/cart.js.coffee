@@ -10,7 +10,7 @@ RightnowOms.Cart = DS.Model.extend
 
   cartableCount: (->
     count = 0
-    this.get('cartItems').forEach (item) ->
+    @get('cartItems').forEach (item) ->
       count += item.get('quantity')
 
     count
@@ -18,7 +18,7 @@ RightnowOms.Cart = DS.Model.extend
 
   total: (->
     total = 0
-    this.get('cartItems').forEach (item) ->
+    @get('cartItems').forEach (item) ->
       total += parseFloat(item.get('price')) * item.get('quantity')
 
     round(total, 2)

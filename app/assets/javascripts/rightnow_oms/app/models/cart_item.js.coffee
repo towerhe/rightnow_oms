@@ -10,4 +10,4 @@ RightnowOms.CartItem.reopenClass
     RightnowOms.store.findAll(RightnowOms.CartItem)
 
   findByName: (name) ->
-    this.all().filterProperty('name', name).get('firstObject')
+    @all().filterProperty('name', name).get('firstObject')
