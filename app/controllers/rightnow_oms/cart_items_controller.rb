@@ -14,7 +14,8 @@ module RightnowOms
         session[:cart_id] = @cart.id
       end
 
-      cart_item = @cart.add_item(find_cartable)
+      group = params[:cart_item][:group] if params.has_key?(:cart_item)
+      cart_item = @cart.add_item(find_cartable, { quantity: 1, group: group })
 
       respond_to do |format|
         if cart_item.save
@@ -38,9 +39,7 @@ module RightnowOms
     def destroy
       @cart_item.destroy
 
-      respond_to do |format|
-        format.json { head :ok }
-      end
+      head :ok
     end
 
     private
