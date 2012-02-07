@@ -3,6 +3,8 @@ require 'spec_helper'
 describe RightnowOms::CartItem do
   it { should belong_to :cartable }
   it { should belong_to :cart }
+  it { should belong_to :parent }
+  it { should have_many :children }
   
   it { should validate_presence_of :cart }
   it { should validate_presence_of :name }
