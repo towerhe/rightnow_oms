@@ -15,6 +15,7 @@ module RightnowOms
       t.add :name
       t.add :price
       t.add :quantity
+      t.add :group
     end
 
     def total_price

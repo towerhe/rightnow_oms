@@ -7,7 +7,8 @@ describe 'CartItems' do
       post cart_items_path, format: :json, cart_item: {
         cartable_id: product.id,
         cartable_type: product.class,
-        quantity: 1
+        quantity: 1,
+        group: 'booking'
       }
     end
 
@@ -17,6 +18,7 @@ describe 'CartItems' do
     specify { subject["name"].should == product.name }
     specify { subject["price"].should == product.price.to_s }
     specify { subject["quantity"].should == 1 }
+    specify { subject["group"].should == 'booking' }
   end
 
   describe "PUT /cart/cart_items/{id}" do
