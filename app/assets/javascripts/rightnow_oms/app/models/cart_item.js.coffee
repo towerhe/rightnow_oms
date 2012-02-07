@@ -11,3 +11,6 @@ RightnowOms.CartItem.reopenClass
 
   findByName: (name) ->
     this.all().filterProperty('name', name).get('firstObject')
+
+  findById: (id) ->
+    @all().filterProperty('id', id).get('firstObject')
