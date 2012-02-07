@@ -4,97 +4,113 @@ getPath = Ember.getPath
 
 DS.MyRESTAdapter = DS.RESTAdapter.extend
   createRecord: (store, type, model) ->
-    root = this.rootForType(type)
-    url = this.buildUrl(type)
+    root = @rootForType(type)
+    url = @buildUrl(type)
     data = {}
 
     data[root] = get(model, 'data')
 
-    this.ajax(url, "POST", {
+    @ajax(url, "POST", {
       data: data,
       success: (json) ->
         store.didCreateRecord(model, json[root])
     })
 
   createRecords: (store, type, models) ->
-    if (get(this, 'bulkCommit') == false)
-      return this._super(store, type, models)
+    if (get(@, 'bulkCommit') == false)
+      return @_super(store, type, models)
 
-    root = this.rootForType(type)
-    plural = this.pluralize(root)
+    root = @rootForType(type)
+    plural = @pluralize(root)
 
     data = {}
     data[plural] = models.map((model) ->
       get(model, 'data')
 
     )
-    this.ajax(this.buildUrl(type), "POST", {
+    @ajax(@buildUrl(type), "POST", {
       data: data,
       success: (json) ->
         store.didCreateRecords(type, models, json[plural])
     })
 
   updateRecord: (store, type, model) ->
-    root = this.rootForType(type)
+    root = @rootForType(type)
 
     data = {}
     data[root] = get(model, 'data')
 
-    this.ajax(this.buildUrl(type, this.getPrimaryKeyValue(type, model)), "PUT", {
+    @ajax(@buildUrl(type, @getPrimaryKeyValue(type, model)), "PUT", {
       data: data,
       success: (json) ->
         store.didUpdateRecord(model, json[root])
     })
 
   updateRecords: (store, type, models) ->
-    if (get(this, 'bulkCommit') == false)
-      return this._super(store, type, models)
+    if (get(@, 'bulkCommit') == false)
+      return @_super(store, type, models)
 
-    root = this.rootForType(type)
-    plural = this.pluralize(root)
+    root = @rootForType(type)
+    plural = @pluralize(root)
 
     data = {}
     data[plural] = models.map((model) ->
       get(model, 'data')
     )
 
-    this.ajax(this.buildUrl(type), "POST", {
+    @ajax(@buildUrl(type), "POST", {
       data: data,
       success: (json) ->
         store.didUpdateRecords(models, json[plural])
     })
 
   deleteRecord: (store, type, model) ->
-    root = this.rootForType(type)
-    url = this.buildUrl(type, this.getPrimaryKeyValue(type, model))
+    root = @rootForType(type)
+    url = @buildUrl(type, @getPrimaryKeyValue(type, model))
 
-    this.ajax(url, "DELETE", {
+    @ajax(url, "DELETE", {
       success: (json) ->
         store.didDeleteRecord(model)
     })
 
-  # Do not support batch deleting
   deleteRecords: (store, type, models) ->
+    if (get(@, 'bulkCommit') == false)
+      return @_super(store, type, models)
+
+    root = @rootType(type)
+    plural = @pluralize(root)
+    primaryKey = getPath(type, 'proto.primaryKey')
+
+    data = {}
+    data[plural] = models.map((model) ->
+      get(model, primaryKey)
+    )
+
+    @ajax(@buildUrl(type) + "/delete", "POST", {
+      data: data
+      success: (json) ->
+        store.didDeleteRecords(models)
+    })
     
   find: (store, type, id) ->
     url = ''
-    root = this.rootForType(type)
+    root = @rootForType(type)
 
-    if this.isSingleton(type)
-      url = this.buildUrl(type)
+    if @isSingleton(type)
+      url = @buildUrl(type)
     else
-      url = this.buildUrl(type, id)
+      url = @buildUrl(type, id)
 
-    this.ajax(url, "GET", {
+    @ajax(url, "GET", {
       success: (json) ->
         store.load(type, json[root])
     })
 
   findMany: (store, type, ids) ->
-    root = this.rootForType(type)
-    plural = this.pluralize(root)
+    root = @rootForType(type)
+    plural = @pluralize(root)
 
-    this.ajax(this.buildUrl(type), "GET", {
+    @ajax(@buildUrl(type), "GET", {
       data: { ids: ids },
       success: (json) ->
         store.loadMany(type, ids, json[plural])
@@ -102,19 +118,19 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
     url = "/" + plural
 
   findAll: (store, type) ->
-    root = this.rootForType(type)
-    plural = this.pluralize(root)
+    root = @rootForType(type)
+    plural = @pluralize(root)
 
-    this.ajax(this.buildUrl(type), "GET", {
+    @ajax(@buildUrl(type), "GET", {
       success: (json) ->
         store.loadMany(type, json[plural])
     })
 
   findQuery: (store, type, query, modelArray) ->
-    root = this.rootForType(type)
-    plural = this.pluralize(root)
+    root = @rootForType(type)
+    plural = @pluralize(root)
 
-    this.ajax(this.buildUrl(type), "GET", {
+    @ajax(@buildUrl(type), "GET", {
       data: query,
       success: (json) ->
         modelArray.load(json[plural])
@@ -127,7 +143,7 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
   # define a plurals hash in your subclass to define
   # special-case pluralization
   pluralize: (name) ->
-    this.plurals[name] || name + "s"
+    @plurals[name] || name + "s"
 
   rootForType: (type) ->
     if type.url
@@ -144,13 +160,13 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
 
   buildUrl: (type, suffix) ->
     url = [""]
-    root = this.rootForType(type)
+    root = @rootForType(type)
 
-    url.push(this.namespace) if this.namespace?
-    if this.isSingleton(type)
+    url.push(@namespace) if @namespace?
+    if @isSingleton(type)
       url.push(root)
     else
-      url.push(this.pluralize(root))
+      url.push(@pluralize(root))
     url.push(suffix) if suffix?
 
     url.join('/')

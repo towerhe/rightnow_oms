@@ -1,3 +1,3 @@
 <td>{{ cartItem.name }}</td>
-<td>{{ cartItem.price }}x{{ cartItem.quantity }}</td>
-<td><a href="#" {{ action "deleteRecord" }}>Delete</a></td>
+<td class='price'>{{ cartItem.price }}x{{ cartItem.quantity }}</td>
+<td><a href="#" {{ action "deleteRecord" }}>删除</a></td>

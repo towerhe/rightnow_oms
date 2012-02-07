@@ -1,3 +1,12 @@
 .cart-items {
   text-align: right;
+  overflow: auto;
+}
+
+.cart-items table {
+  float: right;
+}
+
+.cart-items table .price {
+  color: red;
 }

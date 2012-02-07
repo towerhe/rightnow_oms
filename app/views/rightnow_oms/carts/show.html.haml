@@ -1,0 +1,32 @@
+#shopping-cart
+  %h2 我的购物车
+  %table
+    %tr 
+      %td 商品名称
+      %td 商品价格
+      %td 商品数量
+      %td 单项总价
+      %td 删除商品
+    - @cart.cart_items.each do |item|
+      %tr
+        %td= item.name
+        %td{ class: 'price'}= number_to_currency(item.price)
+        %td<
+          %a{ href: '#none' }-
+          %input{ class: 'quantity', value: "#{item.quantity}" }
+          %a{ href: '#none' }+
+        %td{ class: 'subtotal' }= number_to_currency(item.quantity * item.price)
+        %td
+          %a{ href: '#none' }删除
+    %tr
+      %td{ colspan: 4, class: 'total-price' }<
+        总价：
+        = number_to_currency(@cart.total)
+      %td
+  =link_to '<< 继续购物', main_app.root_path
+  =link_to '去结算 >>', '#'
+
+:javascript
+  $(function() {
+    RightnowOms.cartController.removeCartItem(id);
+  });
