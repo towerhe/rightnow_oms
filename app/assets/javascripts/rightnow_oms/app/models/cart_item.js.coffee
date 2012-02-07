@@ -5,6 +5,16 @@ RightnowOms.CartItem = DS.Model.extend
   price: DS.attr('string')
   quantity: DS.attr('integer')
 
+  subtotal: (->
+    round(round(@get('price'), 2) * @get('quantity'), 2)
+  ).property('price', 'quantity')
+
+  increase: ->
+    @set('quantity', @get('quantity') + 1)
+
+  decrease: ->
+    @set('quantity', @get('quantity') - 1)
+
 RightnowOms.CartItem.reopenClass
   all: ->
     RightnowOms.store.findAll(RightnowOms.CartItem)

@@ -5,9 +5,7 @@ App.ShowProductView = Ember.View.extend
   submit: (e) ->
     e.preventDefault()
 
-    self = this
     product = @get('product')
-
     RightnowOms.cartController.addCartItem
       'cartable_id': product.get('id')
       'cartable_type': 'Product'
