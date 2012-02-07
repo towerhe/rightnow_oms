@@ -10,11 +10,11 @@ RightnowOms.cartController = Ember.Object.create
   addCartItem: (item) ->
     @get('content').addCartItem(item)
 
-  plusCartItem: (id) ->
-    @get('content').plusCartItem(id)
+  increaseCartItem: (id) ->
+    @get('content').increaseCartItem(id)
 
-  minusCartItem: (id) ->
-    @get('content').minusCartItem(id)
+  decreaseCartItem: (id) ->
+    @get('content').decreaseCartItem(id)
 
   removeCartItem: (id) ->
     @get('content').removeCartItem(id)

@@ -7,13 +7,7 @@ class Product < ActiveRecord::Base
     t.add :id
     t.add :name
     t.add :price
-    t.add :has_children?, as: :hasChildren
     t.add :group
-  end
-
-  def has_children?
-    return false if self.children.empty?
-
-    true
+    t.add :children
   end
 end

@@ -27,9 +27,11 @@ RightnowOms.Cart = DS.Model.extend
     if cartItem?
       cartItem.set('quantity', cartItem.get('quantity') + 1)
     else
-      store.createRecord(RightnowOms.CartItem, item)
+      cartItem = store.createRecord(RightnowOms.CartItem, item)
 
     store.commit()
+
+    cartItem
 
   removeCartItem: (id) ->
     item = RightnowOms.CartItem.findById(id)
@@ -38,19 +40,22 @@ RightnowOms.Cart = DS.Model.extend
       item.deleteRecord()
       RightnowOms.store.commit()
 
-  plusCartItem: (id) ->
+  increaseCartItem: (id) ->
     cartItem = RightnowOms.CartItem.findById(id)
 
     cartItem.increase()
     store.commit()
 
-  minusCartItem: (id) ->
+    cartItem
+
+  decreaseCartItem: (id) ->
     cartItem = RightnowOms.CartItem.findById(id)
 
     cartItem.decrease()
     removeCartItem(id) if cartItem.get('quantity') <= 0
     store.commit()
 
+    cartItem
 
 RightnowOms.Cart.reopenClass
   isSingleton: true

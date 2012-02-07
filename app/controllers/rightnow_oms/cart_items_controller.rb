@@ -39,7 +39,9 @@ module RightnowOms
     def destroy
       @cart_item.destroy
 
-      head :ok
+      respond_to do |format|
+        format.json { render_for_api :default, json: @cart_item, root: :cart_item, status: :ok }
+      end
     end
 
     private

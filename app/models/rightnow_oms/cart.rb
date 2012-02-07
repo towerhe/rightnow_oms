@@ -23,7 +23,7 @@ module RightnowOms
 
       if cart_item
         cart_item.update_attributes(
-          quantity: cart_item.quantity + quantity
+          quantity: cart_item.quantity + quantity.to_i
         )
       else
         cart_item = cart_items.create!(

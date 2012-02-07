@@ -14,6 +14,7 @@ module RightnowOms
 
     api_accessible :default do |t|
       t.add :id
+      t.add :parent_id
       t.add :name
       t.add :price
       t.add :quantity
