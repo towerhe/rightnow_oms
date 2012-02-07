@@ -18,7 +18,7 @@ describe RightnowOms::CartItemsController do
         before do
           cart_item.should_receive(:save).and_return(true)
 
-          post :create, format: :json, use_route: :rightnow_oms
+          post :create, format: :json, use_route: :rightnow_oms, cart_item: {}
         end
 
         it { should respond_with :created }
@@ -29,7 +29,7 @@ describe RightnowOms::CartItemsController do
         before do
           cart_item.should_receive(:save).and_return(false)
 
-          post :create, format: :json, use_route: :rightnow_oms
+          post :create, format: :json, use_route: :rightnow_oms, cart_item: {}
         end
 
         it { should respond_with :unprocessable_entity }
@@ -50,7 +50,7 @@ describe RightnowOms::CartItemsController do
         controller.should_receive(:find_cartable).and_return(product)
         cart.should_receive(:add_item).and_return(cart_item)
 
-        post :create, format: :json, use_route: :rightnow_oms
+        post :create, format: :json, use_route: :rightnow_oms, cart_item: {}
       end
     end
   end

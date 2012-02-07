@@ -18,12 +18,13 @@ module RightnowOms
     def add_item(cartable, opts = { quantity: 1 })
       quantity = opts[:quantity]
       group = opts[:group]
+      parent_id = opts[:parent_id]
+
       cart_item = cart_items.find_by_cartable(cartable)
 
       if cart_item
         cart_item.update_attributes(
-          quantity: cart_item.quantity + quantity,
-          group: group
+          quantity: cart_item.quantity + quantity
         )
       else
         cart_item = cart_items.create!(
@@ -31,7 +32,8 @@ module RightnowOms
           name: cartable.name,
           price: cartable.price,
           quantity: quantity,
-          group: group
+          group: group,
+          parent_id: parent_id
         )
       end
 

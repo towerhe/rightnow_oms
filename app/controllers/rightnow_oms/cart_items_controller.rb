@@ -14,8 +14,8 @@ module RightnowOms
         session[:cart_id] = @cart.id
       end
 
-      group = params[:cart_item][:group] if params.has_key?(:cart_item)
-      cart_item = @cart.add_item(find_cartable, { quantity: 1, group: group })
+      params[:cart_item][:quantity] = 1 if params[:cart_item][:quantity].blank?
+      cart_item = @cart.add_item(find_cartable, params[:cart_item])
 
       respond_to do |format|
         if cart_item.save
