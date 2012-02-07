@@ -15,6 +15,7 @@ gem "haml-rails"
 gem "pry"
 gem "ffaker"
 gem 'therubyracer'
+gem 'ancestry'
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
