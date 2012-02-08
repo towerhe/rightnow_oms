@@ -89,7 +89,7 @@ describe RightnowOms::CartItemsController do
       RightnowOms::CartItem.should_receive(:find).and_return(cart_item)
       cart_item.should_receive(:destroy)
 
-      delete :destroy, use_route: :rightnow_oms
+      delete :destroy, format: :json, use_route: :rightnow_oms
     end
 
     it { should respond_with :ok }
