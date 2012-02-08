@@ -1,3 +1,5 @@
+Ember.LOG_STATE_TRANSITIONS = true
+
 window.App = Ember.Application.create
   rootElement: "#products"
 
