@@ -14,8 +14,13 @@ App.ShowProductView = Ember.View.extend
       'group': product.get('group')
       'quantity': 1
 
+    self = @
     if cartItem.get('id')
       @addChildren(product.children, cartItem)
+    else
+      cartItem.addObserver('data', ->
+        self.addChildren(product.children, cartItem)
+      )
 
   addChildren: (children, parent) ->
     children.forEach((child) ->
