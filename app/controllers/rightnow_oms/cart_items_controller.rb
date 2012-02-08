@@ -14,7 +14,8 @@ module RightnowOms
         session[:cart_id] = @cart.id
       end
 
-      cart_item = @cart.add_item(find_cartable)
+      params[:cart_item][:quantity] = 1 if params[:cart_item][:quantity].blank?
+      cart_item = @cart.add_item(find_cartable, params[:cart_item])
 
       respond_to do |format|
         if cart_item.save
@@ -39,7 +40,7 @@ module RightnowOms
       @cart_item.destroy
 
       respond_to do |format|
-        format.json { head :ok }
+        format.json { render_for_api :default, json: @cart_item, root: :cart_item, status: :ok }
       end
     end
 

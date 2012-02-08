@@ -6,10 +6,10 @@ RightnowOms.ShowCartItemInDetailView = Ember.View.extend
     item = @get('cartItem')
     RightnowOms.cartController.removeCartItem(item.get('id'))
 
-  plus: ->
+  increase: ->
     item = @get('cartItem')
-    RightnowOms.cartController.plusCartItem(item.get('id'))
+    RightnowOms.cartController.increaseCartItem(item.get('id'))
 
-  minus: ->
+  decrease: ->
     item = @get('cartItem')
-    RightnowOms.cartController.minusCartItem(item.get('id'))
+    RightnowOms.cartController.decreaseCartItem(item.get('id'))

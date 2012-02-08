@@ -1,5 +1,11 @@
-<form>
-  <p>名称: {{ product.name }}</p>
-  <p>价格: ￥{{ product.price }}</p>
-  <button type="submit">购买</button>
-</form>
+{{#with product }}
+  <form>
+    {{#if hasChildren}}
+      <p>组合产品</p>
+    {{/if}}
+    <p>种类：{{ group }}</p>
+    <p>名称：{{ name }}</p>
+    <p>价格：￥{{ price }}</p>
+    <button type="submit">购买</button>
+  </form>
+{{/with}}

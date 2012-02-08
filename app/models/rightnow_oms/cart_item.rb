@@ -4,6 +4,8 @@ module RightnowOms
 
     belongs_to :cartable, polymorphic: true
     belongs_to :cart
+    belongs_to :parent, class_name: 'RightnowOms::CartItem', foreign_key: :parent_id
+    has_many :children, class_name: 'RightnowOms::CartItem', foreign_key: :parent_id, dependent: :destroy
 
     validates :cart, presence: true
     validates :name, presence: true
@@ -12,9 +14,11 @@ module RightnowOms
 
     api_accessible :default do |t|
       t.add :id
+      t.add :parent_id
       t.add :name
       t.add :price
       t.add :quantity
+      t.add :group
     end
 
     def total_price

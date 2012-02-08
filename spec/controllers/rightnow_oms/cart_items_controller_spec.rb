@@ -11,14 +11,14 @@ describe RightnowOms::CartItemsController do
       before do
         RightnowOms::Cart.should_receive(:find_by_id).and_return(cart)
         controller.should_receive(:find_cartable).and_return(product)
-        cart.should_receive(:add_item).with(product).and_return(cart_item)
+        cart.should_receive(:add_item).and_return(cart_item)
       end
 
       context "with valid params" do
         before do
           cart_item.should_receive(:save).and_return(true)
 
-          post :create, format: :json, use_route: :rightnow_oms
+          post :create, format: :json, use_route: :rightnow_oms, cart_item: {}
         end
 
         it { should respond_with :created }
@@ -29,7 +29,7 @@ describe RightnowOms::CartItemsController do
         before do
           cart_item.should_receive(:save).and_return(false)
 
-          post :create, format: :json, use_route: :rightnow_oms
+          post :create, format: :json, use_route: :rightnow_oms, cart_item: {}
         end
 
         it { should respond_with :unprocessable_entity }
@@ -48,9 +48,9 @@ describe RightnowOms::CartItemsController do
         cart.should_receive(:new_record?).and_return(true)
         cart.should_receive(:save)
         controller.should_receive(:find_cartable).and_return(product)
-        cart.should_receive(:add_item).with(product).and_return(cart_item)
+        cart.should_receive(:add_item).and_return(cart_item)
 
-        post :create, format: :json, use_route: :rightnow_oms
+        post :create, format: :json, use_route: :rightnow_oms, cart_item: {}
       end
     end
   end
@@ -89,7 +89,7 @@ describe RightnowOms::CartItemsController do
       RightnowOms::CartItem.should_receive(:find).and_return(cart_item)
       cart_item.should_receive(:destroy)
 
-      delete :destroy, use_route: :rightnow_oms
+      delete :destroy, format: :json, use_route: :rightnow_oms
     end
 
     it { should respond_with :ok }
