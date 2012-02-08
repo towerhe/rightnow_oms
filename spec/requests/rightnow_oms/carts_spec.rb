@@ -35,7 +35,7 @@ describe "Carts" do
 
         subject { JSON.parse(page.text)["cart"] }
 
-        specify { subject["total"].should == "10.55" }
+        specify { subject["id"].should be }
       end
     end
   end
