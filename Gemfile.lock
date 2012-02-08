@@ -3,7 +3,12 @@ PATH
   specs:
     rightnow_oms (0.0.1)
       acts_as_api
-      rails (~> 3.1.3)
+      coffee-rails
+      ember-rails
+      haml-rails
+      jquery-rails
+      rails
+      sass-rails
 
 GEM
   remote: http://rubygems.org/
@@ -185,7 +190,6 @@ DEPENDENCIES
   ember-rails
   factory_girl_rails
   ffaker
-  haml-rails
   jquery-rails
   pry
   rack_session_access

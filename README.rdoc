@@ -6,9 +6,32 @@ A common gem for managing your carts and orders.
 
 == Installation
 
-Add RightnowOms to your Gemfile.
+Add ember-rails and RightnowOms to your Gemfile.
 
+  gem 'ember-rails'
   gem 'rightnow_oms'
+
+Create the migrations with:
+
+  rake rightnow_oms:install:migrations
+  rake db:migrate
+
+Run +bundle install+ and require ember and ember-data in your +app/assets/javascripts/application.js+:
+
+  //=require rightnow_oms/vendor/ember
+  //=require rightnow_oms/vendor/ember-data
+
+Add the following line to your +app/assets/javascripts/application.js+:
+
+  //=require rightnow_oms/application
+
+Add a place holder for your cart in your views:
+
+  <div id="cart-wrapper">
+    <script type="text/x-handlebars">
+      {{ view RightnowOms.ShowCartView }}
+    </script>
+  </div>
 
 == Development
 

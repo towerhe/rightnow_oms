@@ -13,16 +13,14 @@ Gem::Specification.new do |s|
   s.summary     = "Manage the orders."
   s.description = "A common mountable engine can be used to manage the orders."
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib,vendor}/**/*"] + ["Rakefile", "README.rdoc"]
 
-  s.add_dependency "rails", "~> 3.1.3"
+  s.add_dependency "rails"
+  s.add_dependency "jquery-rails"
+  s.add_dependency "coffee-rails"
+  s.add_dependency "sass-rails"
   s.add_dependency "acts_as_api"
+  s.add_dependency "ember-rails"
+  s.add_dependency "haml-rails"
 
-  s.add_development_dependency "sqlite3"
-  s.add_development_dependency "rspec-rails"
-  s.add_development_dependency "capybara"
-  s.add_development_dependency "shoulda-matchers"
-  s.add_development_dependency "pry"
-  s.add_development_dependency "rack_session_access"
-  s.add_development_dependency "factory_girl_rails"
 end

@@ -1,5 +1,5 @@
 //= require jquery
 //= require jquery_ujs
 //
-//= require ./vendor/ember
-//= require ./vendor/ember-data
+//= require rightnow_oms/vendor/ember
+//= require rightnow_oms/vendor/ember-data
