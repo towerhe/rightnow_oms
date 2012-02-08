@@ -7,14 +7,13 @@ gemspec
 
 # Used by the dummy application or for test
 gem "jquery-rails"
+gem 'ancestry'
 gem "uglifier"
 gem "ember-rails"
 gem "coffee-rails"
 gem "sass-rails"
-gem "haml-rails"
 gem "ffaker"
 gem 'therubyracer'
-gem 'ancestry'
 
 gem "sqlite3"
 gem "rspec-rails"

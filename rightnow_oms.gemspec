@@ -16,6 +16,11 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib,vendor}/**/*"] + ["Rakefile", "README.rdoc"]
 
   s.add_dependency "rails"
+  s.add_dependency "jquery-rails"
+  s.add_dependency "coffee-rails"
+  s.add_dependency "sass-rails"
   s.add_dependency "acts_as_api"
+  s.add_dependency "ember-rails"
+  s.add_dependency "haml-rails"
 
 end
