@@ -1,0 +1,18 @@
+#cart-wrapper {
+  width: 62%;
+  text-align: right;
+}
+
+ul {
+  width: 62%;
+  border: 1px solid #ccc;
+
+  li {
+    float: left;
+    width: 20%;
+  }
+}
+
+.clear {
+  clear: both;
+}

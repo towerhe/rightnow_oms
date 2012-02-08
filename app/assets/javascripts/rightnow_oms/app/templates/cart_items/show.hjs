@@ -1,0 +1,9 @@
+{{#with cartItem }}
+  <td>{{ name }}</td>
+  <td class='price'>{{ price }}x{{ quantity }}</td>
+  <td>
+    {{#unless hasParent }}
+      <a href="#" {{ action "deleteRecord" }}>删除</a>
+    {{/unless}}
+  </td>
+{{/with}}

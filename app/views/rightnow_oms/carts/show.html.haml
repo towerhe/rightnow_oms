@@ -1,0 +1,8 @@
+#cart-wrapper
+  %script{ type: 'text/x-handlebars'}
+    {{ view RightnowOms.ShowCartInDetailView }}
+
+:javascript
+  $(function() {
+    RightnowOms.cartController.load(#{@cart.as_api_response(:default).to_json.html_safe});
+  });

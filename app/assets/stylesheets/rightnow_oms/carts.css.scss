@@ -1,0 +1,22 @@
+.detailed-cart {
+  table {
+    .subtotal {
+      text-align: right;
+      color: red;
+    }
+    .total-price {
+      text-align: right;
+      color: red;
+    }
+    .price {
+      color: red;
+    }
+    .quantity {
+      width: 30px;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  }
+}

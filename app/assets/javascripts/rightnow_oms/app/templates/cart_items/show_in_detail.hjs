@@ -1,0 +1,15 @@
+{{#with cartItem}}
+  <td>{{ name }}</td>
+  <td class="price">￥{{ price }}</td>
+  <td>
+    {{#if hasParent }}
+      {{ quantity }}
+    {{else}}
+      <a href="#" {{ action "decrease" }}>-</a>
+      {{ view Ember.TextField classNames="quantity" valueBinding="quantity" }}
+      <a href="#" {{ action "increase" }}>+</a>
+    {{/if}}
+  </td>
+  <td class="subtotal">￥{{ subtotal }}</td>
+  <td><a href="#" {{ action "deleteRecord" }}>删除</a></td>
+{{/with}}

@@ -1,0 +1,12 @@
+.bundle/
+.rvmrc
+.sass-cache/
+NERD*
+log/*.log
+pkg/
+rdoc/
+spec/dummy/.sass-cache/
+spec/dummy/db/*.sqlite3
+spec/dummy/db/schema.rb
+spec/dummy/log/*.log
+spec/dummy/tmp/
