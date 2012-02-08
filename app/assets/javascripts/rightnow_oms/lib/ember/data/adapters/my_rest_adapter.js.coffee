@@ -43,7 +43,7 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
     @ajax(@buildUrl(type, @getPrimaryKeyValue(type, model)), "PUT", {
       data: data,
       success: (json) ->
-        store.didUpdateRecord(model, json[root])
+        store.didUpdateRecord(model)
     })
 
   updateRecords: (store, type, models) ->
