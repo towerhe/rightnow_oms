@@ -64,7 +64,7 @@ Create a layout for your detailed cart view:
 
 Add before filters to your controllers which need to use the cart:
 
-  # This before filter will create a instance variable @cart
+  # This before filter will create an instance variable @cart
   before_filter :load_or_create_cart
 
 Add a place holder for your cart in your views:
