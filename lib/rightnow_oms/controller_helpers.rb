@@ -11,12 +11,12 @@ module RightnowOms
         load_cart
 
         unless has_cart?
-          @cart = Cart.create! and session[:cart_id] = @cart.id
+          @cart = RightnowOms::Cart.create! and session[:cart_id] = @cart.id
         end
       end
 
       def load_cart
-        @cart = Cart.find_by_id(session[:cart_id])
+        @cart = RightnowOms::Cart.find_by_id(session[:cart_id])
       end
 
     end
