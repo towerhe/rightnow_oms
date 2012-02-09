@@ -16,7 +16,7 @@ describe 'CartItems' do
 
     specify { response.status.should == 201 }
     specify { subject["name"].should == product.name }
-    specify { subject["price"].should == product.price.to_s }
+    specify { subject["price"].should == product.price.round(2).to_s }
     specify { subject["quantity"].should == 1 }
     specify { subject["group"].should == 'booking' }
   end
