@@ -1,6 +1,8 @@
-0.0.4 (wip)
+0.1.0 (wip)
 
-* Return cartable_id of cart item
+0.0.4 (Thu 14:29, Feb 9, 2012)
+
+* Factory not registered error fixed
 
 0.0.3 (Thu 11:16, Feb 9, 2012)
 

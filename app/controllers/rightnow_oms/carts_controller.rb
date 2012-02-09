@@ -1,6 +1,7 @@
 module RightnowOms
   class CartsController < ApplicationController
-    before_filter :load_cart, only: [:show, :destroy]
+    before_filter :load_or_create_cart, only: :show
+    before_filter :load_cart, only: :destroy
 
     def show
       respond_to do |format|
@@ -10,7 +11,7 @@ module RightnowOms
     end
 
     def destroy
-      @cart.destroy
+      @cart.destroy if has_cart?
 
       head :ok
     end

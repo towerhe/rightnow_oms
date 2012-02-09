@@ -53,8 +53,17 @@ RightnowOms.CartItem.reopenClass
   all: ->
     RightnowOms.store.findAll(RightnowOms.CartItem)
 
+  findById: (id) ->
+    @all().filterProperty('id', id).get('firstObject')
+
   findByName: (name) ->
     @all().filterProperty('name', name).get('firstObject')
 
-  findById: (id) ->
-    @all().filterProperty('id', id).get('firstObject')
+  findByCartableAndParentId: (cartableId, cartableType, parentId) ->
+    @all().filter((item) ->
+      if item.get('cartable_id') == cartableId && item.get('cartable_type') == cartableType
+        if parentId?
+          return true if item.get('parent_id') == parentId
+        else
+          return true
+    ).get('firstObject')
