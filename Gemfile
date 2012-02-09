@@ -8,19 +8,28 @@ gemspec
 # Used by the dummy application or for test
 gem "jquery-rails"
 gem 'ancestry'
-gem "uglifier"
 gem "ember-rails"
-gem "coffee-rails"
-gem "sass-rails"
-gem "ffaker"
-gem 'therubyracer'
 
-gem "sqlite3"
-gem "rspec-rails"
-gem "capybara"
-gem "shoulda-matchers"
-gem "pry"
-gem "rack_session_access"
+group :assets do
+  gem "uglifier"
+  gem "coffee-rails"
+  gem "sass-rails"
+end
+
+group :development, :test do
+  gem "ffaker"
+  gem 'therubyracer'
+  gem "sqlite3"
+  gem "pry"
+end
+
+group :test do
+  gem "rspec-rails"
+  gem "capybara"
+  gem "shoulda-matchers"
+  gem "rack_session_access"
+  gem 'factory_girl_rails'
+end
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
