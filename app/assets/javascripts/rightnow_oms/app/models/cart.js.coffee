@@ -20,7 +20,7 @@ RightnowOms.Cart = DS.Model.extend
   ).property("cartableCount")
 
   addCartItem: (item) ->
-    cartItem = RightnowOms.CartItem.findByName(item.name)
+    cartItem = RightnowOms.CartItem.findByCartableIdAndParentId(item.cartable_id, item.parent_id)
 
     if cartItem?
       cartItem.increase() unless cartItem.get('parent')?
