@@ -1,11 +1,5 @@
 0.1.0 (wip)
 
-* Introduce a method into ActionController to load or create the cart.
-* Return cartable_id of cart item.
-* Identify the cart items by cartable_id and parent_id.
-* Stylize the cart and provide a default theme.
-* Doc how to create a customized cart theme.
-
 0.0.4 (Thu 14:29, Feb 9, 2012)
 
 * Factory not registered error fixed
