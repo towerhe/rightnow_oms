@@ -6,7 +6,7 @@ module RightnowOms
     def remove_null_params(data = params)
       data.each do |k, v|
         remove_null_params(v) if v.is_a? Hash
-        data[k] = nil if v == 'null'
+        data.delete(k) if v == 'null'
       end
     end
   end
