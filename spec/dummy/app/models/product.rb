@@ -9,5 +9,6 @@ class Product < ActiveRecord::Base
     t.add :price
     t.add :group
     t.add :children
+    t.add :ancestry
   end
 end

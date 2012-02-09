@@ -18,8 +18,8 @@ App.ShowProductView = Ember.View.extend
     if cartItem.get('id')
       @addChildren(product.children, cartItem)
     else
-      cartItem.addObserver('data', ->
-        self.addChildren(product.children, cartItem)
+      cartItem.addObserver('isDirty', ->
+        self.addChildren(product.children, cartItem) unless cartItem.get('isDirty')
       )
 
   addChildren: (children, parent) ->

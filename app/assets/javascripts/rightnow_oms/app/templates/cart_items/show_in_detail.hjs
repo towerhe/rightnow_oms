@@ -1,12 +1,12 @@
 {{#with cartItem}}
   <td>{{ name }}</td>
   <td class="price">￥{{ price }}</td>
-  <td>
+  <td class="quantity">
     {{#if hasParent }}
       {{ quantity }}
     {{else}}
       <a href="#" {{ action "decrease" }}>-</a>
-      {{ view Ember.TextField classNames="quantity" valueBinding="quantity" }}
+      <span> {{ quantity }} </span>
       <a href="#" {{ action "increase" }}>+</a>
     {{/if}}
   </td>

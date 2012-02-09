@@ -6,6 +6,8 @@
     <p>种类：{{ group }}</p>
     <p>名称：{{ name }}</p>
     <p>价格：￥{{ price }}</p>
-    <button type="submit">购买</button>
+    {{#unless hasAncestry}}
+      <button type="submit">购买</button>
+    {{/unless}}
   </form>
 {{/with}}
