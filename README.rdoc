@@ -21,6 +21,10 @@ Make sure that all requirements are met and add RightnowOms to your Gemfile.
 
   gem 'rightnow_oms'
 
+and run <tt>bundle install</tt>
+
+== Usage
+
 Mount RightnowOms to your application.
 
   # config/routes.rb
@@ -31,16 +35,16 @@ Create the migrations with:
   rake rightnow_oms:install:migrations
   rake db:migrate
 
-Run +bundle install+ and require ember and ember-data in your +app/assets/javascripts/application.js+:
+Run <tt>bundle install</tt> and require ember and ember-data in your <tt>app/assets/javascripts/application.js</tt>:
 
   = require rightnow_oms/vendor/ember
   = require rightnow_oms/vendor/ember-data
 
-Add the following line to your +app/assets/javascripts/application.js+:
+Add the following line to your <tt>app/assets/javascripts/application.js</tt>:
 
   = require rightnow_oms/application
 
-Add the stylesheets to your +app/assets/stylesheets/application.css+:
+Add the stylesheets to your <tt>app/assets/stylesheets/application.css</tt>:
 
   = require rightnow_oms/application
 
@@ -57,6 +61,11 @@ Create a layout for your detailed cart view:
 
     %body
       = yield
+
+Add before filters to your controllers which need to use the cart:
+
+  # This before filter will create a instance variable @cart
+  before_filter :load_or_create_cart
 
 Add a place holder for your cart in your views:
 
