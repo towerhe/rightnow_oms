@@ -1,0 +1,9 @@
+0.0.4 (wip)
+
+* Return cartable_id of cart item
+
+0.0.3 (Thu 11:16, Feb 9, 2012)
+
+* Can't add items with children bug fixed
+* Reorder the architecture
+* Add more tips in README
