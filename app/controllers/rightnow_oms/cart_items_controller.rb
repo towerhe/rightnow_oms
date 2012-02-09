@@ -53,7 +53,7 @@ module RightnowOms
     end
 
     def load_cart_item
-      @cart_item = CartItem.find(params[:id])
+      @cart_item = RightnowOms::CartItem.find(params[:id])
     end
   end
 end
