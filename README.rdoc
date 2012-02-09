@@ -48,7 +48,7 @@ Add the stylesheets to your <tt>app/assets/stylesheets/application.css</tt>:
 
   = require rightnow_oms/application
 
-Create a layout for your detailed cart view:
+Create a layout for your detailed cart view like:
 
   # app/views/layouts/rightnow_oms/application.html.haml
   !!!
