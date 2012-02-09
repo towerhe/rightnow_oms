@@ -75,6 +75,12 @@ Add a place holder for your cart in your views:
     </script>
   </div>
 
+and load your cart in the view:
+
+  $(function() {
+    RightnowOms.cartController.load(#{@cart.as_api_response(:default).to_json.html_safe});
+  });
+
 == Development
 
 RightnowOms is developed with Ruby 1.9.3-p0 and Rails 3.1.3

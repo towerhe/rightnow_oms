@@ -7,6 +7,7 @@ module RightnowOms
     belongs_to :parent, class_name: 'RightnowOms::CartItem', foreign_key: :parent_id
     has_many :children, class_name: 'RightnowOms::CartItem', foreign_key: :parent_id, dependent: :destroy
 
+    validates :cartable, presence: true
     validates :cart, presence: true
     validates :name, presence: true
     validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
@@ -15,6 +16,8 @@ module RightnowOms
     api_accessible :default do |t|
       t.add :id
       t.add :parent_id
+      t.add :cartable_id
+      t.add :cartable_type
       t.add :name
       t.add :price
       t.add :quantity
