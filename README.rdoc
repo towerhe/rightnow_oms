@@ -21,6 +21,11 @@ Make sure that all requirements are met and add RightnowOms to your Gemfile.
 
   gem 'rightnow_oms'
 
+Mount RightnowOms to your application.
+
+  # config/routes.rb
+  mount RightnowOms::Engine => "rightnow_oms"
+
 Create the migrations with:
 
   rake rightnow_oms:install:migrations
