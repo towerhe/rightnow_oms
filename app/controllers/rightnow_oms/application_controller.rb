@@ -3,9 +3,6 @@ module RightnowOms
     before_filter :set_null_to_nil
 
     protected
-    def load_cart
-      @cart = Cart.find_by_id(session[:cart_id]) || Cart.new
-    end
 
     def set_null_to_nil(data = params)
       data.each do |k, v|
