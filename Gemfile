@@ -19,7 +19,7 @@ end
 group :development, :test do
   gem "ffaker"
   gem 'therubyracer'
-  gem "sqlite3"
+  gem "mysql2"
   gem "pry"
 end
 
@@ -29,6 +29,7 @@ group :test do
   gem "shoulda-matchers"
   gem "rack_session_access"
   gem 'factory_girl_rails'
+  gem 'capybara-webkit'
 end
 
 # Declare any dependencies that are still in development here instead of in
