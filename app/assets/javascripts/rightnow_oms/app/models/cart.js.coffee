@@ -1,5 +1,3 @@
-store = RightnowOms.store
-
 RightnowOms.Cart = DS.Model.extend
   cartItems: (->
     RightnowOms.CartItem.all()
@@ -25,19 +23,18 @@ RightnowOms.Cart = DS.Model.extend
     cartItem = RightnowOms.CartItem.findByName(item.name)
 
     if cartItem?
-      cartItem.increase()
+      cartItem.increase() unless cartItem.get('parent')?
     else
-      cartItem = store.createRecord(RightnowOms.CartItem, item)
-
-    store.commit()
+      cartItem = RightnowOms.store.createRecord(RightnowOms.CartItem, item)
 
     cartItem
 
   removeCartItem: (id) ->
-    item = RightnowOms.CartItem.findById(id)
+    cartItem = RightnowOms.CartItem.findById(id)
     
-    if item?
-      item.deleteRecord()
+    cartItem.deleteRecord() if cartItem?
+
+    cartItem
 
   increaseCartItem: (id) ->
     cartItem = RightnowOms.CartItem.findById(id)
