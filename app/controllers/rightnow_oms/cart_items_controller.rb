@@ -1,6 +1,6 @@
 module RightnowOms
   class CartItemsController < ApplicationController
-    before_filter :load_cart, only: [:index, :create]
+    before_filter :load_or_create_cart, only: [:index, :create]
     before_filter :load_cart_item, only: [:update, :destroy]
 
     # TODO Unit test needed
