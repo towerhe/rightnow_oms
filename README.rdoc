@@ -8,12 +8,16 @@ A common gem for managing your carts and orders. RightnowOms is a rails mountabl
 
 Add the following gems to your Gemfile:
 
-* jquery-rails
-* ember-rails
-* haml-rails
-* coffee-rails
-* sass-rails
-* acts_as_api
+  gem 'jquery-rails'
+  gem 'ember-rails'
+  gem 'acts_as_api'
+  gem 'haml-rails'
+
+  group :assets do
+    gem 'uglifier'
+    gem 'coffee-rails'
+    gem 'sass-rails'
+  end
 
 == Installation
 
