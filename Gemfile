@@ -30,6 +30,7 @@ group :test do
   gem "rack_session_access"
   gem 'factory_girl_rails'
   gem 'capybara-webkit'
+  gem 'database_cleaner'
 end
 
 # Declare any dependencies that are still in development here instead of in
