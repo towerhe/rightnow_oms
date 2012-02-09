@@ -1,9 +1,9 @@
 $:.push File.expand_path("../lib", __FILE__)
 
-# Maintain your gem's version:
+# Maintain your s.add_development_dependency's version:
 require "rightnow_oms/version"
 
-# Describe your gem and declare its dependencies:
+# Describe your s.add_development_dependency and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "rightnow_oms"
   s.version     = RightnowOms::VERSION
@@ -23,4 +23,5 @@ Gem::Specification.new do |s|
   s.add_dependency "ember-rails"
   s.add_dependency "haml-rails"
 
+  s.add_development_dependency "factory_girl_rails"
 end
