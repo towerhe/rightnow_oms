@@ -54,11 +54,11 @@ Add the stylesheets to your <tt>app/assets/stylesheets/application.css</tt>:
 
 Create a layout for your detailed cart view like:
 
-  # app/views/layouts/rightnow_oms/application.html.haml
+  # app/views/layouts/rightnow_oms/cart.html.haml
   !!!
   %html
     %head
-      %title Dummy
+      %title RightnowOms
       = stylesheet_link_tag    "application"
       = javascript_include_tag "application"
       = csrf_meta_tags
