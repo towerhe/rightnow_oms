@@ -17,5 +17,12 @@ module RightnowOms
     def load_cart
       @cart = RightnowOms::Cart.find_by_id(session[:cart_id])
     end
+
+    def remove_null_params(data = params)
+      data.each do |k, v|
+        remove_null_params(v) if v.is_a? Hash
+        data.delete(k) if v == 'null'
+      end
+    end
   end
 end
