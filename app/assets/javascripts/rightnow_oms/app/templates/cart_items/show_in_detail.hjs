@@ -11,5 +11,9 @@
     {{/if}}
   </td>
   <td class="subtotal">￥{{ subtotal }}</td>
-  <td><a href="#" {{ action "deleteRecord" }}>删除</a></td>
+  <td>
+    {{#unless hasParent }}
+      <a href="#" {{ action "deleteRecord" }}>删除</a>
+    {{/unless}}
+  </td>
 {{/with}}
