@@ -3,6 +3,7 @@
 .rvmrc
 .sass-cache/
 NERD*
+doc/
 log/*.log
 pkg/
 rdoc/
