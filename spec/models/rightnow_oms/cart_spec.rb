@@ -6,6 +6,19 @@ describe RightnowOms::Cart do
 
   subject { FactoryGirl.create(:cart) }
 
+  describe '#cartable_count' do
+    let(:cart) { FactoryGirl.create(:cart) }
+
+    before do
+      FactoryGirl.create(:cart_item, name: 'first', quantity: 1, cart: cart)
+      FactoryGirl.create(:cart_item, name: 'second', quantity: 2, cart: cart)
+    end
+
+    subject { cart }
+
+    its(:cartable_count) { should == 3 }
+  end
+
   describe '#total' do
     context 'with no items' do
       subject { FactoryGirl.build(:cart) }
