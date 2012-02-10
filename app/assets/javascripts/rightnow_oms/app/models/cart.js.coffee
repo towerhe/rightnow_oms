@@ -23,7 +23,7 @@ RightnowOms.Cart = DS.Model.extend
     cartItem = RightnowOms.CartItem.findByCartableAndParentId(item.cartable_id, item.cartable_type, item.parent_id)
 
     if cartItem?
-      cartItem.increase()# unless cartItem.get('parent')?
+      cartItem.increase() unless cartItem.get('parent')?
     else
       cartItem = RightnowOms.store.createRecord(RightnowOms.CartItem, item)
 
