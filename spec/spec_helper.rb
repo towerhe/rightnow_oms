@@ -16,7 +16,7 @@ require 'database_cleaner'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each {|f| require f}
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
@@ -26,12 +26,16 @@ RSpec.configure do |config|
   config.include RightnowOms::Engine.routes.url_helpers
 
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean_with :truncation
   end
 
   config.before(:each) do
-    DatabaseCleaner.start
+    if Capybara.current_driver == :rack_test
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.start
+    else
+      DatabaseCleaner.strategy = :truncation
+    end
   end
 
   config.after(:each) do
