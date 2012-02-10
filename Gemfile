@@ -1,4 +1,4 @@
-source "http://rubygems.org"
+source 'http://rubygems.org'
 
 # Declare your gem's dependencies in rightnow_oms.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
@@ -6,28 +6,30 @@ source "http://rubygems.org"
 gemspec
 
 # Used by the dummy application or for test
-gem "jquery-rails"
+gem 'jquery-rails'
 gem 'ancestry'
-gem "ember-rails"
-gem "pry"
+gem 'ember-rails'
+gem 'pry'
 
 group :assets do
-  gem "uglifier"
-  gem "coffee-rails"
-  gem "sass-rails"
+  gem 'uglifier'
+  gem 'coffee-rails'
+  gem 'sass-rails'
 end
 
 group :development, :test do
-  gem "ffaker"
+  gem 'yard'
+  gem 'redcarpet'
+  gem 'ffaker'
   gem 'therubyracer'
-  gem "mysql2"
+  gem 'mysql2'
 end
 
 group :test do
-  gem "rspec-rails"
-  gem "capybara"
-  gem "shoulda-matchers"
-  gem "rack_session_access"
+  gem 'rspec-rails'
+  gem 'capybara'
+  gem 'shoulda-matchers'
+  gem 'rack_session_access'
   gem 'factory_girl_rails'
   gem 'capybara-webkit'
   gem 'database_cleaner'
