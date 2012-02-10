@@ -9,6 +9,7 @@ gemspec
 gem "jquery-rails"
 gem 'ancestry'
 gem "ember-rails"
+gem "pry"
 
 group :assets do
   gem "uglifier"
@@ -20,7 +21,6 @@ group :development, :test do
   gem "ffaker"
   gem 'therubyracer'
   gem "mysql2"
-  gem "pry"
 end
 
 group :test do
