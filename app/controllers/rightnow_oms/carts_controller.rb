@@ -5,7 +5,7 @@ module RightnowOms
 
     def show
       respond_to do |format|
-        format.html
+        format.html { render :show, layout: 'rightnow_oms/cart' }
         format.json { render_for_api :default, json: @cart, root: :cart, status: :ok }
       end
     end
