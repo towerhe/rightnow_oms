@@ -89,6 +89,21 @@ Add before filters to your controllers which need to use the cart:
   before_filter :load_or_create_cart
 ```
 
+Create cartable models in your application:
+
+```ruby
+class Product < ActiveRecord::Base
+  acts_as_cartable
+end
+```
+
+By default, Cart loads the name and price of cartable models by
+attributes named name and price. You can customize these attributes:
+
+```ruby
+  acts_as_cartable { name: :your_name_attr, price: :your_price_attr }
+```
+
 Add a place holder for your cart in your views:
 
 ```html
@@ -107,6 +122,20 @@ and load your cart in the view:
   });
 ```
 
+You can add cartables to the cart by:
+
+```javascript
+  RightnowOms.cartController.addCartItem({
+    cartable_id: 1,
+    cartable_type: 'Product'
+
+    // if the item is a child, you need to set the parent id.
+    // parent_id: 2
+  })
+```
+
+Now you have all things done. Wish you have a good day.
+
 ## Development
 
 RightnowOms is developed with Ruby 1.9.3-p0 and Rails 3.1.3
@@ -124,4 +153,5 @@ RightnowOms is developed with Ruby 1.9.3-p0 and Rails 3.1.3
   rails s
 ```
 
+## Copyright
 Copyright 2011-2012 Beijing Menglifang Network Technology and Science Co.,Ltd. All rights reserved.
