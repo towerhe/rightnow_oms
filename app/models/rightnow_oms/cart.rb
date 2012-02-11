@@ -32,8 +32,8 @@ module RightnowOms
       else
         cart_item = cart_items.create!(
           cartable: cartable,
-          name: cartable.name,
-          price: cartable.price,
+          name: cartable.cartable_name,
+          price: cartable.cartable_price,
           quantity: quantity,
           group: group,
           parent_id: parent_id
