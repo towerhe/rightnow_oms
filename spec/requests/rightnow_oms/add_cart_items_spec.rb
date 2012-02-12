@@ -18,8 +18,8 @@ feature "Add cart items to cart", js: true do
 
       visit '/products'
 
-      page.find('#cart-wrapper').should have_cart(cartable_count: 1, total: 3.0)
-      page.find('#cart-wrapper').find('table').should have_cart_items([{
+      page.find('#rightnow-oms').should have_cart(cartable_count: 1, total: 3.0)
+      page.find('#rightnow-oms').find('table').should have_cart_items([{
         name: 'product', price: 3.0, quantity: 1, deletable: true
       }])
     end
@@ -42,8 +42,8 @@ feature "Add cart items to cart", js: true do
 
       visit '/products'
 
-      page.find('#cart-wrapper').should have_cart(cartable_count: 2, total: 6.0)
-      page.find('#cart-wrapper').find('table').should have_cart_items([{
+      page.find('#rightnow-oms').should have_cart(cartable_count: 2, total: 6.0)
+      page.find('#rightnow-oms').find('table').should have_cart_items([{
         name: 'product', price: 3.0, quantity: 2, deletable: true
       }])
     end
@@ -66,8 +66,8 @@ feature "Add cart items to cart", js: true do
       visit '/products'
       find('button').click
 
-      page.find('#cart-wrapper').should have_cart(cartable_count: 2, total: 3.0)
-      page.find('#cart-wrapper').find('table').should have_cart_items([{
+      page.find('#rightnow-oms').should have_cart(cartable_count: 2, total: 3.0)
+      page.find('#rightnow-oms').find('table').should have_cart_items([{
         name: 'parent', price: 1.0, quantity: 1, deletable: true
       }, {
         name: 'child', price: 2.0, quantity: 1, deletable: false
@@ -75,8 +75,8 @@ feature "Add cart items to cart", js: true do
 
       visit '/products'
 
-      page.find('#cart-wrapper').should have_cart(cartable_count: 2, total: 3.0)
-      page.find('#cart-wrapper').find('table').should have_cart_items([{
+      page.find('#rightnow-oms').should have_cart(cartable_count: 2, total: 3.0)
+      page.find('#rightnow-oms').find('table').should have_cart_items([{
         name: 'parent', price: 1.0, quantity: 1, deletable: true
       }, {
         name: 'child', price: 2.0, quantity: 1, deletable: false
