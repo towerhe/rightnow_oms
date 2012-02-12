@@ -1,17 +1,17 @@
 {{#with cartItem}}
-  <td>{{ name }}</td>
+  <td class="name">{{ name }}</td>
   <td class="price">￥{{ price }}</td>
   <td class="quantity">
     {{#if hasParent }}
-      {{ quantity }}
+      <span class="quantity-only">{{ quantity }}</span>
     {{else}}
-      <a href="#" {{ action "decrease" }}>-</a>
-      <span> {{ quantity }} </span>
-      <a href="#" {{ action "increase" }}>+</a>
+      <span class="decrease"><a href="#" {{ action "decrease" }}>-</a></span>
+      <span class="quantity"> {{ quantity }} </span>
+      <span class="increase"><a href="#" {{ action "increase" }}>+</a></span>
     {{/if}}
   </td>
-  <td class="subtotal">￥{{ subtotal }}</td>
-  <td>
+  <td class="subtotal r-money">￥{{ subtotal }}</td>
+  <td class="delete">
     {{#unless hasParent }}
       <a href="#" {{ action "deleteRecord" }}>删除</a>
     {{/unless}}
