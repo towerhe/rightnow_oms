@@ -107,7 +107,7 @@ attributes named name and price. You can customize these attributes:
 Add a place holder for your cart in your views:
 
 ```html
-  <div id="cart-wrapper">
+  <div id="rightnow-oms">
     <script type="text/x-handlebars">
       {{ view RightnowOms.ShowCartView }}
     </script>
