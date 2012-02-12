@@ -4,4 +4,4 @@ RightnowOms.ShowCartItemView = Ember.View.extend
 
   deleteRecord: ->
     item = this.get('cartItem')
-    RightnowOms.cartController.removeCartItem(item.get('id'))
+    RightnowOms.cartController.removeCartItem(item.get('id'), true)
