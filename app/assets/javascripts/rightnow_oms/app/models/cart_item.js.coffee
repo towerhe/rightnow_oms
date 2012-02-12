@@ -28,6 +28,10 @@ RightnowOms.CartItem = DS.Model.extend
     @get('parent_id')?
   ).property('parent_id')
 
+  isDecreasable: (->
+    @get('quantity') > 1
+  ).property('quantity')
+
   increase: ->
     @get('children').forEach((child) ->
       child.increase()
