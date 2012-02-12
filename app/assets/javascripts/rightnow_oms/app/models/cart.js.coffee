@@ -46,7 +46,6 @@ RightnowOms.Cart = DS.Model.extend
     cartItem = RightnowOms.CartItem.findById(id)
 
     cartItem.decrease()
-    #removeCartItem(id) if cartItem.get('quantity') <= 0
     cartItem
 
 RightnowOms.Cart.reopenClass
