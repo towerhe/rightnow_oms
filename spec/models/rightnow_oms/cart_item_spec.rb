@@ -19,6 +19,9 @@ describe RightnowOms::CartItem do
   it { should_not allow_value(-1).for(:quantity) }
   it { should_not allow_value(0).for(:quantity) }
 
+  it { should allow_value(Product.new).for(:cartable) }
+  it { should_not allow_value(RightnowOms::Cart.new).for(:cartable) }
+
   describe "#total_price" do
     subject { FactoryGirl.build(:cart_item, price: 10.55, quantity: 2) }
 
