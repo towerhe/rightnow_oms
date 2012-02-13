@@ -104,8 +104,8 @@ GEM
     method_source (0.7.0)
     mime-types (1.17.2)
     multi_json (1.0.4)
-    mysql2 (0.3.11)
     nokogiri (1.5.0)
+    pg (0.13.1)
     polyglot (0.3.3)
     pry (0.9.8.2)
       coderay (~> 1.0.5)
@@ -198,7 +198,7 @@ DEPENDENCIES
   factory_girl_rails
   ffaker
   jquery-rails
-  mysql2
+  pg
   pry
   rack_session_access
   redcarpet
