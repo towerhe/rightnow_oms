@@ -1,8 +1,7 @@
-*Rightnow OMS 0.1.1 (wip)*
+*Rightnow OMS 0.1.1 (Mon 18:35, Feb 13, 2012)*
 
 * Validate that cart items are cartable
-* TODO Migrate the database to PostgreSQL
-* TODO Deploy a demo to heroku
+* Migrate the database to PostgreSQL
 
 *Rightnow OMS 0.1.0 (Mon 11:31, Feb 13, 2012)*
 
