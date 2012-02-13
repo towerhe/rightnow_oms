@@ -140,6 +140,12 @@ Now you have all things done. Wish you have a good day.
 
 RightnowOms is developed with Ruby 1.9.3-p0 and Rails 3.1.3
 
+First of all, you need to create a database config for RightnowOms.
+There are already some useful templates for you under
+`spec/dummy/config/`. RightnowOms use PostgreSQL by default. If you want
+to setup other databases, for example mysql, you need to modify the
+Gemfile by yourself.
+
 ```bash
   bundle install
   bundle exec rake app:db:migrate
