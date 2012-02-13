@@ -10,7 +10,7 @@
       <span class="increase"><a href="#" {{ action "increase" }}>+</a></span>
     {{/if}}
   </td>
-  <td class="subtotal r-money">￥{{ subtotal }}</td>
+  <td class="subtotal r-money">￥{{ subtotalString }}</td>
   <td class="delete">
     {{#unless hasParent }}
       <a href="#" {{ action "deleteRecord" }}>删除</a>

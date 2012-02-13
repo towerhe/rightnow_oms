@@ -12,8 +12,12 @@ RightnowOms.CartItem = DS.Model.extend
   ).property('price')
 
   subtotal: (->
-    round(round(@get('price'), 2) * @get('quantity'), 2)
+    @get('price') * @get('quantity')
   ).property('price', 'quantity')
+
+  subtotalString: (->
+    round(@get('subtotal'), 2)
+  ).property('subtotal')
 
   children: (->
     RightnowOms.CartItem.all().filterProperty('parent_id', @get('id'))
