@@ -58,5 +58,9 @@ RightnowOms.Cart = DS.Model.extend
     cartItem.decrease()
     cartItem
 
+  findCartItemsByGroup: (group) ->
+    @get('cartItems').filter (item) ->
+      return true if item.get('group') == group
+
 RightnowOms.Cart.reopenClass
   isSingleton: true

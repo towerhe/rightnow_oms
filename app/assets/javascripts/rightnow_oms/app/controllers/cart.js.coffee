@@ -40,3 +40,6 @@ RightnowOms.cartController = Ember.Object.create
     if confirm('您确定要清空您的购物车吗？')
       @get('content').cleanUp()
       @store.commit()
+
+  findCartItemsByGroup: (group) ->
+    @get('content').findCartItemsByGroup(group)

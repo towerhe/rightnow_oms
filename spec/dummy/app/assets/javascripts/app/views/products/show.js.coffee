@@ -9,6 +9,7 @@ App.ShowProductView = Ember.View.extend
     cartItem = RightnowOms.cartController.addCartItem
       'cartable_id': product.get('id')
       'cartable_type': 'Product'
+      'group': product.get('group')
 
     self = @
     if cartItem.get('id')
@@ -25,6 +26,7 @@ App.ShowProductView = Ember.View.extend
         'cartable_id': child.id
         'cartable_type': 'Product'
         'parent_id': parent.get('id')
+        'group': child.group
     )
 
 
