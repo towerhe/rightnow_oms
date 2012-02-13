@@ -35,3 +35,8 @@ RightnowOms.cartController = Ember.Object.create
     if remove
       @get('content').removeCartItem(id)
       @store.commit()
+
+  cleanUp: ->
+    if confirm('您确定要清空您的购物车吗？')
+      @get('content').cleanUp()
+      @store.commit()

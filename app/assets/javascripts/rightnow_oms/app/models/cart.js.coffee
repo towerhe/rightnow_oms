@@ -28,6 +28,16 @@ RightnowOms.Cart = DS.Model.extend
       cartItem = RightnowOms.store.createRecord(RightnowOms.CartItem, item)
 
     cartItem
+    
+  cleanUp: ->
+    cartItemIds = @get('cartItems').map (item) ->
+      return item.get('id')
+
+    cartItemIds.forEach (id) ->
+      item = RightnowOms.CartItem.findById(id)
+
+      # Children will be deleted when the parent is deleted
+      item.deleteRecord() if item && !item.get('hasParent')
 
   removeCartItem: (id) ->
     cartItem = RightnowOms.CartItem.findById(id)
