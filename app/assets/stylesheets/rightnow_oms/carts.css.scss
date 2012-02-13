@@ -134,11 +134,11 @@
   }
   .r-bottom-bar {
     position: relative;
-    float: right;
+    width: 100%;
     font-size: 20px;
     line-height: 36px;
-    span {
-      padding: 8px;
-    }
+    span { padding: 8px; }
+    .left-conner { float: left; }
+    .right-conner { float: right; }
   }
 }
