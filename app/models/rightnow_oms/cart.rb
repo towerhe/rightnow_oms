@@ -30,7 +30,7 @@ module RightnowOms
           quantity: cart_item.quantity + quantity.to_i
         )
       else
-        cart_item = cart_items.create!(
+        cart_item = cart_items.create(
           cartable: cartable,
           name: cartable.cartable_name,
           price: cartable.cartable_price,

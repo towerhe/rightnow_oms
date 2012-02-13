@@ -16,8 +16,7 @@ describe RightnowOms::CartItemsController do
 
       context "with valid params" do
         before do
-          cart_item.should_receive(:save).and_return(true)
-
+          cart_item.should_receive(:valid?).and_return(true)
           post :create, format: :json, use_route: :rightnow_oms, cart_item: {}
         end
 
@@ -27,8 +26,7 @@ describe RightnowOms::CartItemsController do
 
       context "with invalid params" do
         before do
-          cart_item.should_receive(:save).and_return(false)
-
+          cart_item.should_receive(:valid?).and_return(false)
           post :create, format: :json, use_route: :rightnow_oms, cart_item: {}
         end
 
