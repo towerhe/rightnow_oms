@@ -22,7 +22,8 @@ group :development, :test do
   gem 'redcarpet'
   gem 'ffaker'
   gem 'therubyracer'
-  gem 'mysql2'
+  gem 'pg'
+  #gem 'mysql2'
 end
 
 group :test do
