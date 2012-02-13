@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rightnow_oms (0.0.4)
+    rightnow_oms (0.1.0)
       acts_as_api
       coffee-rails
       ember-rails
