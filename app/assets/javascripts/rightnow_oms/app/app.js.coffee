@@ -1,5 +1,5 @@
 window.RightnowOms = Ember.Application.create
-  rootElement: '#cart-wrapper'
+  rootElement: '#rightnow-oms'
 
 window.RightnowOms.store = DS.Store.create
   adapter:

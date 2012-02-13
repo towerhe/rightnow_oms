@@ -14,6 +14,10 @@ module RightnowOms
       cart_items.map.sum(&:total_price) || 0
     end
 
+    def cartable_count
+      cart_items.map.sum(&:quantity)
+    end
+
     def add_item(cartable, opts = { quantity: 1 })
       quantity = opts[:quantity]
       group = opts[:group]
@@ -28,8 +32,8 @@ module RightnowOms
       else
         cart_item = cart_items.create!(
           cartable: cartable,
-          name: cartable.name,
-          price: cartable.price,
+          name: cartable.cartable_name,
+          price: cartable.cartable_price,
           quantity: quantity,
           group: group,
           parent_id: parent_id

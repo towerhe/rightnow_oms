@@ -20,7 +20,7 @@ RightnowOms.Cart = DS.Model.extend
   ).property("cartableCount")
 
   addCartItem: (item) ->
-    cartItem = RightnowOms.CartItem.findByName(item.name)
+    cartItem = RightnowOms.CartItem.findByCartableAndParentId(item.cartable_id, item.cartable_type, item.parent_id)
 
     if cartItem?
       cartItem.increase() unless cartItem.get('parent')?
@@ -46,7 +46,6 @@ RightnowOms.Cart = DS.Model.extend
     cartItem = RightnowOms.CartItem.findById(id)
 
     cartItem.decrease()
-    #removeCartItem(id) if cartItem.get('quantity') <= 0
     cartItem
 
 RightnowOms.Cart.reopenClass

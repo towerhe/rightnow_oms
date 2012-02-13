@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "Manage the orders."
   s.description = "A common mountable engine can be used to manage the orders."
 
-  s.files = Dir["{app,config,db,lib,vendor}/**/*"] + ["Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["Rakefile", "README.md", 'CHANGELOG']
 
   s.add_dependency "rails"
   s.add_dependency "jquery-rails"
@@ -23,5 +23,4 @@ Gem::Specification.new do |s|
   s.add_dependency "ember-rails"
   s.add_dependency "haml-rails"
 
-  s.add_development_dependency "factory_girl_rails"
 end

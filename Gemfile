@@ -1,4 +1,4 @@
-source "http://rubygems.org"
+source 'http://rubygems.org'
 
 # Declare your gem's dependencies in rightnow_oms.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
@@ -6,21 +6,34 @@ source "http://rubygems.org"
 gemspec
 
 # Used by the dummy application or for test
-gem "jquery-rails"
+gem 'jquery-rails'
 gem 'ancestry'
-gem "uglifier"
-gem "ember-rails"
-gem "coffee-rails"
-gem "sass-rails"
-gem "ffaker"
-gem 'therubyracer'
+gem 'ember-rails'
+gem 'pry'
 
-gem "sqlite3"
-gem "rspec-rails"
-gem "capybara"
-gem "shoulda-matchers"
-gem "pry"
-gem "rack_session_access"
+group :assets do
+  gem 'uglifier'
+  gem 'coffee-rails'
+  gem 'sass-rails'
+end
+
+group :development, :test do
+  gem 'yard'
+  gem 'redcarpet'
+  gem 'ffaker'
+  gem 'therubyracer'
+  gem 'mysql2'
+end
+
+group :test do
+  gem 'rspec-rails'
+  gem 'capybara'
+  gem 'shoulda-matchers'
+  gem 'rack_session_access'
+  gem 'factory_girl_rails'
+  gem 'capybara-webkit'
+  gem 'database_cleaner'
+end
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or

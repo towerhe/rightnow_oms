@@ -1,12 +1,14 @@
+.DS_Store
 .bundle/
+.yardoc/
 .rvmrc
 .sass-cache/
+*.log
 NERD*
-log/*.log
+doc/
 pkg/
 rdoc/
-spec/dummy/.sass-cache/
+spec/dummy/config/database.yml
 spec/dummy/db/*.sqlite3
 spec/dummy/db/schema.rb
-spec/dummy/log/*.log
 spec/dummy/tmp/

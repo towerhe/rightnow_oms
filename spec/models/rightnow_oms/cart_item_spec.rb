@@ -6,6 +6,7 @@ describe RightnowOms::CartItem do
   it { should belong_to :parent }
   it { should have_many :children }
   
+  it { should validate_presence_of :cartable }
   it { should validate_presence_of :cart }
   it { should validate_presence_of :name }
   it { should validate_presence_of :price }
@@ -30,5 +31,20 @@ describe RightnowOms::CartItem do
     subject { RightnowOms::CartItem.find_by_cartable(cart_item.cartable) }
 
     it { should be }
+  end
+
+  describe ".as_api_response" do
+    let(:cart_item) { FactoryGirl.create(:cart_item) }
+
+    subject { cart_item.as_api_response(:default) }
+
+    it { should have_key :id }
+    it { should have_key :parent_id }
+    it { should have_key :cartable_id }
+    it { should have_key :cartable_type }
+    it { should have_key :name }
+    it { should have_key :price }
+    it { should have_key :quantity }
+    it { should have_key :group }
   end
 end

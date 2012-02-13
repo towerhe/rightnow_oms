@@ -20,9 +20,18 @@ RightnowOms.cartController = Ember.Object.create
     @store.commit()
 
   decreaseCartItem: (id) ->
-    @get('content').decreaseCartItem(id)
-    @store.commit()
+    cartItem = RightnowOms.CartItem.findById(id)
 
-  removeCartItem: (id) ->
-    @get('content').removeCartItem(id)
-    @store.commit()
+    if cartItem.get('isDecreasable')
+      @get('content').decreaseCartItem(id)
+      @store.commit()
+    else
+      @removeCartItem(id)
+
+  removeCartItem: (id, silent) ->
+    remove = true
+    remove = confirm('您确定要删除该商品吗？') unless silent
+
+    if remove
+      @get('content').removeCartItem(id)
+      @store.commit()
