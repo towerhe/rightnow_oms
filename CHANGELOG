@@ -2,7 +2,8 @@
 
 * Clean up the cart
 * Load the cart items in cart by group
-* (TODO) Update cart items
+* Update cart items
+* (TODO) Define a float type for Ember.JS
 
 *Rightnow OMS 0.1.1 (Mon 18:35, Feb 13, 2012)*
 
