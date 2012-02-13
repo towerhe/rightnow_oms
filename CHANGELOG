@@ -4,6 +4,7 @@
 * Load the cart items in cart by group
 * Update cart items
 * Define a float type for Ember.JS
+* Call a callback when a cart item is added successfully
 
 *Rightnow OMS 0.1.1 (Mon 18:35, Feb 13, 2012)*
 
