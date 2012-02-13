@@ -24,6 +24,8 @@ module RightnowOms
       t.add :group
     end
 
+    default_scope order("id ASC")
+
     def total_price
       price * quantity
     end
