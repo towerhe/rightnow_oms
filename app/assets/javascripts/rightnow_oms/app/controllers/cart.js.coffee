@@ -15,6 +15,10 @@ RightnowOms.cartController = Ember.Object.create
 
     cartItem
 
+  updateCartItem: (id, properties) ->
+    @get('content').updateCartItem(id, properties)
+    @store.commit()
+
   increaseCartItem: (id) ->
     @get('content').increaseCartItem(id)
     @store.commit()

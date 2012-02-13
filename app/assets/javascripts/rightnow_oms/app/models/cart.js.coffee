@@ -28,6 +28,14 @@ RightnowOms.Cart = DS.Model.extend
       cartItem = RightnowOms.store.createRecord(RightnowOms.CartItem, item)
 
     cartItem
+
+  updateCartItem: (id, properties) ->
+    cartItem = RightnowOms.CartItem.findById(id)
+
+    if cartItem?
+      # TODO Define a setProperties method in Model
+      for key, value of properties
+        cartItem.set(key, value)
     
   cleanUp: ->
     cartItemIds = @get('cartItems').map (item) ->
