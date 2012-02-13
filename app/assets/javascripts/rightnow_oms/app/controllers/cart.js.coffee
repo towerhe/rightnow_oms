@@ -15,14 +15,13 @@ RightnowOms.cartController = Ember.Object.create
 
     return unless callback
 
+    return callback.call(@, cartItem) if cartItem.get('id')
+
     self = @
-    if cartItem.get('id')
-      callback.call(@, cartItem)
-    else
-      cartItem.addObserver('isDirty', ->
-        unless cartItem.get('isDirty')
-          callback.call(self, cartItem) unless cartItem.get('isDeleted')
-      )
+    cartItem.addObserver('isDirty', ->
+      if (!cartItem.get('isDirty')) && (!cartItem.get('isDeleted'))
+        callback.call(self, cartItem)
+    )
 
   updateCartItem: (id, properties) ->
     @get('content').updateCartItem(id, properties)
