@@ -1,9 +1,5 @@
 require 'spec_helper'
 
-class CartableModel < ActiveRecord::Base
-  attr_accessor :my_name, :my_price
-end
-
 describe RightnowOms::ActsAsCartable do
   it 'introduces acts_as_cartable to ActiveRecord' do
     CartableModel.should respond_to :acts_as_cartable

@@ -19,7 +19,7 @@ module RightnowOms
       cart_item = @cart.add_item(find_cartable, params[:cart_item])
 
       respond_to do |format|
-        if cart_item.save
+        if cart_item.valid?
           format.json { render_for_api :default, json: cart_item, root: :cart_item, status: :created }
         else
           format.json { render json: cart_item.errors, status: :unprocessable_entity }

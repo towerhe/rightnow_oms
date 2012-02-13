@@ -1,4 +1,15 @@
-*Rightnow OMS 0.1.0 (wip)*
+*Rightnow OMS 0.1.1 (wip)*
+
+* Validate that cart items are cartable
+* TODO Migrate the database to PostgreSQL
+* TODO Deploy a demo to heroku
+
+*Rightnow OMS 0.1.0 (Mon 11:31, Feb 13, 2012)*
+
+* Provide a helper method to load the cart in controllers
+* Return the cartable_id and cartable_type of cart items
+* Distinguish cart items by cartable and parent_id
+* Create an acts_as_cartable method to provide the features of a cartable model.
 
 *Rightnow OMS 0.0.4 (Thu 14:29, Feb 9, 2012)*
 
