@@ -5,20 +5,15 @@ App.ShowProductView = Ember.View.extend
   submit: (e) ->
     e.preventDefault()
 
+    self = @
     product = @get('product')
-    cartItem = RightnowOms.cartController.addCartItem
+    RightnowOms.cartController.addCartItem({
       'cartable_id': product.get('id')
       'cartable_type': 'Product'
       'group': product.get('group')
-
-    self = @
-    if cartItem.get('id')
-      @addChildren(product.children, cartItem)
-    else
-      cartItem.addObserver('isDirty', ->
-        unless cartItem.get('isDirty')
-          self.addChildren(product.children, cartItem) unless cartItem.get('isDeleted')
-      )
+    }, (cartItem) ->
+      self.addChildren(product.children, cartItem)
+    )
 
   addChildren: (children, parent) ->
     children.forEach((child) ->

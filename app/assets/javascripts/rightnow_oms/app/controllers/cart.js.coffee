@@ -9,11 +9,20 @@ RightnowOms.cartController = Ember.Object.create
     @set('content', RightnowOms.store.find(RightnowOms.Cart, @get('content').get('id')))
 
   # item: a hash
-  addCartItem: (item) ->
+  addCartItem: (item, callback) ->
     cartItem = @get('content').addCartItem(item)
     @store.commit()
 
-    cartItem
+    return unless callback
+
+    self = @
+    if cartItem.get('id')
+      callback.call(@, cartItem)
+    else
+      cartItem.addObserver('isDirty', ->
+        unless cartItem.get('isDirty')
+          callback.call(self, cartItem) unless cartItem.get('isDeleted')
+      )
 
   updateCartItem: (id, properties) ->
     @get('content').updateCartItem(id, properties)
