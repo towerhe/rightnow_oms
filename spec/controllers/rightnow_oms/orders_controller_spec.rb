@@ -30,7 +30,7 @@ module RightnowOms
         end
 
         it { should assign_to :order }
-        it { should redirect_to '/' }
+        it { should redirect_to ::RightnowOms.config.new_order_url }
       end
     end
   end

@@ -15,8 +15,7 @@ module RightnowOms
 
           format.html { redirect_to @order }
         else
-          # TODO redirect to the new order url
-          format.html { redirect_to '/' }
+          format.html { redirect_to ::RightnowOms.config.new_order_url }
         end
       end
     end
