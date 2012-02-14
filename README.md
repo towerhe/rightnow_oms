@@ -126,11 +126,17 @@ You can add cartables to the cart by:
 
 ```javascript
   RightnowOms.cartController.addCartItem({
-    cartable_id: 1,
-    cartable_type: 'Product'
+    cartable_id: 1,             // required
+    cartable_type: 'Product',   // required
+    price: '10.00',             // required
 
-    // if the item is a child, you need to set the parent id.
-    // parent_id: 2
+    // optional, indicating this is a child node of another one
+    parent_id: 2,
+
+    // optional, grouping cart items
+    group: 'booking'
+  }, function(cartItem) {
+    // Do something after the cart item is created
   })
 ```
 

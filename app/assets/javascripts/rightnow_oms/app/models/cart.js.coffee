@@ -31,11 +31,7 @@ RightnowOms.Cart = DS.Model.extend
 
   updateCartItem: (id, properties) ->
     cartItem = RightnowOms.CartItem.findById(id)
-
-    if cartItem?
-      # TODO Define a setProperties method in Model
-      for key, value of properties
-        cartItem.set(key, value)
+    cartItem.setProperties(properties) if cartItem?
     
   cleanUp: ->
     cartItemIds = @get('cartItems').map (item) ->
@@ -44,7 +40,7 @@ RightnowOms.Cart = DS.Model.extend
     cartItemIds.forEach (id) ->
       item = RightnowOms.CartItem.findById(id)
 
-      # Children will be deleted when the parent is deleted
+      # INFO Children will be deleted when the parent is deleted
       item.deleteRecord() if item && !item.get('hasParent')
 
   removeCartItem: (id) ->

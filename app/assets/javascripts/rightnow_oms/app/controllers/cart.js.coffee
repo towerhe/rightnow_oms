@@ -23,6 +23,15 @@ RightnowOms.cartController = Ember.Object.create
         callback.call(self, cartItem)
     )
 
+  # @id: id of the cart item to be updated
+  # @properties: a hash which is the new properties of the cart item.
+  # 
+  # For example:
+  #
+  # RightnowOms.cartController.updateCartItem(1, {
+  #   'price': 10.00,
+  #   'quantity': 2
+  # })
   updateCartItem: (id, properties) ->
     @get('content').updateCartItem(id, properties)
     @store.commit()
@@ -53,5 +62,23 @@ RightnowOms.cartController = Ember.Object.create
       @get('content').cleanUp()
       @store.commit()
 
+  # return: an array of cart items.
+  #
+  # For example:
+  #
+  # RightnowOms.cartController.findCartItemsByGroup('booking');
+  #
+  # =>
+  #   [{
+  #     'id': 1, 'cartable_id': 2, 'cartable_type': 'Product', 'name': 'product-1', 'price': 10.0, 'group': 'booking', 'parent_id': null
+  #   }, {
+  #     'id': 2, 'cartable_id': 3, 'cartable_type': 'Product', 'name': 'product-2', 'price': 20.0, 'group': 'booking', 'parent_id': 2
+  #   }]
   findCartItemsByGroup: (group) ->
-    @get('content').findCartItemsByGroup(group)
+    found = []
+    cartItems = @get('content').findCartItemsByGroup(group)
+
+    cartItems.forEach (item) ->
+      found.push(item.getProperties('id', 'cartable_id', 'cartable_type', 'name', 'price', 'quantity', 'group', 'parent_id'))
+
+    found

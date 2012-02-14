@@ -10,6 +10,7 @@ App.ShowProductView = Ember.View.extend
     RightnowOms.cartController.addCartItem({
       'cartable_id': product.get('id')
       'cartable_type': 'Product'
+      'price': product.get('price')
       'group': product.get('group')
     }, (cartItem) ->
       self.addChildren(product.children, cartItem)
@@ -20,6 +21,7 @@ App.ShowProductView = Ember.View.extend
       RightnowOms.cartController.addCartItem
         'cartable_id': child.id
         'cartable_type': 'Product'
+        'price': child.price
         'parent_id': parent.get('id')
         'group': child.group
     )
