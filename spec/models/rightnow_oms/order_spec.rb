@@ -8,7 +8,7 @@ module RightnowOms
         receiver mobile tel
         payment_mode remarks vbrk
       ).each do |column|
-        it { should have_db_column column }
+        it { should have_db_column column.to_sym }
       end
     end
 
@@ -19,9 +19,9 @@ module RightnowOms
     describe 'validations' do
       %W(
         province city district neighborhood room
-        receiver payment_mode
+        receiver payment_mode order_items
       ).each do |attr|
-        it { should validate_presence_of attr }
+        it { should validate_presence_of attr.to_sym }
       end
 
       describe 'validates mobile and tel' do
@@ -53,5 +53,20 @@ module RightnowOms
         end
       end
     end
+  end
+
+  describe '.new_with_items' do
+    let(:order_hash) { fake_order_hash }
+    let(:order_items_hash) { 2.times.inject([]) { |c| c << fake_order_item_hash } }
+
+    subject { Order.new_with_items(order_hash, order_items_hash) }
+
+    its(:order_items) { should have(2).items }
+  end
+
+  describe '#delivery_address' do
+    subject { FactoryGirl.build(:order, province: 'Beijing', city: 'Beijing', district: 'Haidian', street: '17 of Daliushu Rd', neighborhood: 'Fuhai Center', room: '5#1804') }
+    
+    its(:delivery_address) { should == 'BeijingBeijingHaidian17 of Daliushu RdFuhai Center5#1804' }
   end
 end

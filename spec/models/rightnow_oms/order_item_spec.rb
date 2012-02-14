@@ -32,4 +32,10 @@ module RightnowOms
       it { should_not allow_value(0).for(:quantity) }
     end
   end
+
+  describe '.total' do
+    subject { Factory.build(:order_item, order: nil, price: 10, quantity: 2) }
+
+    its(:total) { should == 20 }
+  end
 end
