@@ -34,6 +34,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'capybara-webkit'
   gem 'database_cleaner'
+  gem 'simplecov', :require => false
 end
 
 # Declare any dependencies that are still in development here instead of in
