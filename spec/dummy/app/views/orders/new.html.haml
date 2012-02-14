@@ -23,18 +23,10 @@
     %table
       - @cart.cart_items.each do |i|
         %tr
-          %td
-            = i.name
-            %input{ name: 'order_items[][name]', value: i.name, type: 'hidden' }
-          %td
-            = "￥#{i.price}"
-            %input{ name: 'order_items[][price]', value: i.price, type: 'hidden' }
-          %td
-            = i.quantity
-            %input{ name: 'order_items[][quantity]', value: i.quantity, type: 'hidden' }
-          %td
-            = "￥#{i.total_price}"
-            %input{ name: 'order_items[][parent_id]', value: i.parent_id, type: 'hidden' }
+          %td= i.name
+          %td= "￥#{'%.2f' % i.price}"
+          %td= i.quantity
+          %td= "￥#{'%.2f' % i.total_price}"
 
   .buttons
     %input{ type: 'submit', value: 'Create Order' }
