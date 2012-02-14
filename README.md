@@ -83,6 +83,15 @@ Create a layout for your detailed cart view like:
       = yield
 ```
 
+You need to configure your new order url in RightnowOms:
+
+```ruby
+  # config/initializers/rightnow_oms.rb
+  RightnowOms.configure do
+    new_order_url '/orders/new'
+  end
+```
+
 Add before filters to your controllers which need to use the cart:
 
 ```ruby
