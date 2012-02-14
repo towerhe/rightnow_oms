@@ -10,4 +10,7 @@ FactoryGirl.define do
     price { cartable.price }
     quantity 1
   end
+
+  factory :order, :class => RightnowOms::Order do
+  end
 end
