@@ -13,6 +13,7 @@ Add the following gems to your Gemfile:
   gem 'ember-rails'
   gem 'acts_as_api'
   gem 'haml-rails'
+  gem 'confstruct'
 
   group :assets do
     gem 'uglifier'
