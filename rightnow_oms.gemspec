@@ -15,12 +15,13 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["Rakefile", "README.md", 'CHANGELOG']
 
-  s.add_dependency "rails"
+  s.add_dependency "rails", ">= 3.1"
   s.add_dependency "jquery-rails"
   s.add_dependency "coffee-rails"
   s.add_dependency "sass-rails"
   s.add_dependency "acts_as_api"
   s.add_dependency "ember-rails"
   s.add_dependency "haml-rails"
+  s.add_dependency "confstruct"
 
 end
