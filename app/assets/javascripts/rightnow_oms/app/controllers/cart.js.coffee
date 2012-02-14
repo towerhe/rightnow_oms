@@ -54,4 +54,10 @@ RightnowOms.cartController = Ember.Object.create
       @store.commit()
 
   findCartItemsByGroup: (group) ->
-    @get('content').findCartItemsByGroup(group)
+    found = []
+    cartItems = @get('content').findCartItemsByGroup(group)
+
+    cartItems.forEach (item) ->
+      found.push(item.getProperties('id', 'cartable_id', 'cartable_type', 'name', 'price', 'quantity', 'group', 'parent_id'))
+
+    found
