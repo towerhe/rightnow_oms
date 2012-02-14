@@ -2,14 +2,22 @@ RightnowOms.CartItem = DS.Model.extend
   cartable_id: DS.attr('integer')
   cartable_type: DS.attr('string')
   name: DS.attr('string')
-  price: DS.attr('string')
+  price: DS.attr('money')
   quantity: DS.attr('integer')
   group: DS.attr('string')
   parent_id: DS.attr('integer')
 
+  priceString: (->
+    round(@get('price'), 2)
+  ).property('price')
+
   subtotal: (->
-    round(round(@get('price'), 2) * @get('quantity'), 2)
+    @get('price') * @get('quantity')
   ).property('price', 'quantity')
+
+  subtotalString: (->
+    round(@get('subtotal'), 2)
+  ).property('subtotal')
 
   children: (->
     RightnowOms.CartItem.all().filterProperty('parent_id', @get('id'))

@@ -29,6 +29,20 @@ RightnowOms.Cart = DS.Model.extend
 
     cartItem
 
+  updateCartItem: (id, properties) ->
+    cartItem = RightnowOms.CartItem.findById(id)
+    cartItem.setProperties(properties) if cartItem?
+    
+  cleanUp: ->
+    cartItemIds = @get('cartItems').map (item) ->
+      return item.get('id')
+
+    cartItemIds.forEach (id) ->
+      item = RightnowOms.CartItem.findById(id)
+
+      # INFO Children will be deleted when the parent is deleted
+      item.deleteRecord() if item && !item.get('hasParent')
+
   removeCartItem: (id) ->
     cartItem = RightnowOms.CartItem.findById(id)
     
@@ -47,6 +61,10 @@ RightnowOms.Cart = DS.Model.extend
 
     cartItem.decrease()
     cartItem
+
+  findCartItemsByGroup: (group) ->
+    @get('cartItems').filter (item) ->
+      return true if item.get('group') == group
 
 RightnowOms.Cart.reopenClass
   isSingleton: true

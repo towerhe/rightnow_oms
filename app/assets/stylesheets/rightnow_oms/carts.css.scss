@@ -35,11 +35,11 @@
     display: none;
     table {
       td {
-        padding: 5px;
+        padding: 5px 8px;
         text-align: right;
       }
       td.name {
-        width: 175px;
+        width: 150px;
         text-align: left;
         overflow: hidden;
       }
@@ -134,11 +134,11 @@
   }
   .r-bottom-bar {
     position: relative;
-    float: right;
+    width: 100%;
     font-size: 20px;
     line-height: 36px;
-    span {
-      padding: 8px;
-    }
+    span { padding: 8px; }
+    .left-conner { float: left; }
+    .right-conner { float: right; }
   }
 }
