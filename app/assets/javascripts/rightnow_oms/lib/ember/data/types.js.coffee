@@ -3,5 +3,5 @@ DS.attr.transforms.money =
     parseFloat(serialized) unless Em.none(serialized)
 
   to: (deserialized) ->
-    (Math.round(deserialized * Math.pow(10, 2)) / Math.pow(10, 2)).toFixed(22) unless Em.none(deserialized)
+    (Math.round(deserialized * Math.pow(10, 2)) / Math.pow(10, 2)).toFixed(2) unless Em.none(deserialized)
 
