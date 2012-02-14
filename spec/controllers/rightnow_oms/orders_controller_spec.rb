@@ -7,9 +7,15 @@ module RightnowOms
       let(:cart) { FactoryGirl.build(:cart) }
       
       before {
+        ::RightnowOms.configure { new_order_url '/orders/new' }
+
         Cart.should_receive(:find_by_id).and_return(cart)
         Order.should_receive(:new_with_items).and_return(order)
       }
+
+      after do
+        ::RightnowOms.configure { new_order_url nil }
+      end
 
       context 'with valid params' do
         before do

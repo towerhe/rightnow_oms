@@ -5,6 +5,7 @@
 .sass-cache/
 *.log
 NERD*
+coverage/
 doc/
 pkg/
 rdoc/
