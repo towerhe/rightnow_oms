@@ -1,0 +1,42 @@
+.r-order
+  .r-order-address
+    %h2 送货地址
+    %p= @order.delivery_address
+  .r-order-contact
+    %h2 联系方式
+    %p
+      %label 收货人姓名：
+      = @order.receiver
+      - unless @order.mobile.blank?
+        %label 手机：
+        = @order.mobile
+      - unless @order.tel.blank?
+        %label 电话：
+        = @order.tel
+  .r-order-payment
+    %h2 支付方式
+    %p= @order.payment_mode
+  .r-order-items
+    %h2 商品清单
+    %table
+      %thead
+        %tr
+          %th 名称
+          %th 价格
+          %th 数量
+          %th 小计
+      %tbody
+        - @order.order_items.each do |oi|
+          %tr
+            %td= oi.name
+            %td= oi.price
+            %td= oi.quantity
+            %td= oi.total
+  - unless @order.remarks.blank?
+    .r-order-remarks
+      %h2 备注
+      %p= @order.remarks
+  - unless @order.vbrk.blank?
+    .r-order-vbrk
+      %h2 发票抬头
+      %p= @order.vbrk

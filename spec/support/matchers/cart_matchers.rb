@@ -16,7 +16,7 @@ RSpec::Matchers.define :have_cart_items do |items|
       break if i == items.size
 
       success &&= tr.has_content?(items[i][:name])
-      success &&= tr.has_content?("#{items[i][:price]}x#{items[i][:quantity]}")
+      success &&= tr.has_content?("#{'%.2f' % items[i][:price]}x#{items[i][:quantity]}")
       if items[i][:deletable]
         success &&= tr.has_content?('删除')
       else
