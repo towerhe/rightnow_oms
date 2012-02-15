@@ -1,12 +1,12 @@
 .r-order
   .r-order-no
-    %h2 订单号
+    %h3 订单号
     %p= @order.order_no
   .r-order-address
-    %h2 送货地址
+    %h3 送货地址
     %p= @order.delivery_address
   .r-order-contact
-    %h2 联系方式
+    %h3 联系方式
     %p
       %label 收货人姓名：
       = @order.receiver
@@ -17,10 +17,10 @@
         %label 电话：
         = @order.tel
   .r-order-payment
-    %h2 支付方式
+    %h3 支付方式
     %p= @order.payment_mode
   .r-order-items
-    %h2 商品清单
+    %h3 商品清单
     %table
       %thead
         %tr
@@ -31,15 +31,15 @@
       %tbody
         - @order.order_items.each do |oi|
           %tr
-            %td= oi.name
-            %td= oi.price
-            %td= oi.quantity
-            %td= oi.total
+            %td.name= oi.name
+            %td.price= "￥#{oi.price}"
+            %td.quantity= oi.quantity
+            %td.subtotal= "￥#{oi.total}"
   - unless @order.remarks.blank?
     .r-order-remarks
-      %h2 备注
+      %h3 备注
       %p= @order.remarks
   - unless @order.vbrk.blank?
     .r-order-vbrk
-      %h2 发票抬头
+      %h3 发票抬头
       %p= @order.vbrk
