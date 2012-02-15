@@ -7,9 +7,14 @@ module RightnowOms
         province city district street neighborhood room
         receiver mobile tel
         payment_mode remarks vbrk
+        user_id
       ).each do |column|
         it { should have_db_column column.to_sym }
       end
+    end
+
+    describe 'db indexes' do
+      it { should have_db_index :user_id }
     end
 
     describe 'attributes' do
@@ -19,7 +24,7 @@ module RightnowOms
     describe 'validations' do
       %W(
         province city district neighborhood room
-        receiver payment_mode order_items
+        receiver payment_mode order_items user_id
       ).each do |attr|
         it { should validate_presence_of attr.to_sym }
       end

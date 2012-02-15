@@ -21,7 +21,7 @@ feature 'Creating orders' do
     page.click_button 'Create Order'
 
     order_hash.each do |k, v|
-      page.should have_content(v) unless k == 'line_items'
+      page.should have_content(v) unless k.to_s == 'line_items' || k.to_s == 'user_id'
     end
 
     page.should have_content(@cart_item.name)
