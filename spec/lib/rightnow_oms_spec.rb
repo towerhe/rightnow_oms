@@ -8,11 +8,9 @@ describe RightnowOms do
   end
 
   describe '.configure' do
-    before { @new_order_url = RightnowOms.config.new_order_url }
-
     after do
       RightnowOms.configure do
-        new_order_url { @new_order_url }
+        new_order_url '/orders/new'
       end
     end
 
