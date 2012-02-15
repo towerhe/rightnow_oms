@@ -10,7 +10,6 @@ module RightnowOms
     REQUIRED_ATTRS.each do |attr|
       validates attr, presence: true
     end
-    #validates_associated :order_items
 
     validate :validates_mobile_and_tel
 
@@ -21,7 +20,12 @@ module RightnowOms
     class << self
       def new_with_items(base, items)
         Order.new(base) do |o|
-          items.each { |i| o.order_items.build(i.merge(order: o)) }
+          items.each do |i|
+            children = i.delete(:children)
+
+            oi = o.order_items.build(i.merge(order: o))
+            children.each { |c| oi.children.build(c.merge(order: o)) } if children
+          end
         end
       end
     end
