@@ -70,15 +70,15 @@ RightnowOms.cartController = Ember.Object.create
   #
   # =>
   #   [{
-  #     'id': 1, 'cartable_id': 2, 'cartable_type': 'Product', 'name': 'product-1', 'price': 10.0, 'group': 'booking', 'parent_id': null
+  #     'id': 1, 'cartable_id': 2, 'cartable_type': 'Product', 'name': 'product-1', 'original_price', 10.0, 'price': 10.0, 'group': 'booking', 'parent_id': null
   #   }, {
-  #     'id': 2, 'cartable_id': 3, 'cartable_type': 'Product', 'name': 'product-2', 'price': 20.0, 'group': 'booking', 'parent_id': 2
+  #     'id': 2, 'cartable_id': 3, 'cartable_type': 'Product', 'name': 'product-2', 'original_price', 20.0, 'price': 20.0, 'group': 'booking', 'parent_id': 2
   #   }]
   findCartItemsByGroup: (group) ->
     found = []
     cartItems = @get('content').findCartItemsByGroup(group)
 
     cartItems.forEach (item) ->
-      found.push(item.getProperties('id', 'cartable_id', 'cartable_type', 'name', 'price', 'quantity', 'group', 'parent_id'))
+      found.push(item.getProperties('id', 'cartable_id', 'cartable_type', 'name', 'original_price', 'price', 'quantity', 'group', 'parent_id'))
 
     found

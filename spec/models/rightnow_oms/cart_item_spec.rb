@@ -46,6 +46,7 @@ describe RightnowOms::CartItem do
     it { should have_key :cartable_id }
     it { should have_key :cartable_type }
     it { should have_key :name }
+    it { should have_key :original_price }
     it { should have_key :price }
     it { should have_key :quantity }
     it { should have_key :group }

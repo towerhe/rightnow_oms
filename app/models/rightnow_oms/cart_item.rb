@@ -19,6 +19,7 @@ module RightnowOms
       t.add :cartable_id
       t.add :cartable_type
       t.add :name
+      t.add :original_price
       t.add :price
       t.add :quantity
       t.add :group
@@ -28,6 +29,10 @@ module RightnowOms
 
     def total_price
       price * quantity
+    end
+
+    def original_price
+      cartable.cartable_price
     end
 
     class << self
