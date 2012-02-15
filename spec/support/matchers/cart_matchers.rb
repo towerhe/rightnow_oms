@@ -9,6 +9,13 @@ RSpec::Matchers.define :have_cart do |cart|
   end
 end
 
+RSpec::Matchers.define :have_cart_item do |item|
+  match do |actual|
+    actual.has_content?(item[:name]) &&
+      actual.has_content?("#{'%.2f' % item[:price]}x#{item[:quantity]}")
+  end
+end
+
 RSpec::Matchers.define :have_cart_items do |items|
   match do |actual|
     success = true
