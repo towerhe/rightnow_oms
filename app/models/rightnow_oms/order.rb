@@ -13,6 +13,11 @@ module RightnowOms
 
     validate :validates_mobile_and_tel
 
+    def order_no
+      @generator ||= OrderNoGenerator.new(self)
+      @generator.generate
+    end
+
     def delivery_address
       "#{province}#{city}#{district}#{street}#{neighborhood}#{room}"
     end
