@@ -21,8 +21,8 @@ RightnowOms.CartItem = DS.Model.extend
   ).property('subtotal')
 
   children: (->
-    RightnowOms.CartItem.all().filterProperty('parent_id', @get('id'))
-  ).property()
+    RightnowOms.CartItem.findByParentId(@get('id'))
+  ).property().cacheable()
 
   parent: (->
     if @get('parent_id')?
@@ -30,7 +30,9 @@ RightnowOms.CartItem = DS.Model.extend
   ).property()
 
   hasChildren: (->
-    @get('children.length') > 0
+    @set('children', RightnowOms.CartItem.findByParentId(@get('id')))
+    @get('children') && @getPath('children.length') > 0
+    #@children() && @children().get('length') > 0
   ).property()
 
   hasParent: (->
@@ -42,23 +44,26 @@ RightnowOms.CartItem = DS.Model.extend
   ).property('quantity')
 
   increase: ->
-    @get('children').forEach((child) ->
-      child.increase()
-    )
+    if @get('hasChildren')
+      @get('children').forEach((child) ->
+        child.increase()
+      )
 
     @set('quantity', @get('quantity') + 1)
 
   decrease: ->
-    @get('children').forEach((child) ->
-      child.decrease()
-    )
+    if @get('hasChildren')
+      @get('children').forEach((child) ->
+        child.decrease()
+      )
 
     @set('quantity', @get('quantity') - 1)
 
   deleteRecord: ->
-    @get('children').forEach((child) ->
-      child.deleteRecord()
-    )
+    if @get('hasChildren')
+      @get('children').forEach((child) ->
+        child.deleteRecord()
+      )
 
     @_super()
 
@@ -68,6 +73,9 @@ RightnowOms.CartItem.reopenClass
 
   findById: (id) ->
     @all().filterProperty('id', id).get('firstObject')
+
+  findByParentId: (parentId) ->
+    @all().filterProperty('parent_id', parentId)
 
   findByName: (name) ->
     @all().filterProperty('name', name).get('firstObject')

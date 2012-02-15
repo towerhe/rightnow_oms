@@ -3,25 +3,17 @@
   <table>
     <thead>
       <tr>
-        <th>名称</th>
-        <th>价格</th>
-        <th>数量</th>
-        <th>小计</th>
-        <th></th>
+        <th class="name">名称</th>
+        <th class="price">价格</th>
+        <th class="quantity">数量</th>
+        <th class="subtotal">小计</th>
+        <th class="delete"></th>
       </tr>
     </thead>
-    <tbody>
-    {{#each cart.cartItems}}
-      {{ view RightnowOms.ShowCartItemInDetailView cartItemBinding="this" }}
-    {{/each}}
-    </tbody>
-    <tfoot>
-    <tr>
-      <td colspan="4"></td>
-      <td></td>
-    </tr>
-    </tfoot>
   </table>
+  {{#each cart.cartItems}}
+    {{ view RightnowOms.ShowCartItemInDetailView cartItemBinding="this" }}
+  {{/each}}
 </div>
 <div class="r-bottom-bar">
   <div class="left-conner">

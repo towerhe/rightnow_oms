@@ -27,6 +27,9 @@ RightnowOms.Cart = DS.Model.extend
     else
       cartItem = RightnowOms.store.createRecord(RightnowOms.CartItem, item)
 
+      if cartItem.get('hasParent')
+        cartItem.get('parent').set('children', RightnowOms.CartItem.findByParentId(cartItem.get('id')))
+
     cartItem
 
   updateCartItem: (id, properties) ->
