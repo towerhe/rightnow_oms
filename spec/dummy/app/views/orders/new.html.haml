@@ -1,5 +1,6 @@
 %form.order{ method: 'POST', action: '/rightnow_oms/orders' }
   %input{ name: 'authenticity_token', value: form_authenticity_token, type: 'hidden' }
+  %input{ name: 'order[user_id]', value: 1, type: 'hidden' }
   .address
     - %W(province city district street neighborhood room).each do |attr|
       %p

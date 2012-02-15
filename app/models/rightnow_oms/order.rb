@@ -2,7 +2,7 @@ module RightnowOms
   class Order < ActiveRecord::Base
     REQUIRED_ATTRS = %W(
       province city district neighborhood room
-      receiver payment_mode order_items
+      receiver payment_mode order_items user_id
     )
 
     has_many :order_items
