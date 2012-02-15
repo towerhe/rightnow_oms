@@ -57,11 +57,23 @@ module RightnowOms
 
   describe '.new_with_items' do
     let(:order_hash) { fake_order_hash }
-    let(:order_items_hash) { 2.times.inject([]) { |c| c << fake_order_item_hash } }
+    let(:order_items_hashes) { 2.times.inject([]) { |c| c << fake_order_item_hash } }
 
-    subject { Order.new_with_items(order_hash, order_items_hash) }
+    subject { Order.new_with_items(order_hash, order_items_hashes) }
 
     its(:order_items) { should have(2).items }
+
+    context 'with child order items' do
+      let(:order_items_hashes) do
+        parent = fake_order_item_hash
+        parent[:children] = [fake_order_item_hash]
+
+        [parent]
+      end
+
+      its(:order_items) { should have(1).item }
+      specify { subject.order_items.first.children.should have(1).item }
+    end
   end
 
   describe '#delivery_address' do

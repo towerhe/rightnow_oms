@@ -8,18 +8,20 @@ describe RightnowOms do
   end
 
   describe '.configure' do
+    before { @new_order_url = RightnowOms.config.new_order_url }
+
     after do
       RightnowOms.configure do
-        new_order_url nil
+        new_order_url { @new_order_url }
       end
     end
 
     it 'sets the new order url' do
       RightnowOms.configure do
-        new_order_url '/orders/new'
+        new_order_url '/another/orders/new'
       end
 
-      RightnowOms.config.new_order_url.should == '/orders/new'
+      RightnowOms.config.new_order_url.should == '/another/orders/new'
     end
   end
 end
