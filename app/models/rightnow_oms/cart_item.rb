@@ -36,6 +36,10 @@ module RightnowOms
     end
 
     class << self
+      def roots
+        where(parent_id: nil)
+      end
+
       def find_by_cartable(cartable)
         find_by_cartable_id_and_cartable_type(cartable.id, cartable.class)
       end

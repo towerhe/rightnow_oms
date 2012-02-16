@@ -38,11 +38,22 @@ describe RightnowOms::Cart do
     end
 
     context 'with items' do
-      before { FactoryGirl.create(:cart_item, cart: subject) }
+      context 'and no child' do
+        before { FactoryGirl.create(:cart_item, cart: subject) }
 
-      let(:product) { FactoryGirl.build(:product) }
+        let(:product) { FactoryGirl.build(:product) }
 
-      its(:total) { should == product.price }
+        its(:total) { should == product.price }
+      end
+
+      context 'and having children' do
+        before do
+          parent = FactoryGirl.create(:cart_item, name: 'parent', price: 1.0, cart: subject)
+          FactoryGirl.create(:cart_item, name: 'child', price: 2.0, parent: parent, cart: subject)
+        end
+
+        its(:total) { should == 1 }
+      end
     end
   end
 
