@@ -14,7 +14,7 @@ RightnowOms.CartItem = DS.Model.extend
 
   subtotal: (->
     t = @get('price') * @get('quantity')
-    if @get('hasChildren')
+    if @get('children')?
       @get('children').forEach (child) ->
         t += child.get('subtotal')
 
@@ -32,7 +32,7 @@ RightnowOms.CartItem = DS.Model.extend
   parent: (->
     if @get('parent_id')?
       RightnowOms.CartItem.all().filterProperty('id', @get('parent_id'))
-  ).property()
+  ).property('parent_id')
 
   hasChildren: (->
     @set('children', RightnowOms.CartItem.findByParentId(@get('id')))
