@@ -1,19 +1,17 @@
 <h2>我的购物车</h2>
 <div class="r-cart-items">
-  <table>
-    <thead>
-      <tr>
-        <th class="name">名称</th>
-        <th class="price">价格</th>
-        <th class="quantity">数量</th>
-        <th class="subtotal">小计</th>
-        <th class="delete"></th>
-      </tr>
-    </thead>
-  </table>
+  <ul class='title'>
+    <li class="name">名称</li>
+    <li class="price">价格</li>
+    <li class="quantity">数量</li>
+    <li class="subtotal">小计</li>
+    <li class="delete"></li>
+  </ul>
+  <div class='r-clear'></div>
   {{#each cart.cartItems}}
     {{ view RightnowOms.ShowCartItemInDetailView cartItemBinding="this" }}
   {{/each}}
+  <div class='r-clear'></div>
 </div>
 <div class="r-bottom-bar">
   <div class="left-conner">
