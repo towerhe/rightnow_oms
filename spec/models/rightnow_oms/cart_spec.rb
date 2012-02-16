@@ -52,13 +52,13 @@ describe RightnowOms::Cart do
           FactoryGirl.create(:cart_item, name: 'child', price: 2.0, parent: parent, cart: subject)
         end
 
-        its(:total) { should == 1 }
+        its(:total) { should == 3 }
       end
     end
   end
 
   describe "#add_item" do
-    let(:product) { FactoryGirl.create(:product) }
+    let(:product) { FactoryGirl.create(:product, price: 10) }
 
     context 'when product does not exist' do
       before { subject.add_item(product) }

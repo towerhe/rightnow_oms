@@ -14,10 +14,10 @@ RightnowOms.Cart = DS.Model.extend
   total: (->
     total = 0
     @get('cartItems').forEach (item) ->
-      total += parseFloat(item.get('price')) * item.get('quantity') unless item.get('hasParent')
+      total += item.get('subtotal') unless item.get('hasParent')
 
     round(total, 2)
-  ).property("cartableCount")
+  ).property("cartItems.@each.quantity")
 
   addCartItem: (item) ->
     cartItem = RightnowOms.CartItem.findByCartableAndParentId(item.cartable_id, item.cartable_type, item.parent_id)

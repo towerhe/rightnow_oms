@@ -70,7 +70,7 @@ feature "Add cart items to cart", js: true do
         find('button').click
 
         wrapper = page.find('#rightnow-oms')
-        wrapper.should have_cart(cartable_count: 1, total: 1.0)
+        wrapper.should have_cart(cartable_count: 1, total: 3.0)
         table = wrapper.find('table')
         wrapper.find('.r-cart-bar').trigger('hover')
         table.should have_cart_item({
@@ -82,7 +82,7 @@ feature "Add cart items to cart", js: true do
 
         visit '/products'
 
-        page.find('#rightnow-oms').should have_cart(cartable_count: 1, total: 1.0)
+        page.find('#rightnow-oms').should have_cart(cartable_count: 1, total: 3.0)
         table = page.find('#rightnow-oms table')
         page.find('.r-cart-bar').trigger('hover')
         table.should have_cart_item({

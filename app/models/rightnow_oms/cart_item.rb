@@ -28,7 +28,10 @@ module RightnowOms
     default_scope order("id ASC")
 
     def total_price
-      price * quantity
+      t = price * quantity
+      t += children.sum(&:total_price) if children.exists?
+
+      t
     end
 
     def original_price
