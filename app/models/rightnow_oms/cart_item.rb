@@ -19,6 +19,7 @@ module RightnowOms
       t.add :cartable_id
       t.add :cartable_type
       t.add :name
+      t.add :original_price
       t.add :price
       t.add :quantity
       t.add :group
@@ -27,10 +28,21 @@ module RightnowOms
     default_scope order("id ASC")
 
     def total_price
-      price * quantity
+      t = price * quantity
+      t += children.sum(&:total_price) if children.exists?
+
+      t
+    end
+
+    def original_price
+      cartable.cartable_price
     end
 
     class << self
+      def roots
+        where(parent_id: nil)
+      end
+
       def find_by_cartable(cartable)
         find_by_cartable_id_and_cartable_type(cartable.id, cartable.class)
       end

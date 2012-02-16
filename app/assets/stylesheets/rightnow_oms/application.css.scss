@@ -1,0 +1,23 @@
+/*
+ *= require_self
+ *= require_tree . 
+*/
+
+.r-links {
+  a {
+    color: black;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
+.r-clear { clear: both; }
+.r-money { color: red; }
+h3 {
+  background-color: #ddd;
+  border-bottom: 3px solid #aaa;
+  padding: 10px 20px;
+  font-size: 18px;
+  line-height: 27px;
+}
+p { background-color: whiteSmoke; }
+

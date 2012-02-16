@@ -13,6 +13,7 @@ Add the following gems to your Gemfile:
   gem 'ember-rails'
   gem 'acts_as_api'
   gem 'haml-rails'
+  gem 'confstruct'
 
   group :assets do
     gem 'uglifier'
@@ -80,6 +81,15 @@ Create a layout for your detailed cart view like:
 
     %body
       = yield
+```
+
+You need to configure your new order url in RightnowOms:
+
+```ruby
+  # config/initializers/rightnow_oms.rb
+  RightnowOms.configure do
+    new_order_url '/orders/new'
+  end
 ```
 
 Add before filters to your controllers which need to use the cart:

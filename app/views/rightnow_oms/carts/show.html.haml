@@ -4,5 +4,7 @@
 
 :javascript
   $(function() {
+    RightnowOms.config.set('newOrderUrl', '#{RightnowOms.config.new_order_url}')
+
     RightnowOms.cartController.load(#{@cart.as_api_response(:default).to_json.html_safe});
   });

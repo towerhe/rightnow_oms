@@ -22,8 +22,8 @@ group :development, :test do
   gem 'redcarpet'
   gem 'ffaker'
   gem 'therubyracer'
-  gem 'pg'
-  #gem 'mysql2'
+  #gem 'pg'
+  gem 'mysql2'
 end
 
 group :test do
@@ -34,6 +34,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'capybara-webkit'
   gem 'database_cleaner'
+  gem 'simplecov', :require => false
 end
 
 # Declare any dependencies that are still in development here instead of in

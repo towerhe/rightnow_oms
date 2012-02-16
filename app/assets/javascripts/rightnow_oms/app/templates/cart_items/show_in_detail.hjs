@@ -1,19 +1,43 @@
-{{#with cartItem}}
-  <td class="name">{{ name }}</td>
-  <td class="price">￥{{ priceString }}</td>
-  <td class="quantity">
-    {{#if hasParent }}
-      <span class="quantity-only">{{ quantity }}</span>
-    {{else}}
-      <span class="decrease"><a href="#" {{ action "decrease" }}>-</a></span>
-      <span class="quantity"> {{ quantity }} </span>
-      <span class="increase"><a href="#" {{ action "increase" }}>+</a></span>
+<tbody>
+{{#unless cartItem.hasParent}}
+  <tr>
+    <td class="name" {{ action "toggleChildren" }}>{{ cartItem.name }}</td>
+    <td class="price">￥{{ cartItem.priceString }}</td>
+    <td class="quantity">
+      {{#if hasParent }}
+        <span class="quantity-only">{{ cartItem.quantity }}</span>
+      {{else}}
+        <span class="decrease"><a href="#" {{ action "decrease" }}>-</a></span>
+        <span class="quantity"> {{ cartItem.quantity }} </span>
+        <span class="increase"><a href="#" {{ action "increase" }}>+</a></span>
+      {{/if}}
+    </td>
+    <td class="subtotal r-money">￥{{ cartItem.subtotalString }}</td>
+    <td class="delete">
+      {{#unless cartItem.hasParent }}
+        <a href="#" {{ action "deleteRecord" }}>删除</a>
+      {{/unless}}
+    </td>
+  </tr>
+  {{#if isChildrenHidden}}
+    {{#if cartItem.hasChildren}}
+      <tr>
+        <td colspan="5">
+          <table>
+            {{#each cartItem.children}}
+              <tr>
+                <td class="name">{{ name }}</td>
+                <td class="price">￥{{ priceString }}</td>
+                <td class="quantity">
+                  <span class="quantity-only">{{ quantity }}</span>
+                </td>
+                <td class="subtotal r-money">￥{{ subtotalString }}</td>
+              </tr>
+            {{/each}}
+          </table>
+        </td>
+      </tr>
     {{/if}}
-  </td>
-  <td class="subtotal r-money">￥{{ subtotalString }}</td>
-  <td class="delete">
-    {{#unless hasParent }}
-      <a href="#" {{ action "deleteRecord" }}>删除</a>
-    {{/unless}}
-  </td>
-{{/with}}
+  {{/if}}
+{{/unless}}
+</tbody>

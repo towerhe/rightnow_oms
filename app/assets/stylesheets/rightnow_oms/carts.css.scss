@@ -1,12 +1,3 @@
-.r-links {
-  a {
-    color: black;
-    text-decoration: none;
-    &:hover { text-decoration: underline; }
-  }
-}
-.r-clear { clear: both; }
-.r-money { color: red; }
 .r-mini-cart {
   @extend .r-links;
   position: relative;
@@ -43,7 +34,7 @@
         text-align: left;
         overflow: hidden;
       }
-      td.money { @extend .money }
+      td.money { @extend .r-money }
       td.delete {
         a {
           color: #BF0000;
@@ -95,6 +86,10 @@
           font-weight: bold;
           vertical-align: bottom;
         }
+        th.price { width: 80px; }
+        th.quantity { width: 100px; }
+        th.subtotal { width: 80px; }
+        th.delete { width: 50px; }
       }
     }
     tbody {

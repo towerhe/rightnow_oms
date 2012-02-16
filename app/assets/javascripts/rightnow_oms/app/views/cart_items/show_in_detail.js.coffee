@@ -1,10 +1,5 @@
-RightnowOms.ShowCartItemInDetailView = Ember.View.extend
-  tagName: 'tr'
+RightnowOms.ShowCartItemInDetailView = RightnowOms.ShowCartItemView.extend
   templateName: 'rightnow_oms/app/templates/cart_items/show_in_detail'
-
-  deleteRecord: ->
-    item = @get('cartItem')
-    RightnowOms.cartController.removeCartItem(item.get('id'))
 
   increase: ->
     item = @get('cartItem')

@@ -9,6 +9,13 @@ RSpec::Matchers.define :have_cart do |cart|
   end
 end
 
+RSpec::Matchers.define :have_cart_item do |item|
+  match do |actual|
+    actual.has_content?(item[:name]) &&
+      actual.has_content?("#{'%.2f' % item[:price]}x#{item[:quantity]}")
+  end
+end
+
 RSpec::Matchers.define :have_cart_items do |items|
   match do |actual|
     success = true
@@ -16,7 +23,7 @@ RSpec::Matchers.define :have_cart_items do |items|
       break if i == items.size
 
       success &&= tr.has_content?(items[i][:name])
-      success &&= tr.has_content?("#{items[i][:price]}x#{items[i][:quantity]}")
+      success &&= tr.has_content?("#{'%.2f' % items[i][:price]}x#{items[i][:quantity]}")
       if items[i][:deletable]
         success &&= tr.has_content?('删除')
       else

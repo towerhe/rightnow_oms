@@ -1,0 +1,33 @@
+%form.order{ method: 'POST', action: '/rightnow_oms/orders' }
+  %input{ name: 'authenticity_token', value: form_authenticity_token, type: 'hidden' }
+  %input{ name: 'order[user_id]', value: 1, type: 'hidden' }
+  .address
+    - %W(province city district street neighborhood room).each do |attr|
+      %p
+        %label= attr.humanize
+        %input{ name: "order[#{attr}]", type: 'text' }
+
+  .contact
+    - %W(receiver mobile tel).each do |attr|
+      %p
+        %label= attr.humanize
+        %input{ name: "order[#{attr}]", type: 'text' }
+
+  .misc
+    - %W(payment_mode remarks vbrk).each do |attr|
+      %p
+        %label= attr.humanize
+        %input{ name: "order[#{attr}]", type: 'text' }
+
+
+  .cart-items
+    %table
+      - @cart.cart_items.each do |i|
+        %tr
+          %td= i.name
+          %td= "￥#{'%.2f' % i.price}"
+          %td= i.quantity
+          %td= "￥#{'%.2f' % i.total_price}"
+
+  .buttons
+    %input{ type: 'submit', value: 'Create Order' }

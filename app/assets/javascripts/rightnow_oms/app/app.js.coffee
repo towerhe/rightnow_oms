@@ -6,3 +6,5 @@ window.RightnowOms.store = DS.Store.create
     DS.MyRESTAdapter.create
       bulkCommit: false
       namespace: 'rightnow_oms'
+
+window.RightnowOms.config = Em.Object.create()
