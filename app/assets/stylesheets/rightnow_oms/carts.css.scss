@@ -86,6 +86,10 @@
           font-weight: bold;
           vertical-align: bottom;
         }
+        th.price { width: 80px; }
+        th.quantity { width: 100px; }
+        th.subtotal { width: 80px; }
+        th.delete { width: 50px; }
       }
     }
     tbody {

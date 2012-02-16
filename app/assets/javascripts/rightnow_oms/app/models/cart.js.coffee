@@ -6,7 +6,7 @@ RightnowOms.Cart = DS.Model.extend
   cartableCount: (->
     count = 0
     @get('cartItems').forEach (item) ->
-      count += item.get('quantity')
+      count += item.get('quantity') unless item.get('hasParent')
 
     count
   ).property("cartItems.@each.quantity")
@@ -14,7 +14,7 @@ RightnowOms.Cart = DS.Model.extend
   total: (->
     total = 0
     @get('cartItems').forEach (item) ->
-      total += parseFloat(item.get('price')) * item.get('quantity')
+      total += parseFloat(item.get('price')) * item.get('quantity') unless item.get('hasParent')
 
     round(total, 2)
   ).property("cartableCount")
@@ -26,6 +26,9 @@ RightnowOms.Cart = DS.Model.extend
       cartItem.increase() unless cartItem.get('parent')?
     else
       cartItem = RightnowOms.store.createRecord(RightnowOms.CartItem, item)
+
+      if cartItem.get('hasParent')
+        cartItem.get('parent').set('children', RightnowOms.CartItem.findByParentId(cartItem.get('id')))
 
     cartItem
 
