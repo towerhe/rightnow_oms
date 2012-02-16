@@ -1,7 +1,7 @@
 <tbody>
 {{#unless cartItem.hasParent}}
   <tr>
-    <td class="name"><a href="#" {{ action "toggleChildren" }}>{{ cartItem.name }}</a></td>
+    <td class="name" {{ action "toggleChildren" }}>{{ cartItem.name }}</td>
     <td class="price">￥{{ cartItem.priceString }}</td>
     <td class="quantity">
       {{#if hasParent }}

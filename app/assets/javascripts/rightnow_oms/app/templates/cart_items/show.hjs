@@ -1,6 +1,6 @@
 {{#unless cartItem.hasParent }}
   <tr>
-    <td class="name"><a href="#" {{ action "toggleChildren" }}>{{ cartItem.name }}</a></td>
+    <td class="name" {{ action "toggleChildren" }}>{{ cartItem.name }}</td>
     <td class="price r-money">￥{{ cartItem.priceString }}x{{ cartItem.quantity }}</td>
       <td class="delete">
         <a href="#" {{ action "deleteRecord" }}>删除</a>
