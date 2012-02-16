@@ -24,22 +24,44 @@
     border: 1px solid #ccc;
     background-color: white;
     display: none;
-    table {
-      td {
-        padding: 5px 8px;
-        text-align: right;
-      }
-      td.name {
-        width: 150px;
-        text-align: left;
-        overflow: hidden;
-      }
-      td.money { @extend .r-money }
-      td.delete {
-        a {
-          color: #BF0000;
-        }
-      }
+    dl {
+      margin: 0px;
+      width: 100%;
+    }
+    dl ul {
+      list-style-type: none;
+      padding: 0px;
+      margin: 0px;
+      border: 0px;
+      width: 100%;
+    }
+    dl li{
+      padding-top: 5px;
+      padding-left: 8px;
+      text-align: right;
+    }
+    dl li.name {
+      width: 165px;
+      text-align: left;
+      cursor: pointer;
+    }
+    dl li.price {
+      width: 50px;
+    }
+    dl li.delete {
+      width: 30px;
+    }
+    ul.child {
+      clear: both;
+    }
+    dd {
+      margin-left: 12px;
+    }
+    dd li.price {
+      margin-left: -12px;
+    }
+    dd li.name {
+      cursor: default;
     }
   }
   .r-bottom-bar {
@@ -52,6 +74,7 @@
   @extend .r-links;
   position: relative;
   width: 100%;
+  min-width: 940px;
   max-width: 940px;
   margin: 0 auto;
   font-size: 12px;
@@ -60,74 +83,102 @@
     font-size: 24px;
     line-height: 36px;
   }
-  table {
-    display: table;
-    width: 100%;
-    margin-bottom: 18px;
-    border-collapse: collapse;
-    border-spacing: 0;
-    vertical-align: middle;
-    tr:nth-child(odd) {
-      td { background-color: #F9F9F9; }
+
+  ul {
+    text-align: left;
+    list-style-type: none;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    width:100%;
+    font-size: 12px;
+
+    li.name { 
+      padding-left: 14px;
+      width: 560px;
+    }
+    li.price { 
+      width: 80px;
+      text-align: right;
+      padding-right: 50px;
+    }
+    li.quantity { width: 100px; }
+    li.subtotal { width: 80px; }
+    li.delete { width: 50px; }
+  }
+
+  ul.title {
+    font-size: 16px;
+    font-weight: bold;
+    li.price {
+      text-align: left;
+    }
+  }
+
+  dl {
+    li {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      border-top: 1px solid #CCC;
     }
 
-    th, td {
-      padding: 8px;
-      line-height: 18px;
-      text-align: left;
-      display: table-cell;
-    }
-    thead {
-      display: table-header-group;
-      tr {
-        display: table-row;
-        th {
-          border-top: 0;
-          font-weight: bold;
-          vertical-align: bottom;
-        }
-        th.price { width: 80px; }
-        th.quantity { width: 100px; }
-        th.subtotal { width: 80px; }
-        th.delete { width: 50px; }
+    li.price {
+      span {
+        float: left;
+        display: block;
+        width: 35px;
+      }
+      span.unit {
+        width: 10px;
       }
     }
-    tbody {
-      display: table-row-group;
-      tr {
-        display: table-row;
-        td {
-          border-top: 1px solid #DDD;
-          vertical-align: top;
-        }
-        td.price    { width: 80px; }
-        td.quantity {
-          width: 100px;
-          span {
-            float: left;
-            text-align: center;
-            min-width: 12px;
-            border: 1px solid #CCC;
-            background-color: white;
-          }
-          span.quantity-only { width: 56px; }
-          span.quantity { width: 30px; }
-          span.increase {
-            margin-left: -1px;
-            a { text-decoration: none }
-          }
-          span.decrease {
-            margin-right: -1px;
-            a { text-decoration: none }
-          }
-        }
-        td.subtotal { width: 80px; }
-        td.delete   { width: 50px; }
+
+    li.quantity {
+      span {
+        border: 1px solid #CCC;
+        float: left;
+        display: block;
+        width:10px;
+        text-align: center;
+        margin: -1px;
+      }
+      span.quantity {
+        width: 20px;
       }
     }
-    tfoot { display: none; }
+
+    dd {
+      margin-left: 0px;
+
+      li {
+        background: #EEE;
+      }
+
+      li.name {
+        width: 545px;
+        padding-left: 30px;
+      }
+
+      li.quantity {
+        span.quantity-only {
+          width: 40px;
+        }
+      }
+
+      li.subtotal {
+        width: 130px;
+      }
+    }
+
+
+    dt {
+      li.name {
+        cursor: pointer;
+      }
+    }
   }
   .r-bottom-bar {
+    margin-top: 30px;
     position: relative;
     width: 100%;
     font-size: 20px;

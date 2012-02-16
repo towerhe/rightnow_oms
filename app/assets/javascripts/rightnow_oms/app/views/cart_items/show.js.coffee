@@ -1,5 +1,5 @@
 RightnowOms.ShowCartItemView = Ember.View.extend
-  tagName: 'table'
+  tagName: 'dl'
   templateName: 'rightnow_oms/app/templates/cart_items/show'
 
   toggleChildren: ->
