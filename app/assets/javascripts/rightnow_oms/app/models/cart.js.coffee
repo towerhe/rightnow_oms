@@ -6,7 +6,7 @@ RightnowOms.Cart = DS.Model.extend
   cartableCount: (->
     count = 0
     @get('cartItems').forEach (item) ->
-      count += item.get('quantity')
+      count += item.get('quantity') unless item.get('hasParent')
 
     count
   ).property("cartItems.@each.quantity")

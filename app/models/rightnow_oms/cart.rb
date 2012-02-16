@@ -15,7 +15,7 @@ module RightnowOms
     end
 
     def cartable_count
-      cart_items.map.sum(&:quantity)
+      cart_items.select{ |v| v.parent.nil? }.map.sum(&:quantity)
     end
 
     def add_item(cartable, opts = { quantity: 1 })

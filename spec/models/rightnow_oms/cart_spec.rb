@@ -8,15 +8,26 @@ describe RightnowOms::Cart do
 
   describe '#cartable_count' do
     let(:cart) { FactoryGirl.create(:cart) }
-
-    before do
-      FactoryGirl.create(:cart_item, name: 'first', quantity: 1, cart: cart)
-      FactoryGirl.create(:cart_item, name: 'second', quantity: 2, cart: cart)
-    end
-
     subject { cart }
 
-    its(:cartable_count) { should == 3 }
+    context 'no child' do
+      before do
+        FactoryGirl.create(:cart_item, name: 'first', quantity: 1, cart: cart)
+        FactoryGirl.create(:cart_item, name: 'second', quantity: 2, cart: cart)
+      end
+
+      its(:cartable_count) { should == 3 }
+    end
+
+    context 'having children' do
+      before do
+        FactoryGirl.create(:cart_item, name: 'first', quantity: 1, cart: cart)
+        parent = FactoryGirl.create(:cart_item, name: 'second-parent', quantity: 2, cart: cart)
+        FactoryGirl.create(:cart_item, name: 'second-child', quantity: 2, parent: parent, cart: cart)
+      end
+      
+      its(:cartable_count) { should == 3 }
+    end
   end
 
   describe '#total' do
