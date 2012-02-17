@@ -3,14 +3,9 @@
     {{ view RightnowOms.ShowCartView }}
 
 #products
-  %ul.no-child
+  %ul
     - @products.each do |p|
-      - if p.is_childless? 
-        = render partial: 'products/list_products', locals: { product: p }
-  %ul.has-children
-    - @products.each do |p|
-      - if p.has_children?
-        = render partial: 'products/list_products', locals: { product: p }
+      = render partial: 'products/list_products', locals: { product: p }
 
 :javascript
   $(function() {
