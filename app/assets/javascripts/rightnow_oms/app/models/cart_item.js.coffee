@@ -2,11 +2,12 @@ RightnowOms.CartItem = DS.Model.extend
   cartable_id: DS.attr('integer')
   cartable_type: DS.attr('string')
   name: DS.attr('string')
-  original_price: DS.attr('money')
+  original_price: DS.attr('string')
   price: DS.attr('money')
   quantity: DS.attr('integer')
   group: DS.attr('string')
   parent_id: DS.attr('integer')
+  mergable: DS.attr('boolean')
 
   priceString: (->
     round(@get('price'), 2)
