@@ -20,7 +20,7 @@ RightnowOms.Cart = DS.Model.extend
   ).property("cartItems.@each.quantity")
 
   addCartItem: (item) ->
-    return @createCartItem(item) unless item.mergable
+    return @createCartItem(item) if item.mergable == false
 
     cartItem = RightnowOms.CartItem.findByCartableAndParentId(item.cartable_id, item.cartable_type, item.parent_id)
 
