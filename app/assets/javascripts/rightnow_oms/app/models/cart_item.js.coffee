@@ -3,6 +3,7 @@ RightnowOms.CartItem = DS.Model.extend
   cartable_type: DS.attr('string')
   name: DS.attr('string')
   original_price: DS.attr('string')
+  base_quantity: DS.attr('integer')
   price: DS.attr('money')
   quantity: DS.attr('integer')
   group: DS.attr('string')
@@ -49,7 +50,7 @@ RightnowOms.CartItem = DS.Model.extend
         child.increase()
       )
 
-    @set('quantity', @get('quantity') + 1)
+    @set('quantity', @get('quantity') + @get('base_quantity'))
 
   decrease: ->
     if @get('hasChildren')
@@ -57,7 +58,7 @@ RightnowOms.CartItem = DS.Model.extend
         child.decrease()
       )
 
-    @set('quantity', @get('quantity') - 1)
+    @set('quantity', @get('quantity') - @get('base_quantity'))
 
   deleteRecord: ->
     if @get('hasChildren')
