@@ -19,12 +19,12 @@ feature "Add cart items to cart", js: true do
         visit '/products'
         find('button').click
 
-        visit '/products'
-
         page.find('#rightnow-oms').should have_cart(cartable_count: 1, total: 3.0)
         page.find('#rightnow-oms').find('dl').should have_cart_items([{
           name: 'product', price: 3.0, quantity: 1, deletable: true
         }])
+
+        RightnowOms::CartItem.all.should have(1).item
       end
     end
 
@@ -46,12 +46,12 @@ feature "Add cart items to cart", js: true do
         find('button').click
         find('button').click
 
-        visit '/products'
-
         page.find('#rightnow-oms').should have_cart(cartable_count: 2, total: 6.0)
         page.find('#rightnow-oms dl').should have_cart_items([{
           name: 'product', price: 3.0, quantity: 2, deletable: true
         }])
+
+        RightnowOms::CartItem.first.quantity.should == 2
       end
     end
   end
@@ -82,8 +82,6 @@ feature "Add cart items to cart", js: true do
         name: 'child', price: 2.0, quantity: 1
       })
 
-      visit '/products'
-
       page.find('#rightnow-oms').should have_cart(cartable_count: 1, total: 2.0)
       page.find('.r-cart-items dl').should have_cart_item({
         name: 'parent', price: 2.0, quantity: 1, deletable: true
@@ -91,6 +89,8 @@ feature "Add cart items to cart", js: true do
       page.find('.r-cart-items dl').should_not have_cart_item({
         name: 'child', price: 2.0, quantity: 1
       })
+
+      RightnowOms::CartItem.all.should have(2).items
     end
   end
 
