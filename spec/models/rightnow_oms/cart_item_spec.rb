@@ -63,6 +63,5 @@ describe RightnowOms::CartItem do
     it { should have_key :price }
     it { should have_key :quantity }
     it { should have_key :group }
-    it { should have_key :total }
   end
 end

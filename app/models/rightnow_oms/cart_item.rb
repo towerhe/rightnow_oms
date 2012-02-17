@@ -23,7 +23,6 @@ module RightnowOms
       t.add :price
       t.add :quantity
       t.add :group
-      t.add :total
     end
 
     default_scope order("id ASC")
