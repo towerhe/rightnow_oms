@@ -39,6 +39,7 @@
       padding-top: 5px;
       padding-left: 8px;
       text-align: right;
+      float: left;
     }
     dl li.name {
       width: 165px;
@@ -92,6 +93,10 @@
     padding: 0px;
     width:100%;
     font-size: 12px;
+
+    li {
+      float: left;
+    }
 
     li.name { 
       padding-left: 14px;
