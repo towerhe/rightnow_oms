@@ -3,15 +3,10 @@
  *= require_tree . 
 */
 
-.r-links {
-  a {
-    color: black;
-    text-decoration: none;
-    &:hover { text-decoration: underline; }
-  }
-}
 .r-clear { clear: both; }
 .r-money { color: red; }
+.r-right { float: right }
+.r-left { float: left }
 h3 {
   background-color: #ddd;
   border-bottom: 3px solid #aaa;
@@ -20,7 +15,3 @@ h3 {
   line-height: 27px;
 }
 p { background-color: whiteSmoke; }
-
-.r-right { float: right }
-
-.r-left { float: left }

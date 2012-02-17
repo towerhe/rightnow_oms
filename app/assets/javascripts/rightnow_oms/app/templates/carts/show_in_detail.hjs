@@ -2,10 +2,12 @@
 <div class="r-cart-items">
   <ul class='title'>
     <li class="name">名称</li>
-    <li class="price">价格</li>
-    <li class="quantity">数量</li>
-    <li class="subtotal">小计</li>
-    <li class="delete"></li>
+    <li class="others">
+      <div class="price">价格</div>
+      <div class="quantity">数量</div>
+      <div class="subtotal">小计</div>
+      <div class="delete"></div>
+    </li>
   </ul>
   <div class='r-clear'></div>
   {{#each cart.cartItems}}

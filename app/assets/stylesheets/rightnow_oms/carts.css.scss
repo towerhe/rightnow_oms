@@ -1,3 +1,10 @@
+.r-links {
+  a {
+    color: black;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
 .r-mini-cart {
   @extend .r-links;
   position: relative;
@@ -75,11 +82,11 @@
   @extend .r-links;
   position: relative;
   width: 100%;
-  min-width: 940px;
   max-width: 940px;
   margin: 0 auto;
   font-size: 12px;
   background-color: white;
+
   h2 {
     font-size: 24px;
     line-height: 36px;
@@ -91,25 +98,39 @@
     border: 0px;
     margin: 0px;
     padding: 0px;
-    width:100%;
-    font-size: 12px;
+    width: 100%;
 
     li {
+      padding: 12px 8px;
       float: left;
     }
+    li.others {
+      float: right;
+      div {
+        float: left;
+      }
 
-    li.name { 
-      padding-left: 14px;
-      width: 560px;
+      div.price {
+        width: 100px;
+      }
+
+      div.quantity {
+        width: 100px;
+        span {
+          border: 1px solid #CCC;
+          float: left;
+          display: block;
+          width: 14px;
+          text-align: center;
+        }
+        span.decrease { margin-right: -1px; }
+        span.increase { margin-left: -1px; }
+        span.quantity { width: 30px; }
+        span.quantity-only { width: 60px; }
+      }
+      div.subtotal { width: 85px; }
+      div.delete { width: 50px; }
     }
-    li.price { 
-      width: 80px;
-      text-align: right;
-      padding-right: 50px;
-    }
-    li.quantity { width: 100px; }
-    li.subtotal { width: 80px; }
-    li.delete { width: 50px; }
   }
 
   ul.title {
@@ -121,67 +142,22 @@
   }
 
   dl {
-    li {
-      padding-top: 12px;
-      padding-bottom: 12px;
+    margin: 0;
+    dt, dd {
+      margin: 0;
       border-top: 1px solid #CCC;
     }
-
-    li.price {
-      span {
-        float: left;
-        display: block;
-        width: 35px;
-      }
-      span.unit {
-        width: 10px;
-      }
+    dt ul {
+      li.name { cursor: pointer; }
     }
-
-    li.quantity {
-      span {
-        border: 1px solid #CCC;
-        float: left;
-        display: block;
-        width:10px;
-        text-align: center;
-        margin: -1px;
-      }
-      span.quantity {
-        width: 20px;
-      }
-    }
-
     dd {
-      margin-left: 0px;
-
-      li {
-        background: #EEE;
-      }
-
-      li.name {
-        width: 545px;
-        padding-left: 30px;
-      }
-
-      li.quantity {
-        span.quantity-only {
-          width: 40px;
-        }
-      }
-
-      li.subtotal {
-        width: 130px;
-      }
-    }
-
-
-    dt {
-      li.name {
-        cursor: pointer;
+      background-color: #EEE;
+      ul {
+        li.name { padding-left: 20px; }
       }
     }
   }
+
   .r-bottom-bar {
     margin-top: 30px;
     position: relative;
