@@ -48,11 +48,11 @@ describe RightnowOms::Cart do
 
       context 'and having children' do
         before do
-          parent = FactoryGirl.create(:cart_item, name: 'parent', price: 1.0, cart: subject)
+          parent = FactoryGirl.create(:cart_item, name: 'parent', price: 2.0, cart: subject)
           FactoryGirl.create(:cart_item, name: 'child', price: 2.0, parent: parent, cart: subject)
         end
 
-        its(:total) { should == 3 }
+        its(:total) { should == 2 }
       end
     end
   end

@@ -31,13 +31,13 @@ describe RightnowOms::CartItem do
 
     context 'with children' do
       before do
-        @parent = FactoryGirl.create(:cart_item, name: 'parent', price: 10, quantity: 1)
+        @parent = FactoryGirl.create(:cart_item, name: 'parent', price: 40, quantity: 1)
         FactoryGirl.create(:cart_item, name: 'child', price: 20, quantity: 2, parent: @parent)
       end
 
       subject { @parent }
 
-      its(:total) { should == 50 }
+      its(:total) { should == 40 }
     end
   end
 
