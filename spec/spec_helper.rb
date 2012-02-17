@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start 'rails'
+
 require "rack_session_access"
 require "rack_session_access/capybara"
 
@@ -7,6 +10,7 @@ require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 
+require 'ffaker'
 require 'capybara/rails'
 require 'capybara/rspec'
 require 'capybara-webkit'

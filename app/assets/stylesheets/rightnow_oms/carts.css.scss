@@ -5,8 +5,6 @@
     &:hover { text-decoration: underline; }
   }
 }
-.r-clear { clear: both; }
-.r-money { color: red; }
 .r-mini-cart {
   @extend .r-links;
   position: relative;
@@ -33,22 +31,45 @@
     border: 1px solid #ccc;
     background-color: white;
     display: none;
-    table {
-      td {
-        padding: 5px 8px;
-        text-align: right;
-      }
-      td.name {
-        width: 150px;
-        text-align: left;
-        overflow: hidden;
-      }
-      td.money { @extend .money }
-      td.delete {
-        a {
-          color: #BF0000;
-        }
-      }
+    dl {
+      margin: 0px;
+      width: 100%;
+    }
+    dl ul {
+      list-style-type: none;
+      padding: 0px;
+      margin: 0px;
+      border: 0px;
+      width: 100%;
+    }
+    dl li{
+      padding-top: 5px;
+      padding-left: 8px;
+      text-align: right;
+      float: left;
+    }
+    dl li.name {
+      width: 165px;
+      text-align: left;
+      cursor: pointer;
+    }
+    dl li.price {
+      width: 50px;
+    }
+    dl li.delete {
+      width: 30px;
+    }
+    ul.child {
+      clear: both;
+    }
+    dd {
+      margin-left: 12px;
+    }
+    dd li.price {
+      margin-left: -12px;
+    }
+    dd li.name {
+      cursor: default;
     }
   }
   .r-bottom-bar {
@@ -65,74 +86,80 @@
   margin: 0 auto;
   font-size: 12px;
   background-color: white;
+
   h2 {
     font-size: 24px;
     line-height: 36px;
   }
-  table {
-    display: table;
-    width: 100%;
-    margin-bottom: 18px;
-    border-collapse: collapse;
-    border-spacing: 0;
-    vertical-align: middle;
-    tr:nth-child(odd) {
-      td { background-color: #F9F9F9; }
-    }
 
-    th, td {
-      padding: 8px;
-      line-height: 18px;
-      text-align: left;
-      display: table-cell;
+  ul {
+    text-align: left;
+    list-style-type: none;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+
+    li {
+      padding: 12px 8px;
+      float: left;
     }
-    thead {
-      display: table-header-group;
-      tr {
-        display: table-row;
-        th {
-          border-top: 0;
-          font-weight: bold;
-          vertical-align: bottom;
-        }
+    li.others {
+      float: right;
+      div {
+        float: left;
       }
-    }
-    tbody {
-      display: table-row-group;
-      tr {
-        display: table-row;
-        td {
-          border-top: 1px solid #DDD;
-          vertical-align: top;
-        }
-        td.price    { width: 80px; }
-        td.quantity {
-          width: 100px;
-          span {
-            float: left;
-            text-align: center;
-            min-width: 12px;
-            border: 1px solid #CCC;
-            background-color: white;
-          }
-          span.quantity-only { width: 56px; }
-          span.quantity { width: 30px; }
-          span.increase {
-            margin-left: -1px;
-            a { text-decoration: none }
-          }
-          span.decrease {
-            margin-right: -1px;
-            a { text-decoration: none }
-          }
-        }
-        td.subtotal { width: 80px; }
-        td.delete   { width: 50px; }
+
+      div.price {
+        width: 100px;
       }
+
+      div.quantity {
+        width: 100px;
+        span {
+          border: 1px solid #CCC;
+          float: left;
+          display: block;
+          width: 14px;
+          text-align: center;
+        }
+        span.decrease { margin-right: -1px; }
+        span.increase { margin-left: -1px; }
+        span.quantity { width: 30px; }
+        span.quantity-only { width: 60px; }
+      }
+      div.subtotal { width: 85px; }
+      div.delete { width: 50px; }
     }
-    tfoot { display: none; }
   }
+
+  ul.title {
+    font-size: 16px;
+    font-weight: bold;
+    li.price {
+      text-align: left;
+    }
+  }
+
+  dl {
+    margin: 0;
+    dt, dd {
+      margin: 0;
+      border-top: 1px solid #CCC;
+    }
+    dt ul {
+      li.name { cursor: pointer; }
+    }
+    dd {
+      background-color: #EEE;
+      ul {
+        li.name { padding-left: 20px; }
+      }
+    }
+  }
+
   .r-bottom-bar {
+    margin-top: 30px;
     position: relative;
     width: 100%;
     font-size: 20px;

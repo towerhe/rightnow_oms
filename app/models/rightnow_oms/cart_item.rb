@@ -12,6 +12,7 @@ module RightnowOms
     validates :name, presence: true
     validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
     validates :quantity, presence: true, numericality: { greater_than: 0 }
+    validates :base_quantity, presence: true, numericality: { greater_than: 0 }
 
     api_accessible :default do |t|
       t.add :id
@@ -19,21 +20,38 @@ module RightnowOms
       t.add :cartable_id
       t.add :cartable_type
       t.add :name
+      t.add :original_price
+      t.add :group
+      t.add :base_quantity
       t.add :price
       t.add :quantity
-      t.add :group
     end
 
     default_scope order("id ASC")
 
-    def total_price
+    before_validation :set_base_quantity
+
+    def total
       price * quantity
     end
 
+    def original_price
+      cartable.cartable_price
+    end
+
     class << self
+      def roots
+        where(parent_id: nil)
+      end
+
       def find_by_cartable(cartable)
         find_by_cartable_id_and_cartable_type(cartable.id, cartable.class)
       end
+    end
+
+    private
+    def set_base_quantity
+      self.base_quantity = quantity unless base_quantity
     end
   end
 end

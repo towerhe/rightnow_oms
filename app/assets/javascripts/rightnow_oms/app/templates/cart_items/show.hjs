@@ -1,9 +1,23 @@
-{{#with cartItem }}
-  <td class="name">{{ name }}</td>
-  <td class="price r-money">￥{{ priceString }}x{{ quantity }}</td>
-  <td class="delete">
-    {{#unless hasParent }}
-      <a href="#" {{ action "deleteRecord" }}>删除</a>
-    {{/unless}}
-  </td>
-{{/with}}
+{{#unless cartItem.hasParent }}
+  <dt>
+    <ul>
+      <li class="name" {{ action "toggleChildren" }}>{{ cartItem.name }}</li>
+      <li class="price r-money">￥{{ cartItem.priceString }}x{{ cartItem.quantity }}</li>
+      <li class="delete">
+        <a href="#" {{ action "deleteRecord" }}>删除</a>
+      </li>
+    <ul>
+  </dt>
+  {{#if isChildrenHidden}}
+    {{#if cartItem.hasChildren}}
+      <dd>
+        {{#each cartItem.children }}
+          <ul class='child'>
+            <li class="name">{{ name }}</li>
+            <li class="price r-money">￥{{ priceString }}x{{ quantity }}</li>
+          </ul>
+        {{/each}}
+      </dd>
+    {{/if}}
+  {{/if}}
+{{/unless}}

@@ -2,11 +2,9 @@
   {{ view RightnowOms.ShowCartableCountView cartableCountBinding="cart.cartableCount" }}
 </div>
 <div class="r-cart-items">
-  <table>
   {{#each cart.cartItems}}
     {{ view RightnowOms.ShowCartItemView cartItemBinding="this" }}
   {{/each}}
-  </table>
   <div class="r-bottom-bar">
     <span>总计：<span class="r-money">￥{{ cart.total }}</span></span>
     <span><a href="/rightnow_oms/cart">查看我的购物车</a></span>

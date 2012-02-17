@@ -1,13 +1,30 @@
-#rightnow-oms{ class: 'mini-cart' }
+#rightnow-oms{ class: 'mini-cart' } 
   %script{ type: 'text/x-handlebars'}
     {{ view RightnowOms.ShowCartView }}
 
 #products
-  %script{ type: 'text/x-handlebars'}
-    {{ view App.ListProductsView }}
+  %ul
+    - @products.each do |p|
+      = render partial: 'products/list_products', locals: { product: p }
 
 :javascript
   $(function() {
     RightnowOms.cartController.load(#{@cart.as_api_response(:default).to_json.html_safe});
-    App.productsController.findAll();
-  });
+
+    $('.buy-btn').click(function() {
+      var productInfo = $.parseJSON($(this).attr('info'));
+
+      RightnowOms.cartController.addCartItem({
+        cartable_id: productInfo.id,
+        cartable_type: 'Product'
+      }, function(cartItem) {
+        for(var i = 0; i < productInfo.child_ids.length; i++) {
+          RightnowOms.cartController.addCartItem({
+            cartable_id: parseInt(productInfo.child_ids[i]),
+            cartable_type: 'Product',
+            parent_id: cartItem.get('id')
+          });
+        }
+      });
+    });
+  })

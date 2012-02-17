@@ -1,19 +1,46 @@
-{{#with cartItem}}
-  <td class="name">{{ name }}</td>
-  <td class="price">￥{{ priceString }}</td>
-  <td class="quantity">
-    {{#if hasParent }}
-      <span class="quantity-only">{{ quantity }}</span>
-    {{else}}
-      <span class="decrease"><a href="#" {{ action "decrease" }}>-</a></span>
-      <span class="quantity"> {{ quantity }} </span>
-      <span class="increase"><a href="#" {{ action "increase" }}>+</a></span>
+{{#unless cartItem.hasParent}}
+  <dt>
+    <ul>
+      <li class="name" {{ action "toggleChildren" }}>{{ cartItem.name }}</li>
+      <li class="others">
+        <div class='price'>￥{{ cartItem.priceString }}</div>
+        <div class="quantity">
+          {{#if hasParent }}
+            <span class="quantity-only">{{ cartItem.quantity }}</span>
+          {{else}}
+            <span class="decrease"><a href="#" {{ action "decrease" }}>-</a></span>
+            <span class="quantity"> {{ cartItem.quantity }} </span>
+            <span class="increase"><a href="#" {{ action "increase" }}>+</a></span>
+          {{/if}}
+        </div>
+        <div class="subtotal r-money">￥{{ cartItem.subtotalString }}</div>
+        <div class="delete">
+          {{#unless cartItem.hasParent }}
+            <a href="#" {{ action "deleteRecord" }}>删除</a>
+          {{/unless}}
+        </div>
+      </li>
+      <div class="r-clear"></div>
+    </ul>
+  </dt>
+  {{#if isChildrenHidden}}
+    {{#if cartItem.hasChildren}}
+      <dd>
+        {{#each cartItem.children}}
+          <ul>
+            <li class="name">{{ name }}</li>
+            <li class="others">
+              <div class="price">￥{{ priceString }}</div>
+              <div class="quantity">
+                <span class="quantity-only">{{ quantity }}</span>
+              </div>
+              <div class="subtotal r-money">￥{{ subtotalString }}</div>
+              <div class="delete"></div>
+            </li>
+            <div class="r-clear"></div>
+          </ul>
+        {{/each}}
+      </dd>
     {{/if}}
-  </td>
-  <td class="subtotal r-money">￥{{ subtotalString }}</td>
-  <td class="delete">
-    {{#unless hasParent }}
-      <a href="#" {{ action "deleteRecord" }}>删除</a>
-    {{/unless}}
-  </td>
-{{/with}}
+  {{/if}}
+{{/unless}}

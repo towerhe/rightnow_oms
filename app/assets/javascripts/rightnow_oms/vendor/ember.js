@@ -9770,9 +9770,9 @@ Ember.ArrayProxy = Ember.Object.extend(Ember.MutableArray,
 
   Then, create a view that binds to your new controller:
 
-    {{#collection contentBinding="MyApp.listController"}}
-      {{content.firstName}} {{content.lastName}}
-    {{/collection}}
+    {{#each MyApp.listController}}
+      {{firstName}} {{lastName}}
+    {{/each}}
 
   The advantage of using an array controller is that you only have to set up
   your view bindings once; to change what's displayed, simply swap out the
@@ -12607,7 +12607,7 @@ Ember.View.views = {};
 Ember.View.childViewsProperty = childViewsProperty;
 
 Ember.View.applyAttributeBindings = function(elem, name, value) {
-  var type = typeof value;
+  var type = Ember.typeOf(value);
   var currentValue = elem.attr(name);
 
   // if this changes, also change the logic in ember-handlebars/lib/helpers/binding.js
@@ -13340,15 +13340,27 @@ Ember.$ = window.jQuery;
 })({});
 
 (function(exports) {
-var get = Ember.get, set = Ember.set;
+var get = Ember.get, set = Ember.set, getPath = Ember.getPath;
 
 Ember.State = Ember.Object.extend({
   isState: true,
   parentState: null,
   start: null,
+  name: null,
+  path: Ember.computed(function() {
+    var parentPath = getPath(this, 'parentState.path'),
+        path = get(this, 'name');
+
+    if (parentPath) {
+      path = parentPath + '.' + path;
+    }
+
+    return path;
+  }).property().cacheable(),
 
   init: function() {
     var states = get(this, 'states'), foundStates;
+    var name;
 
     // As a convenience, loop over the properties
     // of this state and look for any that are other
@@ -13358,40 +13370,37 @@ Ember.State = Ember.Object.extend({
 
     if (!states) {
       states = {};
-      for (var name in this) {
-        if (name === "constructor") { continue; }
-        value = this.setupChild(name, this[name]);
 
-        if (value) {
-          foundStates = true;
-          states[name] = value;
-        }
+      for (name in this) {
+        if (name === "constructor") { continue; }
+        this.setupChild(states, name, this[name]);
       }
 
-      if (foundStates) { set(this, 'states', states); }
+      set(this, 'states', states);
     } else {
-      for (var name in states) {
-        this.setupChild(name, states[name]);
+      for (name in states) {
+        this.setupChild(states, name, states[name]);
       }
     }
 
     set(this, 'routes', {});
   },
 
-  setupChild: function(name, value) {
+  setupChild: function(states, name, value) {
     if (!value) { return false; }
 
     if (Ember.State.detect(value)) {
-      value = value.create();
+      value = value.create({
+        name: name
+      });
+    } else if (value.isState) {
+      set(value, 'name', name);
     }
 
     if (value.isState) {
       set(value, 'parentState', this);
-      set(value, 'name', (get(this, 'name') || '') + '.' + name);
-      return value;
+      states[name] = value;
     }
-
-    return false;
   },
 
   enter: Ember.K,
@@ -13421,7 +13430,7 @@ Ember.StateManager = Ember.State.extend(
 
     var initialState = get(this, 'initialState');
 
-    if (!initialState && get(this, 'start')) {
+    if (!initialState && getPath(this, 'states.start')) {
       initialState = 'start';
     }
 
@@ -13431,6 +13440,15 @@ Ember.StateManager = Ember.State.extend(
   },
 
   currentState: null,
+
+  /**
+    @property
+
+    If set to true, `errorOnUnhandledEvents` will cause an exception to be
+    raised if you attempt to send an event to a state manager that is not
+    handled by the current state or any of its parent states.
+  */
+  errorOnUnhandledEvent: true,
 
   /**
     @property
@@ -13469,7 +13487,11 @@ Ember.StateManager = Ember.State.extend(
       action.call(currentState, this, context);
     } else {
       var parentState = get(currentState, 'parentState');
-      if (parentState) { this.sendRecursively(event, parentState, context); }
+      if (parentState) {
+        this.sendRecursively(event, parentState, context);
+      } else if (get(this, 'errorOnUnhandledEvent')) {
+        throw new Ember.Error(this.toString() + " could not respond to event " + event + " in state " + getPath(this, 'currentState.name') + ".");
+      }
     }
   },
 
@@ -13597,7 +13619,7 @@ Ember.StateManager = Ember.State.extend(
         }
 
         // right now, start states cannot be entered asynchronously
-        while (startState = get(startState, initialState)) {
+        while (startState = get(get(startState, 'states'), initialState)) {
           enteredState = startState;
 
           if (log) { console.log("STATEMANAGER: Entering " + startState.name); }
@@ -13743,17 +13765,6 @@ Ember.ViewState = Ember.State.extend({
 
   // If we have the W3C range API, this process is relatively straight forward.
   if (supportsRange) {
-
-    // IE 9 supports ranges but doesn't define createContextualFragment
-    if (!Range.prototype.createContextualFragment) {
-      Range.prototype.createContextualFragment = function(html) {
-        var frag = document.createDocumentFragment(),
-             div = document.createElement("div");
-        frag.appendChild(div);
-        div.outerHTML = html;
-        return frag;
-      };
-    }
 
     // Get a range for the current morph. Optionally include the starting and
     // ending placeholders.
@@ -14015,6 +14026,7 @@ Ember.ViewState = Ember.State.extend({
     afterFunc = function(html) {
       // get the real starting node. see realNode for details.
       var end = document.getElementById(this.end);
+      var insertBefore = end.nextSibling;
       var parentNode = end.parentNode;
       var nextSibling;
       var node;
@@ -14028,7 +14040,7 @@ Ember.ViewState = Ember.State.extend({
       // placeholder.
       while (node) {
         nextSibling = node.nextSibling;
-        parentNode.insertBefore(node, end.nextSibling);
+        parentNode.insertBefore(node, insertBefore);
         node = nextSibling;
       }
     };
@@ -15510,7 +15522,14 @@ Ember.Handlebars.registerHelper('collection', function(path, options) {
   }
 
   if (inverse && inverse !== Handlebars.VM.noop) {
-    hash.emptyView = Ember.View.extend({
+    var emptyViewClass = Ember.View;
+
+    if (hash.emptyViewClass) {
+      emptyViewClass = Ember.View.detect(emptyViewClass) ?
+                          hash.emptyViewClass : getPath(this, hash.emptyViewClass);
+    }
+
+    hash.emptyView = emptyViewClass.extend({
       template: inverse,
       tagName: itemHash.tagName
     });
@@ -15608,6 +15627,11 @@ Ember.Handlebars.EachView = Ember.CollectionView.extend(Ember.Metamorph, {
 Ember.Handlebars.registerHelper('each', function(path, options) {
   options.hash.contentBinding = path;
   options.hash.preserveContext = true;
+
+  // Set up emptyView as a metamorph with no tag
+  options.hash.itemTagName = '';
+  options.hash.emptyViewClass = Ember.View.extend(Ember.Metamorph);
+
   return Ember.Handlebars.helpers.collection.call(this, 'Ember.Handlebars.EachView', options);
 });
 

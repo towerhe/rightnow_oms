@@ -9,21 +9,18 @@ RSpec::Matchers.define :have_cart do |cart|
   end
 end
 
+RSpec::Matchers.define :have_cart_item do |item|
+  match do |actual|
+    matched = actual.has_content?(item[:name]) &&
+      actual.has_content?("#{'%.2f' % item[:price]}x#{item[:quantity]}")
+    #matched &&= wrapper.has_content?('删除') if item[:deletable]
+
+    matched
+  end
+end
+
 RSpec::Matchers.define :have_cart_items do |items|
   match do |actual|
-    success = true
-    actual.all('tr').each_with_index do |tr, i|
-      break if i == items.size
-
-      success &&= tr.has_content?(items[i][:name])
-      success &&= tr.has_content?("#{items[i][:price]}x#{items[i][:quantity]}")
-      if items[i][:deletable]
-        success &&= tr.has_content?('删除')
-      else
-        success &&= tr.has_no_content?('删除')
-      end
-    end
-
-    success
+    items.each { |i| return false unless have_cart_item(i) }
   end
 end

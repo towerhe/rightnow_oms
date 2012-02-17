@@ -1,0 +1,50 @@
+.r-order {
+  margin: 0 auto;
+  max-width: 940px;
+  h3 { margin: 0px; }
+  p {
+    margin: 0px;
+    padding: 20px 20px;
+  }
+  label { font-weight: bold; }
+  table {
+    width: 100%;
+    margin-bottom: 18px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    vertical-align: middle;
+    tr:nth-child(odd) {
+      td { background-color: #F9F9F9; }
+    }
+
+    th, td {
+      padding: 8px;
+      line-height: 18px;
+      text-align: left;
+    }
+    thead {
+      tr {
+        th {
+          border-top: 0;
+          font-weight: bold;
+          vertical-align: bottom;
+          padding-top: 20px;
+          padding-left: 20px;
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+          padding-left: 20px;
+          border-top: 1px solid #DDD;
+          vertical-align: top;
+        }
+        td.price    { width: 80px; }
+        td.quantity { width: 100px; }
+        td.subtotal { width: 80px; }
+      }
+    }
+    tfoot { display: none; }
+  }
+}

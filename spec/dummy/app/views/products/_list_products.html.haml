@@ -1,0 +1,20 @@
+%li
+  %p
+    name:
+    %strong= product.name
+  %p.price
+    price:
+    = product.price
+  %p
+    group:
+    = product.group
+  - if product.has_children?
+    %p
+      children:
+      %ul.list-children
+        - for i in product.children do
+          %li= "#{i.name}￥#{i.price}"
+  - p = product.as_json.merge(child_ids: product.children.map(&:id))
+  %button.buy-btn{ id: "#{product.id}", info: p.to_json }
+    购买
+

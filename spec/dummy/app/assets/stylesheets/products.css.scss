@@ -1,17 +1,42 @@
 .mini-cart {
   float: right;
 }
-
-ul {
+#products {
   width: 62%;
-  border: 1px solid #ccc;
-
-  li {
-    float: left;
-    width: 20%;
+  background-color: white;
+  padding: 0;
+  margin: 10px;
+  ul {
+    margin: 10px;
+    li {
+      border: 1px solid gray;
+      padding: 5px;
+      margin: 5px 6px;
+      width: 220px;
+      display: block;
+      float: left;
+      text-align: left;
+      .price {
+        width: 140px;
+      }
+      ul.list-children {
+        li {
+          border: 0 solid gray;
+      }
+      }
+      button {
+       position: relative;
+       top: 5px;
+      }
+    }
   }
-}
-
-.clear {
-  clear: both;
+  .no-child {
+    float: left;
+  }
+  .has-children {
+    float: left;
+    li.list-no-child {
+      height: 300px;
+    }
+  }
 }
