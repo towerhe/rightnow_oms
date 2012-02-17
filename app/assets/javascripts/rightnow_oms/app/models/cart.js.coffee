@@ -20,15 +20,22 @@ RightnowOms.Cart = DS.Model.extend
   ).property("cartItems.@each.quantity")
 
   addCartItem: (item) ->
+    return @createCartItem(item) unless item.mergable
+
     cartItem = RightnowOms.CartItem.findByCartableAndParentId(item.cartable_id, item.cartable_type, item.parent_id)
 
     if cartItem?
       cartItem.increase() unless cartItem.get('parent')?
     else
-      cartItem = RightnowOms.store.createRecord(RightnowOms.CartItem, item)
+      cartItem = @createCartItem(item)
 
-      if cartItem.get('hasParent')
-        cartItem.get('parent').set('children', RightnowOms.CartItem.findByParentId(cartItem.get('id')))
+    cartItem
+
+  createCartItem: (item)->
+    cartItem = RightnowOms.store.createRecord(RightnowOms.CartItem, item)
+
+    if cartItem.get('hasParent')
+      cartItem.get('parent').set('children', RightnowOms.CartItem.findByParentId(cartItem.get('id')))
 
     cartItem
 
