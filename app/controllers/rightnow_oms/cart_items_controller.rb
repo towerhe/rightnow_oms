@@ -10,11 +10,6 @@ module RightnowOms
     end
 
     def create
-      if @cart.new_record?
-        @cart.save
-        session[:cart_id] = @cart.id
-      end
-
       params[:cart_item][:quantity] = 1 if params[:cart_item][:quantity].blank?
       cart_item = @cart.add_item(find_cartable, params[:cart_item])
 
@@ -28,7 +23,11 @@ module RightnowOms
     end
 
     def update
-      params[:cart_item].delete(:original_price) if params[:cart_item]
+      if params[:cart_item]
+        params[:cart_item].delete(:original_price)
+        params[:cart_item].delete(:base_quantity)
+      end
+
       respond_to do |format|
         if @cart_item.update_attributes(params[:cart_item])
           format.json { render_for_api :default, json: @cart_item, root: :cart_item, status: :ok }
