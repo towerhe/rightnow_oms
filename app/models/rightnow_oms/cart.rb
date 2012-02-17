@@ -11,7 +11,7 @@ module RightnowOms
     end
 
     def total
-      cart_items.roots.map.sum(&:total_price) || 0
+      cart_items.roots.map.sum(&:total) || 0
     end
 
     def cartable_count

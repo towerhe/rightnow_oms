@@ -70,7 +70,7 @@ describe RightnowOms::Cart do
       specify { subject.cart_items.first.name.should == product.name }
       specify { subject.cart_items.first.price.should == product.price }
       specify { subject.cart_items.first.quantity.should == 1 }
-      specify { subject.cart_items.first.total_price.should == product.price * 1 }
+      specify { subject.cart_items.first.total.should == product.price * 1 }
     end
 
     context 'when product exists' do
@@ -83,7 +83,7 @@ describe RightnowOms::Cart do
       specify { subject.cart_items.first.name.should == product.name }
       specify { subject.cart_items.first.price.should == product.price }
       specify { subject.cart_items.first.quantity.should == 2 }
-      specify { subject.cart_items.first.total_price.should == product.price * 2 }
+      specify { subject.cart_items.first.total.should == product.price * 2 }
     end
 
     context 'when adding two different products' do

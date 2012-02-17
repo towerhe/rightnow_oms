@@ -22,11 +22,11 @@ describe RightnowOms::CartItem do
   it { should allow_value(Product.new).for(:cartable) }
   it { should_not allow_value(RightnowOms::Cart.new).for(:cartable) }
 
-  describe "#total_price" do
+  describe "#total" do
     context 'without child' do
       subject { FactoryGirl.build(:cart_item, price: 10.55, quantity: 2) }
 
-      its(:total_price) { should == 10.55 * 2 }
+      its(:total) { should == 10.55 * 2 }
     end
 
     context 'with children' do
@@ -37,7 +37,7 @@ describe RightnowOms::CartItem do
 
       subject { @parent }
 
-      its(:total_price) { should == 50 }
+      its(:total) { should == 50 }
     end
   end
 
@@ -63,5 +63,6 @@ describe RightnowOms::CartItem do
     it { should have_key :price }
     it { should have_key :quantity }
     it { should have_key :group }
+    it { should have_key :total }
   end
 end

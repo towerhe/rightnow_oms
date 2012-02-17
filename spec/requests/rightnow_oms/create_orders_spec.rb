@@ -27,6 +27,6 @@ feature 'Creating orders' do
     page.should have_content(@cart_item.name)
     page.should have_content(@cart_item.price)
     page.should have_content(@cart_item.quantity)
-    page.should have_content(@cart_item.total_price)
+    page.should have_content(@cart_item.total)
   end
 end

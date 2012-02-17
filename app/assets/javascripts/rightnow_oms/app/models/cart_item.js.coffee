@@ -7,23 +7,19 @@ RightnowOms.CartItem = DS.Model.extend
   quantity: DS.attr('integer')
   group: DS.attr('string')
   parent_id: DS.attr('integer')
+  total: DS.attr('money')
 
   priceString: (->
     round(@get('price'), 2)
   ).property('price')
 
   subtotal: (->
-    t = @get('price') * @get('quantity')
-    if @get('children')?
-      @get('children').forEach (child) ->
-        t += child.get('subtotal')
-
-    t
-  ).property('price', 'quantity', 'children')
+    @get('total')
+  ).property('total')
 
   subtotalString: (->
-    round(@get('subtotal'), 2)
-  ).property('subtotal')
+    round(@get('total'), 2)
+  ).property('total')
 
   children: (->
     RightnowOms.CartItem.findByParentId(@get('id'))
