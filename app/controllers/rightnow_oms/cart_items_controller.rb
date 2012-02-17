@@ -28,11 +28,7 @@ module RightnowOms
     end
 
     def update
-      if params[:cart_item]
-        params[:cart_item].delete(:original_price)
-        params[:cart_item].delete(:total)
-      end
-
+      params[:cart_item].delete(:original_price) if params[:cart_item]
       respond_to do |format|
         if @cart_item.update_attributes(params[:cart_item])
           format.json { render_for_api :default, json: @cart_item, root: :cart_item, status: :ok }
