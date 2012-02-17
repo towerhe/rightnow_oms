@@ -10,11 +10,6 @@ module RightnowOms
     end
 
     def create
-      if @cart.new_record?
-        @cart.save
-        session[:cart_id] = @cart.id
-      end
-
       params[:cart_item][:quantity] = 1 if params[:cart_item][:quantity].blank?
       cart_item = @cart.add_item(find_cartable, params[:cart_item])
 

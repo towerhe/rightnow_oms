@@ -43,8 +43,6 @@ describe RightnowOms::CartItemsController do
       end
 
       it 'saves the cart' do
-        cart.should_receive(:new_record?).and_return(true)
-        cart.should_receive(:save)
         controller.should_receive(:find_cartable).and_return(product)
         cart.should_receive(:add_item).and_return(cart_item)
 
