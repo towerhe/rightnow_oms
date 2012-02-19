@@ -8,3 +8,11 @@ RightnowOms.ShowCartItemInDetailView = RightnowOms.ShowCartItemView.extend
   decrease: ->
     item = @get('cartItem')
     RightnowOms.cartController.decreaseCartItem(item.get('id'))
+
+  mouseEnter: (e) ->
+    $(e.target).parents('.r-cart-items').find('dt').css('background', 'white')
+    $(e.target).parents('dt').css('background','#EEE')
+
+
+  mouseLeave: (e) ->
+    $(e.target).parents('.r-cart-items').find('dt').css('background', 'white')

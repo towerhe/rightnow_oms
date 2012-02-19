@@ -1,25 +1,23 @@
 {{#unless cartItem.hasParent }}
-  <tr>
-    <td class="name" {{ action "toggleChildren" }}>{{ cartItem.name }}</td>
-    <td class="price r-money">￥{{ cartItem.priceString }}x{{ cartItem.quantity }}</td>
-      <td class="delete">
+  <dt>
+    <ul>
+      <li class="name" {{ action "toggleChildren" }}>{{ cartItem.name }}</li>
+      <li class="price r-money">￥{{ cartItem.priceString }}x{{ cartItem.quantity }}</li>
+      <li class="delete">
         <a href="#" {{ action "deleteRecord" }}>删除</a>
-      </td>
-  </tr>
+      </li>
+    <ul>
+  </dt>
   {{#if isChildrenHidden}}
     {{#if cartItem.hasChildren}}
-      <tr>
-        <td colspan="3">
-          <table>
-            {{#each cartItem.children }}
-              <tr>
-                <td class="name">{{ name }}</td>
-                <td class="price r-money">￥{{ priceString }}x{{ quantity }}</td>
-              </tr>
-            {{/each}}
-          </table>
-        </td>
-      </tr>
+      <dd>
+        {{#each cartItem.children }}
+          <ul class='child'>
+            <li class="name">{{ name }}</li>
+            <li class="price r-money">￥{{ priceString }}x{{ quantity }}</li>
+          </ul>
+        {{/each}}
+      </dd>
     {{/if}}
   {{/if}}
 {{/unless}}

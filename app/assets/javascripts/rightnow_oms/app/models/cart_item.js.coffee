@@ -2,24 +2,21 @@ RightnowOms.CartItem = DS.Model.extend
   cartable_id: DS.attr('integer')
   cartable_type: DS.attr('string')
   name: DS.attr('string')
-  original_price: DS.attr('money')
+  original_price: DS.attr('string')
+  base_quantity: DS.attr('integer')
   price: DS.attr('money')
   quantity: DS.attr('integer')
   group: DS.attr('string')
   parent_id: DS.attr('integer')
+  mergable: DS.attr('boolean')
 
   priceString: (->
     round(@get('price'), 2)
   ).property('price')
 
   subtotal: (->
-    t = @get('price') * @get('quantity')
-    if @get('children')?
-      @get('children').forEach (child) ->
-        t += child.get('subtotal')
-
-    t
-  ).property('price', 'quantity', 'children')
+    @get('price') * @get('quantity')
+  ).property('price', 'quantity')
 
   subtotalString: (->
     round(@get('subtotal'), 2)
@@ -53,7 +50,7 @@ RightnowOms.CartItem = DS.Model.extend
         child.increase()
       )
 
-    @set('quantity', @get('quantity') + 1)
+    @set('quantity', @get('quantity') + @get('base_quantity'))
 
   decrease: ->
     if @get('hasChildren')
@@ -61,7 +58,7 @@ RightnowOms.CartItem = DS.Model.extend
         child.decrease()
       )
 
-    @set('quantity', @get('quantity') - 1)
+    @set('quantity', @get('quantity') - @get('base_quantity'))
 
   deleteRecord: ->
     if @get('hasChildren')

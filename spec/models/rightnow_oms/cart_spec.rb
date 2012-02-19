@@ -48,11 +48,11 @@ describe RightnowOms::Cart do
 
       context 'and having children' do
         before do
-          parent = FactoryGirl.create(:cart_item, name: 'parent', price: 1.0, cart: subject)
+          parent = FactoryGirl.create(:cart_item, name: 'parent', price: 2.0, cart: subject)
           FactoryGirl.create(:cart_item, name: 'child', price: 2.0, parent: parent, cart: subject)
         end
 
-        its(:total) { should == 3 }
+        its(:total) { should == 2 }
       end
     end
   end
@@ -60,7 +60,7 @@ describe RightnowOms::Cart do
   describe "#add_item" do
     let(:product) { FactoryGirl.create(:product, price: 10) }
 
-    context 'when product does not exist' do
+    context 'when the item does not exist' do
       before { subject.add_item(product) }
 
       its(:total) { should == product.price }
@@ -70,23 +70,33 @@ describe RightnowOms::Cart do
       specify { subject.cart_items.first.name.should == product.name }
       specify { subject.cart_items.first.price.should == product.price }
       specify { subject.cart_items.first.quantity.should == 1 }
-      specify { subject.cart_items.first.total_price.should == product.price * 1 }
+      specify { subject.cart_items.first.total.should == product.price * 1 }
     end
 
-    context 'when product exists' do
-      before { 2.times { subject.add_item(product) } }
+    context 'when the item exists' do
+      before { subject.add_item(product) }
 
-      its(:total) { should == product.price * 2 }
-      its(:cart_items) { should have(1).item }
+      context 'and adding a same item not setting to unmergable' do
+        before { subject.add_item(product) }
 
-      specify { subject.cart_items.first.cartable.should == product }
-      specify { subject.cart_items.first.name.should == product.name }
-      specify { subject.cart_items.first.price.should == product.price }
-      specify { subject.cart_items.first.quantity.should == 2 }
-      specify { subject.cart_items.first.total_price.should == product.price * 2 }
+        its(:total) { should == product.price * 2 }
+        its(:cart_items) { should have(1).item }
+
+        specify { subject.cart_items.first.cartable.should == product }
+        specify { subject.cart_items.first.name.should == product.name }
+        specify { subject.cart_items.first.price.should == product.price }
+        specify { subject.cart_items.first.quantity.should == 2 }
+        specify { subject.cart_items.first.total.should == product.price * 2 }
+      end
+
+      context 'and adding a same item setting to unmergable' do
+        before { subject.add_item(product, mergable: false) }
+        
+        its(:cart_items) { should have(2).items }
+      end
     end
 
-    context 'when adding two different products' do
+    context 'when adding two different items' do
       let(:another_product) { FactoryGirl.create(:product, name: 'another product for test', price: 10) }
 
       before do
