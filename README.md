@@ -150,6 +150,24 @@ You can add cartables to the cart by:
   })
 ```
 
+### Strategy to sync data with remote
+
+By default, RightnowOms sync the data immediately when you change the
+data objects in the store. But by setting `autoCommit` to `false`, you
+can change the default behavior. 
+
+```javascript
+  RightnowOms.config.autoCommit = false
+```
+
+If you turn off auto-commit, you need to sync the data explicitly. When
+you have created, updated and deleted any data object in the client
+side, you ought to commit these changes by yourself.
+
+```javascript
+  RightnowOms.commit(true)
+```
+
 Now you have all things done. Wish you have a good day.
 
 ## Development
