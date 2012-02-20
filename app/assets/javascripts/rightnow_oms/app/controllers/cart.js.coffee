@@ -11,17 +11,20 @@ RightnowOms.cartController = Ember.Object.create
   # item: a hash
   addCartItem: (item, callback) ->
     cartItem = @get('content').addCartItem(item)
-    @store.commit()
+    RightnowOms.commit()
 
     return unless callback
 
     return callback.call(@, cartItem) if cartItem.get('id')
 
     self = @
-    cartItem.addObserver('isDirty', ->
+    _afterCartItemCreated = ->
       if (!cartItem.get('isDirty')) && (!cartItem.get('isDeleted'))
         callback.call(self, cartItem)
-    )
+        cartItem.removeObserver('isDirty', _afterCartItemCreated)
+        RightnowOms.commit(true) unless RightnowOms.config.autoCommit
+
+    cartItem.addObserver('isDirty', _afterCartItemCreated)
 
   # @id: id of the cart item to be updated
   # @properties: a hash which is the new properties of the cart item.
@@ -34,18 +37,18 @@ RightnowOms.cartController = Ember.Object.create
   # })
   updateCartItem: (id, properties) ->
     @get('content').updateCartItem(id, properties)
-    @store.commit()
+    RightnowOms.commit()
 
   increaseCartItem: (id) ->
     @get('content').increaseCartItem(id)
-    @store.commit()
+    RightnowOms.commit()
 
   decreaseCartItem: (id) ->
     cartItem = RightnowOms.CartItem.findById(id)
 
     if cartItem.get('isDecreasable')
       @get('content').decreaseCartItem(id)
-      @store.commit()
+      RightnowOms.commit()
     else
       @removeCartItem(id)
 
@@ -55,12 +58,12 @@ RightnowOms.cartController = Ember.Object.create
 
     if remove
       @get('content').removeCartItem(id)
-      @store.commit()
+      RightnowOms.commit()
 
   cleanUp: ->
     if confirm('您确定要清空您的购物车吗？')
       @get('content').cleanUp()
-      @store.commit()
+      RightnowOms.commit()
 
   # return: an array of cart items.
   #
