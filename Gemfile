@@ -15,7 +15,6 @@ gem 'pry'
 gem 'pry-nav'
 gem 'pry-stack_explorer'
 gem 'pry-exception_explorer'
-gem 'plymouth'
 
 group :assets do
   gem 'uglifier'
@@ -33,6 +32,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'plymouth'
   gem 'rspec-rails'
   gem 'capybara'
   gem 'shoulda-matchers'
