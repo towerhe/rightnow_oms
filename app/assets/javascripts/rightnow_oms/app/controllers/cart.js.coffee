@@ -41,14 +41,14 @@ RightnowOms.cartController = Ember.Object.create
 
   increaseCartItem: (id) ->
     @get('content').increaseCartItem(id)
-    RightnowOms.commit()
+    RightnowOms.commit(true)
 
   decreaseCartItem: (id) ->
     cartItem = RightnowOms.CartItem.findById(id)
 
     if cartItem.get('isDecreasable')
       @get('content').decreaseCartItem(id)
-      RightnowOms.commit()
+      RightnowOms.commit(true)
     else
       @removeCartItem(id)
 
@@ -58,12 +58,12 @@ RightnowOms.cartController = Ember.Object.create
 
     if remove
       @get('content').removeCartItem(id)
-      RightnowOms.commit()
+      RightnowOms.commit(true)
 
   cleanUp: ->
     if confirm('您确定要清空您的购物车吗？')
       @get('content').cleanUp()
-      RightnowOms.commit()
+      RightnowOms.commit(true)
 
   # return: an array of cart items.
   #
