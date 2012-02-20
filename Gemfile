@@ -9,7 +9,13 @@ gemspec
 gem 'jquery-rails'
 gem 'ancestry'
 gem 'ember-rails'
+
+# The pry ecosystem
 gem 'pry'
+gem 'pry-nav'
+gem 'pry-stack_explorer'
+gem 'pry-exception_explorer'
+gem 'plymouth'
 
 group :assets do
   gem 'uglifier'

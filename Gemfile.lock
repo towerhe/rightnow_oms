@@ -48,6 +48,7 @@ GEM
     ancestry (1.2.4)
       activerecord (>= 2.2.2)
     arel (3.0.0)
+    binding_of_caller (0.6.2)
     builder (3.0.0)
     capybara (1.1.2)
       mime-types (>= 1.16)
@@ -108,11 +109,20 @@ GEM
     multi_json (1.0.4)
     mysql2 (0.3.11)
     nokogiri (1.5.0)
+    plymouth (0.3.2)
+      pry-exception_explorer (>= 0.1.7)
     polyglot (0.3.3)
     pry (0.9.8.2)
       coderay (~> 1.0.5)
       method_source (~> 0.7)
       slop (>= 2.4.4, < 3)
+    pry-exception_explorer (0.1.7)
+      pry-stack_explorer (>= 0.3.9)
+    pry-nav (0.1.0)
+      pry (~> 0.9.8.1)
+    pry-stack_explorer (0.4.0)
+      binding_of_caller (~> 0.6.2)
+      pry (~> 0.9.8.2)
     rack (1.4.1)
     rack-cache (1.1)
       rack (>= 0.4)
@@ -205,7 +215,11 @@ DEPENDENCIES
   ffaker
   jquery-rails
   mysql2
+  plymouth
   pry
+  pry-exception_explorer
+  pry-nav
+  pry-stack_explorer
   rack_session_access
   redcarpet
   rightnow_oms!
