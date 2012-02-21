@@ -51,7 +51,7 @@ Create the migrations with:
 Run `bundle install` and require ember and ember-data in your `app/assets/javascripts/application.js`:
 
 ```
-  = require rightnow_oms/vendor/ember
+  = require rightnow_oms/vendor/ember-0.9.5
   = require rightnow_oms/vendor/ember-data
 ```
 
