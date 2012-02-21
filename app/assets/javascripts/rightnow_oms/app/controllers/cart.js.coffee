@@ -36,15 +36,27 @@ RightnowOms.cartController = Ember.Object.create
   #   'quantity': 2
   # })
   updateCartItem: (id, properties) ->
+    if RightnowOms.CartItem.findById(id).isProcessing()
+      alert('正在保存购物车，请稍后。。。')
+      return
+
     @get('content').updateCartItem(id, properties)
     RightnowOms.commit()
 
   increaseCartItem: (id) ->
-    @get('content').increaseCartItem(id)
+    if RightnowOms.CartItem.findById(id).isProcessing()
+      alert('正在保存购物车，请稍后。。。')
+      return
+
+    cartItem = @get('content').increaseCartItem(id)
     RightnowOms.commit(true)
 
   decreaseCartItem: (id) ->
     cartItem = RightnowOms.CartItem.findById(id)
+
+    if cartItem.isProcessing()
+      alert('正在保存购物车，请稍后。。。')
+      return
 
     if cartItem.get('isDecreasable')
       @get('content').decreaseCartItem(id)
