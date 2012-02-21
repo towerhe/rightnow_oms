@@ -22,7 +22,7 @@ RightnowOms.cartController = Ember.Object.create
       if (!cartItem.get('isDirty')) && (!cartItem.get('isDeleted'))
         callback.call(self, cartItem)
         cartItem.removeObserver('isDirty', _afterCartItemCreated)
-        RightnowOms.commit(true) unless RightnowOms.config.autoCommit
+        RightnowOms.commit(true) unless RightnowOms.config.get('autoCommit')
 
     cartItem.addObserver('isDirty', _afterCartItemCreated)
 

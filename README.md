@@ -157,7 +157,7 @@ data objects in the store. But by setting `autoCommit` to `false`, you
 can change the default behavior. 
 
 ```javascript
-  RightnowOms.config.autoCommit = false
+  RightnowOms.config.set('autoCommit', false)
 ```
 
 If you turn off auto-commit, you need to sync the data explicitly. When

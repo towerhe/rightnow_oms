@@ -4,7 +4,7 @@ window.RightnowOms = Ember.Application.create
     clearTimeout(@_commitTimer) if @_commitTimer
 
     @_commitTimer = setTimeout((->
-      window.RightnowOms.store.commit() if window.RightnowOms.config.autoCommit || force
+      window.RightnowOms.store.commit() if window.RightnowOms.config.get('autoCommit') || force
     ), 500)
 
   _commitTimer: null
@@ -15,6 +15,4 @@ window.RightnowOms.store = DS.Store.create
       bulkCommit: false
       namespace: 'rightnow_oms'
 
-window.RightnowOms.config = Em.Object.create({
-  autoCommit: true
-})
+window.RightnowOms.config = Em.Object.create()
