@@ -16,3 +16,4 @@ window.RightnowOms.store = DS.Store.create
       namespace: 'rightnow_oms'
 
 window.RightnowOms.config = Em.Object.create()
+window.RightnowOms.config.set('autoCommit', true)
