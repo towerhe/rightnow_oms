@@ -51,7 +51,7 @@ Create the migrations with:
 Run `bundle install` and require ember and ember-data in your `app/assets/javascripts/application.js`:
 
 ```
-  = require rightnow_oms/vendor/ember
+  = require rightnow_oms/vendor/ember-0.9.5
   = require rightnow_oms/vendor/ember-data
 ```
 
@@ -157,7 +157,7 @@ data objects in the store. But by setting `autoCommit` to `false`, you
 can change the default behavior. 
 
 ```javascript
-  RightnowOms.config.autoCommit = false
+  RightnowOms.config.set('autoCommit', false)
 ```
 
 If you turn off auto-commit, you need to sync the data explicitly. When

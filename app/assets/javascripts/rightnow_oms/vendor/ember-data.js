@@ -527,8 +527,10 @@ DS.Transaction = Ember.Object.extend({
   },
 
   add: function(model) {
-    var modelTransaction = get(model, 'transaction');
-    ember_assert("Models cannot belong to more than one transaction at a time.", !modelTransaction);
+    var modelTransaction = get(model, 'transaction'),
+        defaultTransaction = getPath(this, 'store.defaultTransaction');
+
+    ember_assert("Models cannot belong to more than one transaction at a time.", modelTransaction === defaultTransaction);
 
     set(model, 'transaction', this);
   },
@@ -545,12 +547,13 @@ DS.Transaction = Ember.Object.extend({
 
   modelBecameClean: function(kind, model) {
     var dirty = get(get(this, 'dirty'), kind),
-        type = model.constructor;
+        type = model.constructor,
+        defaultTransaction = getPath(this, 'store.defaultTransaction');
 
     var models = dirty.fetch(type);
     models.remove(model);
 
-    set(model, 'transaction', null);
+    set(model, 'transaction', defaultTransaction);
   },
 
   commit: function() {
@@ -697,10 +700,10 @@ DS.Store = Ember.Object.extend({
 
     set(this, 'data', []);
     set(this, '_typeMap', {});
-    set(this, 'models', []);
+    set(this, 'recordCache', []);
     set(this, 'modelArrays', []);
     set(this, 'modelArraysByClientId', {});
-    set(this, 'defaultTransaction', DS.Transaction.create({ store: this }));
+    set(this, 'defaultTransaction', this.transaction());
 
     return this._super();
   },
@@ -747,27 +750,48 @@ DS.Store = Ember.Object.extend({
   createRecord: function(type, properties, transaction) {
     properties = properties || {};
 
-    var id = properties[getPath(type, 'proto.primaryKey')] || null;
-
-    var model = type._create({
+    // Create a new instance of the model `type` and put it
+    // into the specified `transaction`. If no transaction is
+    // specified, the default transaction will be used.
+    //
+    // NOTE: A `transaction` is specified when the
+    // `transaction.createRecord` API is used.
+    var record = type._create({
       store: this,
-      transaction: transaction
+      transaction: transaction || get(this, 'defaultTransaction')
     });
+
+    // Extract the primary key from the `properties` hash,
+    // based on the `primaryKey` for the model type.
+    var id = properties[get(record, 'primaryKey')] || null;
 
     var hash = {}, clientId;
 
+    // Push the hash into the store. If present, associate the
+    // extracted `id` with the hash.
     clientId = this.pushHash(hash, id, type);
-    model.send('setData', hash);
 
-    var models = get(this, 'models');
+    record.send('setData', hash);
 
-    set(model, 'clientId', clientId);
-    models[clientId] = model;
+    var recordCache = get(this, 'recordCache');
 
-    model.setProperties(properties);
+    // Now that we have a clientId, attach it to the record we
+    // just created.
+    set(record, 'clientId', clientId);
+
+    // Store the record we just created in the record cache for
+    // this clientId.
+    recordCache[clientId] = record;
+
+    // Set the properties specified on the record.
+    record.setProperties(properties);
+
+    // Update any model arrays. Most notably, add this record to
+    // the model arrays returned by `find(type)` and add it to
+    // any filtered arrays for whom this model passes the filter.
     this.updateModelArrays(type, clientId, hash);
 
-    return model;
+    return record;
   },
 
   // ................
@@ -823,7 +847,7 @@ DS.Store = Ember.Object.extend({
   findByClientId: function(type, clientId, id) {
     var model;
 
-    var models = get(this, 'models');
+    var recordCache = get(this, 'recordCache');
     var data = this.clientIdToHashMap(type);
 
     // If there is already a clientId assigned for this
@@ -832,7 +856,7 @@ DS.Store = Ember.Object.extend({
     // materialize a new model and set its data to the
     // value we already have.
     if (clientId !== undefined) {
-      model = models[clientId];
+      model = recordCache[clientId];
 
       if (!model) {
         // create a new instance of the model in the
@@ -940,7 +964,10 @@ DS.Store = Ember.Object.extend({
   // ..............
 
   commit: function() {
-    get(this, 'defaultTransaction').commit();
+    var defaultTransaction = get(this, 'defaultTransaction');
+    set(this, 'defaultTransaction', this.transaction());
+
+    defaultTransaction.commit();
   },
 
   didUpdateRecords: function(array, hashes) {
@@ -1209,14 +1236,14 @@ DS.Store = Ember.Object.extend({
     }
 
     var data = this.clientIdToHashMap(type);
-    var models = get(this, 'models');
+    var recordCache = get(this, 'recordCache');
 
     var clientId = this.clientIdForId(type, id);
 
     if (clientId !== undefined) {
       data[clientId] = hash;
 
-      var model = models[clientId];
+      var model = recordCache[clientId];
       if (model) {
         model.send('setData', hash);
       }
@@ -1290,7 +1317,11 @@ DS.Store = Ember.Object.extend({
   materializeRecord: function(type, clientId) {
     var model;
 
-    get(this, 'models')[clientId] = model = type._create({ store: this, clientId: clientId });
+    get(this, 'recordCache')[clientId] = model = type._create({
+      store: this,
+      clientId: clientId,
+      transaction: get(this, 'defaultTransaction')
+    });
     set(model, 'clientId', clientId);
     model.send('loadingData');
     return model;
@@ -1596,6 +1627,15 @@ var DirtyState = DS.State.extend({
       },
 
       doneWaiting: function(manager) {
+        var model = get(manager, 'model'),
+            transaction = get(model, 'transaction');
+
+        // Now that the model is no longer pending, schedule
+        // the transaction to commit.
+        Ember.run.once(transaction, transaction.commit);
+      },
+
+      willCommit: function(manager) {
         var dirtyType = get(this, 'dirtyType');
         manager.goToState(dirtyType + '.inFlight');
       }
@@ -1855,6 +1895,7 @@ DS.Model = Ember.Object.extend({
   isValid: retrieveFromCurrentState,
 
   clientId: null,
+  transaction: null,
 
   // because unknownProperty is used, any internal property
   // must be initialized here.
@@ -1873,7 +1914,7 @@ DS.Model = Ember.Object.extend({
 
   data: null,
   pendingQueue: null,
-  transaction: null,
+
   errors: null,
 
   didLoad: Ember.K,
@@ -1902,7 +1943,7 @@ DS.Model = Ember.Object.extend({
   },
 
   withTransaction: function(fn) {
-    var transaction = get(this, 'transaction') || getPath(this, 'store.defaultTransaction');
+    var transaction = get(this, 'transaction');
     if (transaction) { fn(transaction); }
   },
 
