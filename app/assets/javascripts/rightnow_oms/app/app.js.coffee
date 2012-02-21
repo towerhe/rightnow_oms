@@ -1,7 +1,13 @@
 window.RightnowOms = Ember.Application.create
   rootElement: '#rightnow-oms'
   commit: (force = false)->
-    window.RightnowOms.store.commit() if window.RightnowOms.config.autoCommit || force
+    clearTimeout(@_commitTimer) if @_commitTimer
+
+    @_commitTimer = setTimeout((->
+      window.RightnowOms.store.commit() if window.RightnowOms.config.autoCommit || force
+    ), 500)
+
+  _commitTimer: null
 
 window.RightnowOms.store = DS.Store.create
   adapter:
