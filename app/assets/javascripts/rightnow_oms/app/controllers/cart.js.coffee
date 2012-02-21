@@ -9,22 +9,29 @@ RightnowOms.cartController = Ember.Object.create
     @set('content', RightnowOms.store.find(RightnowOms.Cart, @get('content').get('id')))
 
   # item: a hash
-  addCartItem: (item, callback) ->
+  addCartItem: (item) ->
     cartItem = @get('content').addCartItem(item)
     RightnowOms.commit()
 
-    return unless callback
-
-    return callback.call(@, cartItem) if cartItem.get('id')
+    return if !(item.children && item.children.length > 0)
 
     self = @
-    _afterCartItemCreated = ->
+
+    addChildren = (parent, children) ->
+      children.forEach((c) ->
+        c.parent_id = parent.get('id')
+        self.addCartItem(c)
+      )
+
+    return addChildren(cartItem, item.children) if cartItem.get('id')?
+
+    afterCartItemCreated = ->
       if (!cartItem.get('isDirty')) && (!cartItem.get('isDeleted'))
-        callback.call(self, cartItem)
-        cartItem.removeObserver('isDirty', _afterCartItemCreated)
+        addChildren(cartItem, item.children)
+        cartItem.removeObserver('isDirty', afterCartItemCreated)
         RightnowOms.commit(true) unless RightnowOms.config.get('autoCommit')
 
-    cartItem.addObserver('isDirty', _afterCartItemCreated)
+    cartItem.addObserver('isDirty', afterCartItemCreated)
 
   # @id: id of the cart item to be updated
   # @properties: a hash which is the new properties of the cart item.
