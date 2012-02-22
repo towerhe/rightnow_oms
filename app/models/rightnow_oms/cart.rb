@@ -42,6 +42,7 @@ module RightnowOms
         cartable: cartable,
         name: cartable.cartable_name,
         price: opts[:price] || cartable.cartable_price,
+        base_quantity: opts[:base_quantity],
         quantity: opts[:quantity] || 1,
         group: opts[:group],
         parent_id: opts[:parent_id]
