@@ -20,6 +20,7 @@ module RightnowOms
     validate :validates_mobile_and_tel
 
     api_accessible :default do |t|
+      t.add :id
       (REQUIRED_ATTRS + OPTIONAL_ATTRS).each do |attr|
         t.add attr.to_sym
       end
