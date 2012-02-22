@@ -6,6 +6,12 @@
   %ul
     - @products.each do |p|
       = render partial: 'products/list_products', locals: { product: p }
+  %button.descount
+    折后价
+  %button.increase
+    加1
+  %button.decrease
+    减1
 
 :javascript
   $(function() {
@@ -16,15 +22,64 @@
 
       RightnowOms.cartController.addCartItem({
         cartable_id: productInfo.id,
-        cartable_type: 'Product'
+        cartable_type: 'Product',
+        group: 'booking'
       }, function(cartItem) {
         for(var i = 0; i < productInfo.child_ids.length; i++) {
           RightnowOms.cartController.addCartItem({
             cartable_id: parseInt(productInfo.child_ids[i]),
             cartable_type: 'Product',
-            parent_id: cartItem.get('id')
+            parent_id: cartItem.get('id'),
+            group: 'booking'
           });
         }
       });
+    });
+
+    $('.buy-single').click(function() {
+      var productInfo = $.parseJSON($(this).attr('info'));
+
+      RightnowOms.cartController.addCartItem({
+        cartable_id: productInfo.id,
+        cartable_type: 'Product',
+        mergable: false,
+        group: 'booking'
+      }, function(cartItem) {
+        for(var i = 0; i < productInfo.child_ids.length; i++) {
+          RightnowOms.cartController.addCartItem({
+            cartable_id: parseInt(productInfo.child_ids[i]),
+            cartable_type: 'Product',
+            parent_id: cartItem.get('id'),
+            mergable: false,
+            group: 'booking'
+          });
+        }
+      });
+    })
+
+    $('.descount').click(function() {
+      var cartItems = RightnowOms.cartController.findCartItemsByGroup('booking');
+
+      for(var i = 0; i < cartItems.length; i++) {
+      RightnowOms.cartController.updateCartItem(cartItems[i].id, {
+        'price': 11
+      });
+      }
+    });
+
+    $('.increase').click(function() {
+      var cartItems = RightnowOms.cartController.findCartItemsByGroup('booking');
+
+      for(var i = 0; i < cartItems.length; i++) {
+        RightnowOms.cartController.increaseCartItem(cartItems[i].id)
+      }
+    });
+
+    $('.decrease').click(function() {
+      var cartItems = RightnowOms.cartController.findCartItemsByGroup('booking');
+
+      for(var i = 0; i < cartItems.length; i++) {
+        RightnowOms.cartController.decreaseCartItem(cartItems[i].id)
+      }
     });
   })

@@ -5,14 +5,14 @@ feature "Add cart items to cart", js: true do
   describe "which is a singleton" do
     context "when cartable does not exists" do
       background(:all) do
-        DatabaseCleaner.strategy = nil
+        #DatabaseCleaner.strategy = nil
         FactoryGirl.create(:product, name: 'product', price: 3)
       end
 
       after(:all) do
         Product.destroy_all
 
-        DatabaseCleaner.strategy = :truncation
+        #DatabaseCleaner.strategy = :truncation
       end
 
       scenario "add cartable to cart" do
@@ -30,7 +30,7 @@ feature "Add cart items to cart", js: true do
 
     context "when cartable exists" do
       background(:all) do
-        DatabaseCleaner.strategy = nil
+        #DatabaseCleaner.strategy = nil
 
         FactoryGirl.create(:product, name: 'product', price: 3)
       end
@@ -38,7 +38,7 @@ feature "Add cart items to cart", js: true do
       after(:all) do
         Product.destroy_all
 
-        DatabaseCleaner.strategy = :truncation
+        #DatabaseCleaner.strategy = :truncation
       end
 
       scenario "add cartable to cart" do
@@ -58,7 +58,7 @@ feature "Add cart items to cart", js: true do
 
   describe "and adding cartable with children" do
     background(:all) do
-      DatabaseCleaner.strategy = nil
+      #DatabaseCleaner.strategy = nil
 
       @parent_product = FactoryGirl.create(:product, name: 'parent', price: 2)
       @child_product  = FactoryGirl.create(:product, name: 'child', price: 2, parent: @parent_product)
@@ -67,7 +67,7 @@ feature "Add cart items to cart", js: true do
     after(:all) do
       Product.destroy_all
 
-      DatabaseCleaner.strategy = :truncation
+      #DatabaseCleaner.strategy = :truncation
     end
 
     scenario "not expanded" do
@@ -96,7 +96,7 @@ feature "Add cart items to cart", js: true do
 
   describe "and adding cartable with children" do
     background(:all) do
-      DatabaseCleaner.strategy = nil
+      #DatabaseCleaner.strategy = nil
 
       @parent_product = FactoryGirl.create(:product, name: 'parent', price: 2)
       @child_product  = FactoryGirl.create(:product, name: 'child', price: 2, parent: @parent_product)
@@ -105,12 +105,12 @@ feature "Add cart items to cart", js: true do
     after(:all) do
       Product.destroy_all
 
-      DatabaseCleaner.strategy = :truncation
+      #DatabaseCleaner.strategy = :truncation
     end
 
     scenario 'expanded' do
       visit '/products'
-      find('button').click
+      find('.buy-btn').click
 
       dl = page.find('#rightnow-oms dl')
       page.execute_script("$('.r-cart-items').css('display', 'block');")
@@ -122,6 +122,57 @@ feature "Add cart items to cart", js: true do
       dl.should have_cart_item({
         name: 'child', price: 2.0, quantity: 1
       })
+    end
+  end
+
+  describe "add the same cartable but not overlap" do
+    describe "which has no children" do
+      background(:all) do
+        FactoryGirl.create(:product, name: 'product', price: 3)
+      end
+
+      scenario 'add as singleton' do
+        visit '/products'
+
+        find('.buy-btn').click
+        find('.buy-single').click
+
+        RightnowOms::CartItem.all.should have(2).items
+        page.find('#rightnow-oms dl').should have_cart_items([{
+          name: 'product', price: 3.0, quantity: 1, deletable: true
+        }])
+      end
+    end
+
+    describe "which has children" do
+      background(:all) do
+        @parent_product = FactoryGirl.create(:product, name: 'parent', price: 5)
+        @child_product  = FactoryGirl.create(:product, name: 'child', price: 2, parent: @parent_product)
+      end
+
+      scenario 'add as singleton' do
+        visit '/products'
+        find('.buy-btn').click
+        find('.buy-single').click
+
+        RightnowOms::CartItem.all.should have(4).items
+        page.find('#rightnow-oms dl').should have_cart_items([{
+          name: 'product', price: 5.0, quantity: 1, deletable: true
+        }])
+      end
+    end
+  end
+
+  describe "add two or more cartables at a time " do
+    background(:all) do
+      @products = [FactoryGirl.create(:product, name: 'test')]
+    end
+
+    scenario 'add to cart' do
+      visit '/products'
+      find('button').click
+
+      #RightnowOms::CartItem.all.should have(4).items
     end
   end
 end
