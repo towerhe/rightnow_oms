@@ -17,7 +17,7 @@ module RightnowOms
           format.json { render_for_api :default, json: @order, root: :order, status: :ok }
         else
           format.html { redirect_to ::RightnowOms.config.new_order_url }
-          format.json { render_for_api :default, @order.errors, status: :unprocessable_entity }
+          format.json { render json: @order.errors, status: :unprocessable_entity }
         end
       end
     end
