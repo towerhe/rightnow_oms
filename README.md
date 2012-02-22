@@ -51,7 +51,7 @@ Create the migrations with:
 Run `bundle install` and require ember and ember-data in your `app/assets/javascripts/application.js`:
 
 ```
-  = require rightnow_oms/vendor/ember
+  = require rightnow_oms/vendor/ember-0.9.5
   = require rightnow_oms/vendor/ember-data
 ```
 
@@ -148,6 +148,24 @@ You can add cartables to the cart by:
   }, function(cartItem) {
     // Do something after the cart item is created
   })
+```
+
+### Strategy to sync data with remote
+
+By default, RightnowOms sync the data immediately when you change the
+data objects in the store. But by setting `autoCommit` to `false`, you
+can change the default behavior. 
+
+```javascript
+  RightnowOms.config.set('autoCommit', false)
+```
+
+If you turn off auto-commit, you need to sync the data explicitly. When
+you have created, updated and deleted any data object in the client
+side, you ought to commit these changes by yourself.
+
+```javascript
+  RightnowOms.commit(true)
 ```
 
 Now you have all things done. Wish you have a good day.

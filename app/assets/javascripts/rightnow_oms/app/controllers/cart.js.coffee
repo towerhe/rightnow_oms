@@ -9,19 +9,29 @@ RightnowOms.cartController = Ember.Object.create
     @set('content', RightnowOms.store.find(RightnowOms.Cart, @get('content').get('id')))
 
   # item: a hash
-  addCartItem: (item, callback) ->
+  addCartItem: (item) ->
     cartItem = @get('content').addCartItem(item)
-    @store.commit()
+    RightnowOms.commit()
 
-    return unless callback
-
-    return callback.call(@, cartItem) if cartItem.get('id')
+    return if !(item.children && item.children.length > 0)
 
     self = @
-    cartItem.addObserver('isDirty', ->
+
+    addChildren = (parent, children) ->
+      children.forEach((c) ->
+        c.parent_id = parent.get('id')
+        self.addCartItem(c)
+      )
+
+    return addChildren(cartItem, item.children) if cartItem.get('id')?
+
+    afterCartItemCreated = ->
       if (!cartItem.get('isDirty')) && (!cartItem.get('isDeleted'))
-        callback.call(self, cartItem)
-    )
+        addChildren(cartItem, item.children)
+        cartItem.removeObserver('isDirty', afterCartItemCreated)
+        RightnowOms.commit(true) unless RightnowOms.config.get('autoCommit')
+
+    cartItem.addObserver('isDirty', afterCartItemCreated)
 
   # @id: id of the cart item to be updated
   # @properties: a hash which is the new properties of the cart item.
@@ -33,19 +43,31 @@ RightnowOms.cartController = Ember.Object.create
   #   'quantity': 2
   # })
   updateCartItem: (id, properties) ->
+    if RightnowOms.CartItem.findById(id).isProcessing()
+      alert('正在保存购物车，请稍后。。。')
+      return
+
     @get('content').updateCartItem(id, properties)
-    @store.commit()
+    RightnowOms.commit()
 
   increaseCartItem: (id) ->
-    @get('content').increaseCartItem(id)
-    @store.commit()
+    if RightnowOms.CartItem.findById(id).isProcessing()
+      alert('正在保存购物车，请稍后。。。')
+      return
+
+    cartItem = @get('content').increaseCartItem(id)
+    RightnowOms.commit(true)
 
   decreaseCartItem: (id) ->
     cartItem = RightnowOms.CartItem.findById(id)
 
+    if cartItem.isProcessing()
+      alert('正在保存购物车，请稍后。。。')
+      return
+
     if cartItem.get('isDecreasable')
       @get('content').decreaseCartItem(id)
-      @store.commit()
+      RightnowOms.commit(true)
     else
       @removeCartItem(id)
 
@@ -55,12 +77,12 @@ RightnowOms.cartController = Ember.Object.create
 
     if remove
       @get('content').removeCartItem(id)
-      @store.commit()
+      RightnowOms.commit(true)
 
   cleanUp: ->
     if confirm('您确定要清空您的购物车吗？')
       @get('content').cleanUp()
-      @store.commit()
+      RightnowOms.commit(true)
 
   # return: an array of cart items.
   #
@@ -70,15 +92,15 @@ RightnowOms.cartController = Ember.Object.create
   #
   # =>
   #   [{
-  #     'id': 1, 'cartable_id': 2, 'cartable_type': 'Product', 'name': 'product-1', 'original_price', 10.0, 'price': 10.0, 'group': 'booking', 'parent_id': null
+  #     'id': 1, 'cartable_id': 2, 'cartable_type': 'Product', 'name': 'product-1', 'original_price', 10.0, 'base_quantity': 1, 'price': 10.0, 'group': 'booking', 'parent_id': null
   #   }, {
-  #     'id': 2, 'cartable_id': 3, 'cartable_type': 'Product', 'name': 'product-2', 'original_price', 20.0, 'price': 20.0, 'group': 'booking', 'parent_id': 2
+  #     'id': 2, 'cartable_id': 3, 'cartable_type': 'Product', 'name': 'product-2', 'original_price', 20.0, 'base_quantity': 1,  'price': 20.0, 'group': 'booking', 'parent_id': 2
   #   }]
   findCartItemsByGroup: (group) ->
     found = []
     cartItems = @get('content').findCartItemsByGroup(group)
 
     cartItems.forEach (item) ->
-      found.push(item.getProperties('id', 'cartable_id', 'cartable_type', 'name', 'original_price', 'price', 'quantity', 'group', 'parent_id'))
+      found.push(item.getProperties('id', 'cartable_id', 'cartable_type', 'name', 'original_price', 'base_quantity', 'price', 'quantity', 'group', 'parent_id'))
 
     found

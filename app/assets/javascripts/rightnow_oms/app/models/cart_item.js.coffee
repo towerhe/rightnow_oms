@@ -68,6 +68,9 @@ RightnowOms.CartItem = DS.Model.extend
 
     @_super()
 
+  isProcessing: ->
+    @get('isSaving') || @get('children').someProperty('isSaving', true)
+
 RightnowOms.CartItem.reopenClass
   all: ->
     RightnowOms.store.findAll(RightnowOms.CartItem)

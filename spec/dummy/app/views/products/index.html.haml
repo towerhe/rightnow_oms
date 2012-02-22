@@ -13,18 +13,20 @@
 
     $('.buy-btn').click(function() {
       var productInfo = $.parseJSON($(this).attr('info'));
-
-      RightnowOms.cartController.addCartItem({
+      
+      var item = { 
         cartable_id: productInfo.id,
-        cartable_type: 'Product'
-      }, function(cartItem) {
-        for(var i = 0; i < productInfo.child_ids.length; i++) {
-          RightnowOms.cartController.addCartItem({
-            cartable_id: parseInt(productInfo.child_ids[i]),
-            cartable_type: 'Product',
-            parent_id: cartItem.get('id')
-          });
-        }
-      });
+        cartable_type: 'Product',
+        children: []
+      }
+
+      for(var i = 0; i < productInfo.child_ids.length; i++) {
+        item.children.push({
+          cartable_id: parseInt(productInfo.child_ids[i]),
+          cartable_type: 'Product',
+        })
+      }
+
+      RightnowOms.cartController.addCartItem(item);
     });
   })
