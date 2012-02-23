@@ -17,7 +17,7 @@ RightnowOms.Cart = DS.Model.extend
       total += item.get('price') * item.get('quantity') unless item.get('hasParent')
 
     round(total, 2)
-  ).property("cartItems.@each.quantity")
+  ).property("cartItems.@each.quantity", "cartItems.@each.price")
 
   addCartItem: (item) ->
     return @createCartItem(item) if item.mergable == false
