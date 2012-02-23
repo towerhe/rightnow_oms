@@ -139,14 +139,20 @@ You can add cartables to the cart by:
     cartable_id: 1,             // required
     cartable_type: 'Product',   // required
     price: '10.00',             // required
-
     // optional, indicating this is a child node of another one
     parent_id: 2,
-
     // optional, grouping cart items
-    group: 'booking'
-  }, function(cartItem) {
-    // Do something after the cart item is created
+    group: 'booking',
+    // optional
+    children: [{
+      cartable_id: 1,             // required
+      cartable_type: 'Product',   // required
+      price: '10.00',             // required
+      // optional, indicating this is a child node of another one
+      parent_id: 2,
+      // optional, grouping cart items
+      group: 'booking',
+    })
   })
 ```
 

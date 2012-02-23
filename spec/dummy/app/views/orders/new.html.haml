@@ -21,13 +21,7 @@
 
 
   .cart-items
-    %table
-      - @cart.cart_items.each do |i|
-        %tr
-          %td= i.name
-          %td= "￥#{'%.2f' % i.price}"
-          %td= i.quantity
-          %td= "￥#{'%.2f' % i.total}"
+    = list_items @cart.cart_items
 
   .buttons
     %input{ type: 'submit', value: 'Create Order' }
