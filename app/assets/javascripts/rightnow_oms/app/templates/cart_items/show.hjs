@@ -2,11 +2,14 @@
   <dt>
     <ul>
       <li class="name" {{ action "toggleChildren" }}>{{ cartItem.name }}</li>
-      <li class="price r-money">￥{{ cartItem.priceString }}x{{ cartItem.quantity }}</li>
-      <li class="delete">
-        <a href="#" {{ action "deleteRecord" }}>删除</a>
+      <li class="others">
+        <div class="price r-money">￥{{ cartItem.priceString }}x{{ cartItem.quantity }}</div>
+        <div class="delete">
+          <a href="#" {{ action "deleteRecord" }}>删除</a>
+        </li>
       </li>
-    <ul>
+      <div class='r-clear' />
+    </ul>
   </dt>
   {{#if isChildrenHidden}}
     {{#if cartItem.hasChildren}}
@@ -14,7 +17,11 @@
         {{#each cartItem.children }}
           <ul class='child'>
             <li class="name">{{ name }}</li>
-            <li class="price r-money">￥{{ priceString }}x{{ quantity }}</li>
+            <li class="others">
+              <div class="price r-money">￥{{ priceString }}x{{ quantity }}</div>
+              <div class="delete" />
+            </li>
+            <div class="r-clear" />
           </ul>
         {{/each}}
       </dd>
