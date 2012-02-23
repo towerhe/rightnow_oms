@@ -10,37 +10,37 @@ RightnowOms.CartItem = DS.Model.extend
   parent_id: DS.attr('integer')
   mergable: DS.attr('boolean')
 
-  priceString: (->
+  priceString: Ember.computed(->
     round(@get('price'), 2)
   ).property('price')
 
-  subtotal: (->
+  subtotal: Ember.computed(->
     @get('price') * @get('quantity')
   ).property('price', 'quantity')
 
-  subtotalString: (->
+  subtotalString: Ember.computed(->
     round(@get('subtotal'), 2)
   ).property('subtotal')
 
-  children: (->
+  children: Ember.computed(->
     RightnowOms.CartItem.findByParentId(@get('id'))
   ).property().cacheable()
 
-  parent: (->
+  parent: Ember.computed(->
     if @get('parent_id')?
       RightnowOms.CartItem.all().filterProperty('id', @get('parent_id'))
   ).property('parent_id')
 
-  hasChildren: (->
+  hasChildren: Ember.computed(->
     @set('children', RightnowOms.CartItem.findByParentId(@get('id')))
     @get('children') && @getPath('children.length') > 0
   ).property()
 
-  hasParent: (->
+  hasParent: Ember.computed(->
     @get('parent_id')?
   ).property('parent_id')
 
-  isDecreasable: (->
+  isDecreasable: Ember.computed(->
     @get('quantity') > 1
   ).property('quantity')
 
@@ -76,19 +76,25 @@ RightnowOms.CartItem.reopenClass
     RightnowOms.store.findAll(RightnowOms.CartItem)
 
   findById: (id) ->
-    @all().filterProperty('id', id).get('firstObject')
+    @all().filterProperty('id', id)[0]
 
   findByParentId: (parentId) ->
-    @all().filterProperty('parent_id', parentId)
+    result = Ember.ArrayProxy.create({ content: Ember.A() })
+
+    @all().filterProperty('parent_id', parentId).forEach (item) ->
+      result.pushObject(item)
+
+    result
+
 
   findByName: (name) ->
-    @all().filterProperty('name', name).get('firstObject')
+    @all().filterProperty('name', name)[0]
 
   findByCartableAndParentId: (cartableId, cartableType, parentId) ->
-    @all().filter((item) ->
+    Ember.get(@all().filter((item) ->
       if item.get('cartable_id') == cartableId && item.get('cartable_type') == cartableType
         if parentId?
           return true if item.get('parent_id') == parentId
         else
           return true
-    ).get('firstObject')
+    ), 'firstObject')

@@ -14,8 +14,10 @@ module RightnowOms
           @cart.destroy
 
           format.html { redirect_to @order }
+          format.json { render_for_api :default, json: @order, root: :order, status: :ok }
         else
           format.html { redirect_to ::RightnowOms.config.new_order_url }
+          format.json { render json: @order.errors, status: :unprocessable_entity }
         end
       end
     end

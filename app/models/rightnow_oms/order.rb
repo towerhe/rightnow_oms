@@ -1,8 +1,14 @@
 module RightnowOms
   class Order < ActiveRecord::Base
+    acts_as_api
+
     REQUIRED_ATTRS = %W(
       province city district neighborhood room
       receiver payment_mode order_items user_id
+    )
+
+    OPTIONAL_ATTRS = %W(
+      street remarks vbrk mobile tel
     )
 
     has_many :order_items
@@ -12,6 +18,13 @@ module RightnowOms
     end
 
     validate :validates_mobile_and_tel
+
+    api_accessible :default do |t|
+      t.add :id
+      (REQUIRED_ATTRS + OPTIONAL_ATTRS).each do |attr|
+        t.add attr.to_sym
+      end
+    end
 
     def order_no
       @generator ||= OrderNoGenerator.new(self)
