@@ -61,9 +61,12 @@ RightnowOms.CartItem = DS.Model.extend
     @set('quantity', @get('quantity') - @get('base_quantity'))
 
   deleteRecord: ->
+    # If having children, remove the children from the local store.
+    # No use to delete the children explicitly since it will be remove
+    # automatically on remote.
     if @get('hasChildren')
       @get('children').forEach((child) ->
-        child.deleteRecord()
+        RightnowOms.store.removeFromModelArrays(child)
       )
 
     @_super()

@@ -6,6 +6,15 @@
   %ul
     - @products.each do |p|
       = render partial: 'products/list_products', locals: { product: p }
+  %button.descount
+    折后价
+  %button.increase
+    加1
+  %button.decrease
+    减1
+  - p = Product.where(group: "无厘头")
+  %button.group-btn{ info: p.to_json }
+    add by group
 
 :javascript
   $(function() {
@@ -13,20 +22,89 @@
 
     $('.buy-btn').click(function() {
       var productInfo = $.parseJSON($(this).attr('info'));
-      
-      var item = { 
+
+      var item = {
         cartable_id: productInfo.id,
         cartable_type: 'Product',
+        group: 'booking',
         children: []
       }
-
       for(var i = 0; i < productInfo.child_ids.length; i++) {
         item.children.push({
           cartable_id: parseInt(productInfo.child_ids[i]),
           cartable_type: 'Product',
+          group: 'booking'
         })
       }
 
       RightnowOms.cartController.addCartItem(item);
     });
+
+    $('.buy-single').click(function() {
+      var productInfo = $.parseJSON($(this).attr('info'));
+
+      var item = {
+        cartable_id: productInfo.id,
+        cartable_type: 'Product',
+        mergable: false,
+        group: 'booking',
+        children: []
+      }
+      for(var i = 0; i < productInfo.child_ids.length; i++) {
+        item.children.push({
+          cartable_id: parseInt(productInfo.child_ids[i]),
+          cartable_type: 'Product',
+          mergable: false,
+          group: 'booking'
+          })
+        }
+
+      RightnowOms.cartController.addCartItem(item);
+    });
+
+    $('.descount').click(function() {
+      var cartItems = RightnowOms.cartController.findCartItemsByGroup('booking');
+
+      for(var i = 0; i < cartItems.length; i++) {
+      RightnowOms.cartController.updateCartItem(cartItems[i].id, {
+        'price': 11
+      });
+      }
+    });
+
+    $('.increase').click(function() {
+      var cartItems = RightnowOms.cartController.findCartItemsByGroup('booking');
+
+      for(var i = 0; i < cartItems.length; i++) {
+        if (cartItems[i].parent_id == null) {
+          RightnowOms.cartController.increaseCartItem(cartItems[i].id)
+        }
+      }
+    });
+
+    $('.decrease').click(function() {
+      var cartItems = RightnowOms.cartController.findCartItemsByGroup('booking');
+
+      for(var i = 0; i < cartItems.length; i++) {
+        if (cartItems[i].parent_id == null) {
+          RightnowOms.cartController.decreaseCartItem(cartItems[i].id)
+        }
+      }
+    });
+
+    $('.group-btn').click(function() {
+      var products = $.parseJSON($(this).attr('info'));
+
+      for(var i = 0; i < products.length; i++) {
+        var item = {
+          cartable_id: products[i].id,
+          cartable_type: 'Product',
+          group: 'booking',
+          children: []
+        }
+
+        RightnowOms.cartController.addCartItem(item);
+      }
+    });
+
   })
