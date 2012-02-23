@@ -48,11 +48,13 @@ module RightnowOms
         before do
           controller.session[:booking_cart_id] = cart.id
           controller.session[:current_cart_id] = cart.id
-          Cart.should_receive(:find_by_id).with(cart.id).and_return(cart)
         end
 
         context 'and cart item is not set' do
-          before { controller.load_or_create_cart }
+          before do
+            Cart.should_receive(:find_by_id).with(cart.id).and_return(cart)
+            controller.load_or_create_cart
+          end
 
           it 'does not change the current_cart_id' do
             controller.session[:current_cart_id].should == cart.id
@@ -64,7 +66,10 @@ module RightnowOms
         end
 
         context 'and cart name is set to booking' do
-          before { controller.load_or_create_cart :booking }
+          before do
+            Cart.should_receive(:find_by_id).with(cart.id).and_return(cart)
+            controller.load_or_create_cart :booking
+          end
 
           it 'does not change the current_cart_id' do
             controller.session[:current_cart_id].should == cart.id
@@ -79,6 +84,7 @@ module RightnowOms
           let(:instant_cart) { FactoryGirl.build(:cart, id: 2) }
 
           before do
+            Cart.should_receive(:find_by_id).with(nil).and_return(nil)
             Cart.should_receive(:create).and_return(instant_cart)
             controller.load_or_create_cart :instant
           end
