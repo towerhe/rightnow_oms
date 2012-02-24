@@ -16,6 +16,8 @@ gem 'pry-nav'
 gem 'pry-stack_explorer'
 gem 'pry-exception_explorer'
 
+gem 'test_track', git: 'https://github.com/towerhe/test_track.git'
+
 group :assets do
   gem 'uglifier'
   gem 'coffee-rails'

@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/towerhe/test_track.git
+  revision: 7d90981a5a06c36868127220d1a75317c452c64d
+  specs:
+    test_track (0.0.4)
+      rails (>= 3.1.0)
+
 PATH
   remote: .
   specs:
@@ -231,6 +238,7 @@ DEPENDENCIES
   sass-rails
   shoulda-matchers
   simplecov
+  test_track!
   therubyracer
   uglifier
   yard
