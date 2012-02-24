@@ -170,4 +170,26 @@ feature "Add cart items to cart", js: true do
       RightnowOms::CartItem.all.should have(4).items
     end
   end
+
+  #TODO
+  describe "show cart in different page" do
+    describe "when visit the other page" do
+      before(:all) do
+        @product = FactoryGirl.create(:product)
+      end
+
+      scenario 'have no cart items' do
+        visit '/booking'
+        find('.buy-btn').click
+
+        page.click_link('instant')
+        sleep 1.second
+
+        current_path.should == "/instant"
+        page.find('#rightnow-oms').should_not have_cart_item({
+          name: @product.name, price: @product.price, quantity: 1, deletable: true
+        })
+      end
+    end
+  end
 end

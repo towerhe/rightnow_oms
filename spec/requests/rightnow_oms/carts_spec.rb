@@ -28,7 +28,7 @@ describe "Carts" do
 
         before do
           FactoryGirl.create(:cart_item, cart: cart)
-          page.set_rack_session(cart_id: cart.id)
+          page.set_rack_session(current_cart_id: cart.id)
 
           visit '/rightnow_oms/cart.json'
         end
@@ -43,7 +43,7 @@ describe "Carts" do
   describe 'DELETE /cart' do
     before do
       cart_item = FactoryGirl.create(:cart_item)
-      page.set_rack_session(cart_id: cart_item.cart.id)
+      page.set_rack_session(current_cart_id: cart_item.cart.id)
 
       page.driver.submit :delete, cart_path, format: :json
     end
