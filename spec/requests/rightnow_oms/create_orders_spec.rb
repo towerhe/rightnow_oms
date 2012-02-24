@@ -9,12 +9,12 @@ feature 'Creating orders' do
   let(:order_hash) { fake_order_hash }
 
   scenario 'create an order' do
-    page.set_rack_session(cart_id: @cart.id)
+    page.set_rack_session(current_cart_id: @cart.id)
     page.visit '/orders/new'
 
     %W(
       province city district street neighborhood room
-      receiver mobile tel payment_mode remarks vbrk
+      receiver mobile tel required_arrival_time payment_mode remarks vbrk
     ).each do |attr|
       page.fill_in "order[#{attr}]", with: order_hash[attr.to_sym]
     end

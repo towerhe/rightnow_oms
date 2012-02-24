@@ -16,6 +16,8 @@
       - unless @order.tel.blank?
         %label 电话：
         = @order.tel
+      %label 要求送达时间：
+      = @order.required_arrival_time
   .r-order-payment
     %h3 支付方式
     %p= @order.payment_mode

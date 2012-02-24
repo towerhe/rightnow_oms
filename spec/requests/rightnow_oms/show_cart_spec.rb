@@ -11,7 +11,7 @@ feature 'show cart_items in cart', js:true do
     after(:all) { @cart.destroy }
 
     scenario 'show in cart' do
-      page.set_rack_session(cart_id: @cart.id)
+      page.set_rack_session(current_cart_id: @cart.id)
       visit '/products'
 
       page.execute_script("$('.r-cart-items').css('display', 'block');")
@@ -32,7 +32,7 @@ feature 'show cart_items in cart', js:true do
     after(:all) { @cart.destroy }
 
     scenario 'show in cart' do
-      page.set_rack_session(cart_id: @cart.id)
+      page.set_rack_session(current_cart_id: @cart.id)
       visit '/products'
 
       page.execute_script("$('.r-cart-items').css('display', 'block');")
