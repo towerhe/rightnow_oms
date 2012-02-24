@@ -5,6 +5,7 @@ module RightnowOms
     REQUIRED_ATTRS = %W(
       province city district neighborhood room
       receiver payment_mode order_items user_id
+      required_arrival_time
     )
 
     OPTIONAL_ATTRS = %W(
@@ -18,6 +19,7 @@ module RightnowOms
     end
 
     validate :validates_mobile_and_tel
+    validates_datetime :required_arrival_time, after: lambda { Time.now + RightnowOms.config.shortest_delivery_period }
 
     api_accessible :default do |t|
       t.add :id
