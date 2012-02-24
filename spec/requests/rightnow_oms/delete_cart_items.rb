@@ -11,7 +11,7 @@ feature 'delete cart items', js:true do
     after(:all) { @cart.destroy }
 
     scenario 'delete cart item' do
-      page.set_rack_session(cart_id: @cart.id)
+      page.set_rack_session(current_cart_id: @cart.id)
 
       visit '/products'
 
@@ -32,7 +32,7 @@ feature 'delete cart items', js:true do
     after(:all) { @cart.destroy }
 
     scenario 'delete cart item' do
-      page.set_rack_session(cart_id: @cart.id)
+      page.set_rack_session(current_cart_id: @cart.id)
 
       visit '/products'
 

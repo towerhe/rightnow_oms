@@ -11,7 +11,7 @@ feature "Change the cartable's attributes", js: true do
       end
 
       scenario "should change the price" do
-        page.set_rack_session(cart_id: @cart.id)
+        page.set_rack_session(current_cart_id: @cart.id)
         visit '/products'
         find('.descount').click
 
@@ -19,9 +19,6 @@ feature "Change the cartable's attributes", js: true do
 
         page.find('#rightnow-oms').should have_cart_item({
           name: 'first', price: 11, quantity: 1, deletable: true
-        })
-        page.find('#rightnow-oms').should have_cart_item({
-          name: 'second', price: 11, quantity: 1, deletable: true
         })
 
         page.find('#rightnow-oms').should have_content('22')
@@ -36,18 +33,14 @@ feature "Change the cartable's attributes", js: true do
       end
 
       scenario "should change the price" do
-        page.set_rack_session(cart_id: @cart.id)
+        page.set_rack_session(current_cart_id: @cart.id)
         visit '/products'
         find('.descount').click
 
         page.execute_script("$('.r-cart-items').css('display', 'block');")
-        find('.r-cart-items li', text: 'parent').click
 
         page.find('#rightnow-oms').should have_cart_item({
           name: 'parent', price: 11, quantity: 1, deletable: true
-        })
-        page.find('#rightnow-oms').should have_cart_item({
-          name: 'child', price: 11, quantity: 1, deletable: true
         })
 
         page.find('#rightnow-oms').should have_content('11')
@@ -65,7 +58,7 @@ feature "Change the cartable's attributes", js: true do
         end
 
         scenario 'click the "+"' do
-          page.set_rack_session(cart_id: @cart.id)
+          page.set_rack_session(current_cart_id: @cart.id)
           visit '/rightnow_oms/cart'
 
           page.click_link('+')
@@ -95,7 +88,7 @@ feature "Change the cartable's attributes", js: true do
           after(:all) { @cart.destroy }
 
           scenario 'click the "加1" button' do
-            page.set_rack_session(cart_id: @cart.id)
+            page.set_rack_session(current_cart_id: @cart.id)
             visit '/products'
 
             find('.increase').click
@@ -129,7 +122,7 @@ feature "Change the cartable's attributes", js: true do
         after(:all) { @cart.destroy }
 
         scenario 'click the "-"' do
-          page.set_rack_session(cart_id: @cart.id)
+          page.set_rack_session(current_cart_id: @cart.id)
           visit '/rightnow_oms/cart'
           find('li', text: 'parent').click
 
@@ -160,7 +153,7 @@ feature "Change the cartable's attributes", js: true do
         after(:all) { @cart.destroy }
 
         scenario 'click the "减1" button' do
-          page.set_rack_session(cart_id: @cart.id)
+          page.set_rack_session(current_cart_id: @cart.id)
           visit '/products'
 
           find('.increase').click

@@ -11,7 +11,7 @@ feature "Manage my shopping cart", js: true do
     after(:all) { @cart.destroy }
 
     scenario 'delete cart item' do
-      page.set_rack_session(cart_id: @cart.id)
+      page.set_rack_session(current_cart_id: @cart.id)
       visit '/rightnow_oms/cart'
       page.click_link('删除')
 
@@ -30,7 +30,7 @@ feature "Manage my shopping cart", js: true do
     after(:all) { @cart.destroy }
 
     scenario 'delete cart item' do
-      page.set_rack_session(cart_id: @cart.id)
+      page.set_rack_session(current_cart_id: @cart.id)
       visit '/rightnow_oms/cart'
 
       page.click_link('删除')
@@ -50,7 +50,7 @@ feature "Manage my shopping cart", js: true do
     after(:all) { @cart.destroy }
 
     scenario 'clean all the cart items' do
-      page.set_rack_session(cart_id: @cart.id)
+      page.set_rack_session(current_cart_id: @cart.id)
       visit '/rightnow_oms/cart'
 
       page.should have_content('test1')
@@ -72,7 +72,7 @@ feature "Manage my shopping cart", js: true do
     after(:all) { @cart.destroy }
 
     scenario 'go on shopping' do
-      page.set_rack_session(cart_id: @cart.id)
+      page.set_rack_session(current_cart_id: @cart.id)
       visit '/rightnow_oms/cart'
 
       page.click_link('继续购物')

@@ -23,8 +23,10 @@ module RightnowOms
       load_cart key
 
       unless has_cart?
-        @cart = RightnowOms::Cart.create and session[:current_cart_id] = session[key] = @cart.id
+        @cart = RightnowOms::Cart.create
       end
+
+      session[:current_cart_id] = session[key] = @cart.id
     end
 
   end

@@ -1,5 +1,6 @@
 require 'acts_as_api'
 require 'confstruct'
+require 'validates_timeliness'
 
 require 'rightnow_oms/engine'
 require 'rightnow_oms/cartable_validator'
