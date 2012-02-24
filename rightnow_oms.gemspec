@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails", ">= 1.0.19"
   s.add_dependency "coffee-rails", ">= 3.1.1"
   s.add_dependency "sass-rails", ">= 3.1.5"
+  s.add_dependency 'validates_timeliness', '>= 3.0.2'
   s.add_dependency "acts_as_api"
   s.add_dependency "ember-rails"
   s.add_dependency "haml-rails"

@@ -8,6 +8,7 @@ module RightnowOms
         receiver mobile tel
         payment_mode remarks vbrk
         user_id
+        required_arrival_time
       ).each do |column|
         it { should have_db_column column.to_sym }
       end
@@ -25,6 +26,7 @@ module RightnowOms
       %W(
         province city district neighborhood room
         receiver payment_mode order_items user_id
+        required_arrival_time
       ).each do |attr|
         it { should validate_presence_of attr.to_sym }
       end
