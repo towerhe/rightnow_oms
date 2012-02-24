@@ -1,9 +1,9 @@
 RightnowOms.Cart = DS.Model.extend
-  cartItems: (->
+  cartItems: Ember.computed(->
     RightnowOms.CartItem.all()
   ).property()
 
-  cartableCount: (->
+  cartableCount: Ember.computed(->
     count = 0
     @get('cartItems').forEach (item) ->
       count += item.get('quantity') unless item.get('hasParent')
@@ -11,7 +11,7 @@ RightnowOms.Cart = DS.Model.extend
     count
   ).property("cartItems.@each.quantity")
 
-  total: (->
+  total: Ember.computed(->
     total = 0
     @get('cartItems').forEach (item) ->
       total += item.get('price') * item.get('quantity') unless item.get('hasParent')
@@ -35,7 +35,7 @@ RightnowOms.Cart = DS.Model.extend
     cartItem = RightnowOms.store.createRecord(RightnowOms.CartItem, item)
 
     if cartItem.get('hasParent')
-      cartItem.get('parent').set('children', RightnowOms.CartItem.findByParentId(cartItem.get('id')))
+      Ember.set(cartItem.get('parent'), 'children', RightnowOms.CartItem.findByParentId(cartItem.get('id')))
 
     cartItem
 

@@ -13,7 +13,8 @@ def fake_order_hash(items_count = nil)
   }
 
   misc = {
-    payment_mode: 'alipay', remarks: Faker::Lorem.paragraph, vbrk: Faker::Company.name, user_id: rand(100) + 1
+    payment_mode: 'alipay', remarks: Faker::Lorem.paragraph, vbrk: Faker::Company.name, user_id: rand(100) + 1,
+    required_arrival_time: '2012-02-24 13:30:00'
   }
 
   order = address.merge(contact).merge(misc)

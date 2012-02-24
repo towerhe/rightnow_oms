@@ -6,4 +6,7 @@ Rails.application.routes.draw do
   resources :orders
 
   mount RightnowOms::Engine => "/rightnow_oms"
+
+  get 'booking' => 'products#booking'
+  get 'instant' => 'products#instant'
 end

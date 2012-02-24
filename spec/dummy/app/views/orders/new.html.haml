@@ -8,7 +8,7 @@
         %input{ name: "order[#{attr}]", type: 'text' }
 
   .contact
-    - %W(receiver mobile tel).each do |attr|
+    - %W(receiver mobile tel required_arrival_time).each do |attr|
       %p
         %label= attr.humanize
         %input{ name: "order[#{attr}]", type: 'text' }
@@ -20,14 +20,9 @@
         %input{ name: "order[#{attr}]", type: 'text' }
 
 
+
   .cart-items
-    %table
-      - @cart.cart_items.each do |i|
-        %tr
-          %td= i.name
-          %td= "￥#{'%.2f' % i.price}"
-          %td= i.quantity
-          %td= "￥#{'%.2f' % i.total}"
+    = list_items @cart.cart_items
 
   .buttons
     %input{ type: 'submit', value: 'Create Order' }

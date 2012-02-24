@@ -1,0 +1,36 @@
+#rightnow-oms{ class: 'mini-cart' } 
+  %script{ type: 'text/x-handlebars'}
+    {{ view RightnowOms.ShowCartView }}
+
+#products
+  %ul
+    - @products.each do |p|
+      = render partial: 'products/list_products', locals: { product: p }
+  =link_to 'booking', '/booking'
+  =link_to 'products', '/products'
+  - p = Product.where(group: "无厘头")
+
+:javascript
+  $(function() {
+    RightnowOms.cartController.load(#{@cart.as_api_response(:default).to_json.html_safe});
+
+    $('.buy-btn').click(function() {
+      var productInfo = $.parseJSON($(this).attr('info'));
+
+      var item = {
+        cartable_id: productInfo.id,
+        cartable_type: 'Product',
+        group: 'booking',
+        children: []
+      }
+      for(var i = 0; i < productInfo.child_ids.length; i++) {
+        item.children.push({
+          cartable_id: parseInt(productInfo.child_ids[i]),
+          cartable_type: 'Product',
+          group: 'booking'
+        })
+      }
+
+      RightnowOms.cartController.addCartItem(item);
+    });
+  })
