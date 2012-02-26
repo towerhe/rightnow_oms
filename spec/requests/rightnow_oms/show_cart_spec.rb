@@ -40,7 +40,7 @@ feature 'show cart_items in cart', js:true do
 
       page.should have_content('parent')
       page.should have_content('3.1')
-      page.should_not have_content('child')
+      page.find('.r-cart-items').should_not have_content('child')
 
       find('.r-cart-items li', text: 'parent').click
 

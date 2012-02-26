@@ -15,7 +15,7 @@ feature "Manage my shopping cart", js: true do
       visit '/rightnow_oms/cart'
       page.click_link('删除')
 
-      page.should_not have_content(@cart_item.name)
+      page.find('.r-cart-items').should_not have_content(@cart_item.name)
     end
   end
 
@@ -35,8 +35,8 @@ feature "Manage my shopping cart", js: true do
 
       page.click_link('删除')
 
-      page.should_not have_content('parent')
-      page.should_not have_content('child')
+      page.find('.r-cart-items').should_not have_content('parent')
+      page.find('.r-cart-items').should_not have_content('child')
     end
   end
 
@@ -58,8 +58,8 @@ feature "Manage my shopping cart", js: true do
 
       page.click_link('清空购物车')
 
-      page.should_not have_content('test1')
-      page.should_not have_content('test2')
+      page.find('.r-cart-items').should_not have_content('test1')
+      page.find('.r-cart-items').should_not have_content('test2')
     end
   end
 
