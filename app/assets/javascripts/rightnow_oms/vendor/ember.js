@@ -2161,6 +2161,8 @@ var EMPTY_META = {
 
 if (Object.freeze) Object.freeze(EMPTY_META);
 
+var createMeta = Ember.platform.defineProperty.isSimulated ? o_create : function(meta) { return meta; };
+
 /**
   @private
   @function
@@ -2189,26 +2191,27 @@ Ember.meta = function meta(obj, writable) {
 
   if (!ret) {
     o_defineProperty(obj, META_KEY, META_DESC);
-    ret = obj[META_KEY] = {
+    ret = obj[META_KEY] = createMeta({
       descs: {},
       watching: {},
       values: {},
       lastSetValues: {},
       cache:  {},
       source: obj
-    };
+    });
 
     // make sure we don't accidentally try to create constructor like desc
     ret.descs.constructor = null;
 
   } else if (ret.source !== obj) {
-    ret = obj[META_KEY] = o_create(ret);
+    ret = o_create(ret);
     ret.descs    = o_create(ret.descs);
     ret.values   = o_create(ret.values);
     ret.watching = o_create(ret.watching);
     ret.lastSetValues = {};
     ret.cache    = {};
     ret.source   = obj;
+    ret = obj[META_KEY] = createMeta(ret);
   }
   return ret;
 };
@@ -2737,8 +2740,15 @@ Ember.isGlobalPath = function(path) {
 (function(exports) {
 /*jshint newcap:true*/
 
+// Testing this is not ideal, but we want ArrayUtils to use native functions
+// if available, but not to use versions created by libraries like Prototype
+var isNativeFunc = function(func) {
+  // This should probably work in all browsers likely to have ES5 array methods
+  return func && Function.prototype.toString.call(func).indexOf('[native code]') > -1;
+};
+
 // From: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/map
-var arrayMap = Array.prototype.map || function(fun /*, thisp */) {
+var arrayMap = isNativeFunc(Array.prototype.map) ? Array.prototype.map : function(fun /*, thisp */) {
   "use strict";
 
   if (this === void 0 || this === null) {
@@ -2763,7 +2773,7 @@ var arrayMap = Array.prototype.map || function(fun /*, thisp */) {
 };
 
 // From: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach
-var arrayForEach = Array.prototype.forEach || function(fun /*, thisp */) {
+var arrayForEach = isNativeFunc(Array.prototype.forEach) ? Array.prototype.forEach : function(fun /*, thisp */) {
   "use strict";
 
   if (this === void 0 || this === null) {
@@ -2784,7 +2794,7 @@ var arrayForEach = Array.prototype.forEach || function(fun /*, thisp */) {
   }
 };
 
-var arrayIndexOf = Array.prototype.indexOf || function (obj, fromIndex) {
+var arrayIndexOf = isNativeFunc(Array.prototype.indexOf) ? Array.prototype.indexOf : function (obj, fromIndex) {
   if (fromIndex === null || fromIndex === undefined) { fromIndex = 0; }
   else if (fromIndex < 0) { fromIndex = Math.max(0, this.length + fromIndex); }
   for (var i = fromIndex, j = this.length; i < j; i++) {
@@ -4709,20 +4719,18 @@ function getPathWithGlobals(obj, path) {
   return getPath(isGlobalPath(path) ? window : obj, path);
 }
 
-function getTransformedFromValue(obj, binding) {
-  var operation = binding._operation,
-      fromValue;
+function getFromValue(obj, binding) {
+  var operation = binding._operation;
+
   if (operation) {
-    fromValue = operation(obj, binding._from, binding._operand);
+    return operation(obj, binding._from, binding._operand);
   } else {
-    fromValue = getPathWithGlobals(obj, binding._from);
+    return getPathWithGlobals(obj, binding._from);
   }
-  return getTransformedValue(binding, fromValue, obj, 'to');
 }
 
-function getTransformedToValue(obj, binding) {
-  var toValue = getPath(obj, binding._to);
-  return getTransformedValue(binding, toValue, obj, 'from');
+function getToValue(obj, binding) {
+  return getPath(obj, binding._to);
 }
 
 var AND_OPERATION = function(obj, left, right) {
@@ -4753,6 +4761,9 @@ var Binding = function(toPath, fromPath) {
   /** @private */
   self._from = fromPath;
   self._to   = toPath;
+
+  /** @private */
+  self._cache = {};
 
   return self;
 };
@@ -5086,13 +5097,43 @@ Binding.prototype = /** @scope Ember.Binding.prototype */ {
     // synchronizing from
     var guid = guidFor(obj), direction = this[guid];
 
-    var fromPath = this._from, toPath = this._to;
+    var fromPath = this._from, toPath = this._to, lastSet;
 
     delete this[guid];
 
-    // apply any operations to the object, then apply transforms
-    var fromValue = getTransformedFromValue(obj, this);
-    var toValue   = getTransformedToValue(obj, this);
+    if (direction === 'fwd') {
+      lastSet = this._cache.back;
+    } else if (direction === 'back') {
+      lastSet = this._cache.fwd;
+    }
+
+    var fromValue, toValue;
+
+    // There's a bit of duplicate logic here, but the order is important.
+    //
+    // We want to avoid ping-pong bindings. To do this, we store off the
+    // guid of the item we are setting. Later, we avoid synchronizing
+    // bindings in the other direction if the raw value we are copying
+    // is the same as the guid of the last thing we set.
+    //
+    // Use guids here to avoid unnecessarily holding hard references
+    // to objects.
+    if (direction === 'fwd') {
+      fromValue = getFromValue(obj, this);
+      if (this._cache.back === guidFor(fromValue)) { return; }
+      this._cache.fwd = guidFor(fromValue);
+
+      toValue = getToValue(obj, this);
+    } else if (direction === 'back') {
+      toValue = getToValue(obj, this);
+      if (this._cache.fwd === guidFor(toValue)) { return; }
+      this._cache.back = guidFor(toValue);
+
+      fromValue = getFromValue(obj, this);
+    }
+
+    fromValue = getTransformedValue(this, fromValue, obj, 'to');
+    toValue = getTransformedValue(this, toValue, obj, 'from');
 
     if (toValue === fromValue) { return; }
 
@@ -8357,7 +8398,10 @@ function makeCtor() {
   };
 
   Class.toString = classToString;
-  Class._prototypeMixinDidChange = function() { isPrepared = false; };
+  Class._prototypeMixinDidChange = function() {
+    ember_assert("Reopening already instantiated classes is not supported. We plan to support this in the future.", isPrepared === false);
+    isPrepared = false;
+  };
   Class._initMixins = function(args) { initMixins = args; };
 
   Ember.defineProperty(Class, 'proto', Ember.computed(function() {
@@ -10630,6 +10674,7 @@ if (Ember.EXTEND_PROTOTYPES) Ember.NativeArray.activate();
 */
 
 var guidFor = Ember.guidFor;
+var indexOf = Ember.ArrayUtils.indexOf;
 
 // This class is used internally by Ember.js and Ember Data.
 // Please do not use it at this time. We plan to clean it up
@@ -10666,7 +10711,7 @@ OrderedSet.prototype = {
 
     delete presenceSet[guid];
 
-    var index = list.indexOf(obj);
+    var index = indexOf(list, obj);
     if (index > -1) {
       list.splice(index, 1);
     }
@@ -11345,6 +11390,16 @@ Ember.EventDispatcher = Ember.Object.extend(
       }
 
       return result;
+    });
+
+    rootElement.delegate('[data-ember-action]', event + '.ember', function(evt) {
+      var actionId = $(evt.currentTarget).attr('data-ember-action'),
+          action   = Ember.Handlebars.ActionHelper.registeredActions[actionId],
+          handler  = action.handler;
+
+      if (action.eventName === eventName) {
+        return handler(evt);
+      }
     });
   },
 
@@ -12257,6 +12312,11 @@ Ember.View = Ember.Object.extend(Ember.Evented,
     return value !== undefined ? value : Ember.guidFor(this);
   }).cacheable(),
 
+  /** @private */
+  _elementIdDidChange: Ember.beforeObserver(function() {
+    throw "Changing a view's elementId after creation is not allowed.";
+  }, 'elementId'),
+
   /**
     Attempts to discover the element in the parent element. The default
     implementation looks for an element with an ID of elementId (or the view's
@@ -12679,8 +12739,11 @@ Ember.View = Ember.Object.extend(Ember.Evented,
     set(this, '_childViews', childViews);
 
 
-    this.classNameBindings = Ember.A(get(this, 'classNameBindings').slice());
-    this.classNames = Ember.A(get(this, 'classNames').slice());
+    ember_assert("Only arrays are allowed for 'classNameBindings'", Ember.typeOf(this.classNameBindings) === 'array');
+    this.classNameBindings = Ember.A(this.classNameBindings.slice());
+
+    ember_assert("Only arrays are allowed for 'classNames'", Ember.typeOf(this.classNames) === 'array');
+    this.classNames = Ember.A(this.classNames.slice());
 
     set(this, 'domManager', this.domManagerClass.create({ view: this }));
 
@@ -13997,7 +14060,7 @@ Ember.StateManager = Ember.State.extend(
 
     var stateManager = this;
 
-    exitStates.reverse();
+    exitStates = exitStates.slice(0).reverse();
     this.asyncEach(exitStates, function(state, transition) {
       state.exit(stateManager, transition);
     }, function() {
@@ -15549,9 +15612,10 @@ EmberHandlebars.registerHelper('bindAttr', function(options) {
 
     ember_assert(fmt("You must provide a String for a bound attribute, not %@", [property]), typeof property === 'string');
 
-    var value = getPath(ctx, property);
+    var value = (property === 'this') ? ctx : getPath(ctx, property),
+        type = Ember.typeOf(value);
 
-    ember_assert(fmt("Attributes must be numbers, strings or booleans, not %@", [value]), value === null || value === undefined || typeof value === 'number' || typeof value === 'string' || typeof value === 'boolean');
+    ember_assert(fmt("Attributes must be numbers, strings or booleans, not %@", [value]), value === null || value === undefined || type === 'number' || type === 'string' || type === 'boolean');
 
     var observer, invoker;
 
@@ -15583,11 +15647,11 @@ EmberHandlebars.registerHelper('bindAttr', function(options) {
     // Add an observer to the view for when the property changes.
     // When the observer fires, find the element using the
     // unique data id and update the attribute to the new value.
-    Ember.addObserver(ctx, property, invoker);
+    if (property !== 'this') {
+      Ember.addObserver(ctx, property, invoker);
+    }
 
     // if this changes, also change the logic in ember-views/lib/views/view.js
-    var type = typeof value;
-
     if ((type === 'string' || (type === 'number' && !isNaN(value)))) {
       ret.push(attr + '="' + value + '"');
     } else if (value && type === 'boolean') {
@@ -15768,6 +15832,18 @@ Ember.Handlebars.ViewHelper = Ember.Object.create({
       dup = true;
     }
 
+    if (options.attributeBindings) {
+      ember_assert("Setting 'attributeBindings' via Handlebars is not allowed. Please subclass Ember.View and set it there instead.");
+      extensions.attributeBindings = null;
+      dup = true;
+    }
+
+    if (options.classNameBindings) {
+      ember_assert("Setting 'classNameBindings' via Handlebars is not allowed. Consider setting 'classNames' instead.");
+      extensions.classNameBindings = null;
+      dup = true;
+    }
+
     if (dup) {
       options = Ember.$.extend({}, options);
       delete options.id;
@@ -15945,7 +16021,7 @@ Ember.Handlebars.registerHelper('collection', function(path, options) {
     delete hash.preserveContext;
   }
 
-  hash.itemViewClass = Ember.Handlebars.ViewHelper.viewClassFromHTMLOptions(itemViewClass, itemHash);
+  hash.itemViewClass = Ember.Handlebars.ViewHelper.viewClassFromHTMLOptions(itemViewClass, itemHash, this);
 
   return Ember.Handlebars.helpers.view.call(this, collectionClass, options);
 });
@@ -16085,42 +16161,26 @@ Ember.Handlebars.registerHelper('template', function(name, options) {
 (function(exports) {
 var EmberHandlebars = Ember.Handlebars, getPath = Ember.Handlebars.getPath;
 
-var ActionHelper = EmberHandlebars.ActionHelper = {};
+var ActionHelper = EmberHandlebars.ActionHelper = {
+  registeredActions: {}
+};
 
 ActionHelper.registerAction = function(actionName, eventName, target, view, context) {
-  var actionId = (++Ember.$.uuid).toString(),
-      existingHandler = view[eventName];
+  var actionId = (++Ember.$.uuid).toString();
 
-  function handler(event) {
-    if (Ember.$(event.target).closest('[data-ember-action]').attr('data-ember-action') === actionId) {
-      event.preventDefault();
-
+  ActionHelper.registeredActions[actionId] = {
+    eventName: eventName,
+    handler: function(event) {
       if ('function' === typeof target.send) {
         return target.send(actionName, { view: view, event: event, context: context });
       } else {
         return target[actionName].call(target, view, event, context);
       }
     }
-  }
+  };
 
-  if (existingHandler) {
-    view[eventName] = function(event) {
-      var ret = handler.call(view, event);
-      return ret !== false ? existingHandler.call(view, event) : ret;
-    };
-  } else {
-    view[eventName] = handler;
-  }
-
-  view.reopen({
-    rerender: function() {
-      if (existingHandler) {
-        view[eventName] = existingHandler;
-      } else {
-        view[eventName] = null;
-      }
-      return this._super();
-    }
+  view.on('willRerender', function() {
+    delete ActionHelper.registeredActions[actionId];
   });
 
   return actionId;
