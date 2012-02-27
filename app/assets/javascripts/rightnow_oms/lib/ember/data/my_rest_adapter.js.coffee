@@ -8,60 +8,26 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
     url = @buildUrl(type)
     data = {}
 
-    data[root] = get(model, 'data')
+    data[root] = model.toJSON()
 
     @ajax(url, "POST", {
       data: data,
       success: (json) ->
+        @sideload(store, type, json, root)
         store.didCreateRecord(model, json[root])
-    })
-
-  createRecords: (store, type, models) ->
-    if (get(@, 'bulkCommit') == false)
-      return @_super(store, type, models)
-
-    root = @rootForType(type)
-    plural = @pluralize(root)
-
-    data = {}
-    data[plural] = models.map((model) ->
-      get(model, 'data')
-
-    )
-    @ajax(@buildUrl(type), "POST", {
-      data: data,
-      success: (json) ->
-        store.didCreateRecords(type, models, json[plural])
     })
 
   updateRecord: (store, type, model) ->
     root = @rootForType(type)
 
     data = {}
-    data[root] = get(model, 'data')
+    data[root] = model.toJSON()
 
     @ajax(@buildUrl(type, @getPrimaryKeyValue(type, model)), "PUT", {
       data: data,
       success: (json) ->
-        store.didUpdateRecord(model)
-    })
-
-  updateRecords: (store, type, models) ->
-    if (get(@, 'bulkCommit') == false)
-      return @_super(store, type, models)
-
-    root = @rootForType(type)
-    plural = @pluralize(root)
-
-    data = {}
-    data[plural] = models.map((model) ->
-      get(model, 'data')
-    )
-
-    @ajax(@buildUrl(type), "POST", {
-      data: data,
-      success: (json) ->
-        store.didUpdateRecords(models, json[plural])
+        @sideload(store, type, json, root)
+        store.didUpdateRecord(model,json[root])
     })
 
   deleteRecord: (store, type, model) ->
@@ -70,28 +36,10 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
 
     @ajax(url, "DELETE", {
       success: (json) ->
+        @sideload(store, type, json) if json
         store.didDeleteRecord(model)
     })
 
-  deleteRecords: (store, type, models) ->
-    if (get(@, 'bulkCommit') == false)
-      return @_super(store, type, models)
-
-    root = @rootType(type)
-    plural = @pluralize(root)
-    primaryKey = getPath(type, 'proto.primaryKey')
-
-    data = {}
-    data[plural] = models.map((model) ->
-      get(model, primaryKey)
-    )
-
-    @ajax(@buildUrl(type) + "/delete", "POST", {
-      data: data
-      success: (json) ->
-        store.didDeleteRecords(models)
-    })
-    
   find: (store, type, id) ->
     url = ''
     root = @rootForType(type)
@@ -104,6 +52,7 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
     @ajax(url, "GET", {
       success: (json) ->
         store.load(type, json[root])
+        @sideload(store, type, json, root)
     })
 
   findMany: (store, type, ids) ->
@@ -114,8 +63,8 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
       data: { ids: ids },
       success: (json) ->
         store.loadMany(type, ids, json[plural])
+        @sideload(store, type, json, plural)
     })
-    url = "/" + plural
 
   findAll: (store, type) ->
     root = @rootForType(type)
@@ -124,6 +73,7 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
     @ajax(@buildUrl(type), "GET", {
       success: (json) ->
         store.loadMany(type, json[plural])
+        @sideload(store, type, json, plural)
     })
 
   findQuery: (store, type, query, modelArray) ->
@@ -134,25 +84,8 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
       data: query,
       success: (json) ->
         modelArray.load(json[plural])
+        @sideload(store, type, json, plural)
     })
-
-  # HELPERS
-
-  plurals: {}
-
-  # define a plurals hash in your subclass to define
-  # special-case pluralization
-  pluralize: (name) ->
-    @plurals[name] || name + "s"
-
-  rootForType: (type) ->
-    if type.url
-      return type.url
-
-    # use the last part of the name as the URL
-    parts = type.toString().split(".")
-    name = parts[parts.length - 1]
-    name.replace(/([A-Z])/g, '_$1').toLowerCase().slice(1)
 
   getPrimaryKeyValue: (type, model)->
     primaryKey = getPath(type, 'proto.primaryKey')
@@ -173,11 +106,3 @@ DS.MyRESTAdapter = DS.RESTAdapter.extend
 
   isSingleton: (type) ->
     if type.isSingleton then type.isSingleton else false
-
-  ajax: (url, type, hash) ->
-    hash.url = url
-    hash.type = type
-    hash.dataType = "json"
-
-    jQuery.ajax(hash)
-
