@@ -69,7 +69,7 @@ feature "Change the cartable's attributes", js: true do
           page.find('.r-cart-items').should_not have_content('child')
           page.find('.r-cart-items').should_not have_content('16')
 
-          find('li', text: 'parent').click
+          page.find('.r-cart-items').find('li', text: 'parent').click
 
           page.should have_content('child')
           page.should have_content('16')

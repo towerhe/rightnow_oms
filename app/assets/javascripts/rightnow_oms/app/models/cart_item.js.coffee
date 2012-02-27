@@ -7,8 +7,11 @@ RightnowOms.CartItem = DS.Model.extend
   price: DS.attr('money')
   quantity: DS.attr('integer')
   group: DS.attr('string')
-  parent_id: DS.attr('integer')
   mergable: DS.attr('boolean')
+  parent_id: DS.attr('integer')
+  cart: DS.belongsTo('RightnowOms.Cart')
+  parent: DS.belongsTo('RightnowOms.CartItem', { key: 'parent_id' })
+  children: DS.hasMany('RightnowOms.CartItem', { embedded: true })
 
   priceString: Ember.computed(->
     round(@get('price'), 2)
@@ -22,23 +25,18 @@ RightnowOms.CartItem = DS.Model.extend
     round(@get('subtotal'), 2)
   ).property('subtotal')
 
-  children: Ember.computed(->
-    RightnowOms.CartItem.findByParentId(@get('id'))
-  ).property().cacheable()
-
-  parent: Ember.computed(->
-    if @get('parent_id')?
-      RightnowOms.CartItem.all().filterProperty('id', @get('parent_id'))
-  ).property('parent_id')
-
   hasChildren: Ember.computed(->
-    @set('children', RightnowOms.CartItem.findByParentId(@get('id')))
-    @get('children') && @getPath('children.length') > 0
-  ).property()
+    @get('children')? && @getPath('children.length') > 0
+  ).property('children')
 
   hasParent: Ember.computed(->
-    @get('parent_id')?
-  ).property('parent_id')
+    @get('parent')?
+  ).property('parent')
+
+  addChild: (child) ->
+    child.parent_id = @get('id')
+    childItem = RightnowOms.CartItem.createRecord(child)
+    @get('children').pushObject(childItem)
 
   isDecreasable: Ember.computed(->
     @get('quantity') > 1
@@ -65,39 +63,28 @@ RightnowOms.CartItem = DS.Model.extend
     # No use to delete the children explicitly since it will be remove
     # automatically on remote.
     if @get('hasChildren')
-      @get('children').forEach((child) ->
-        RightnowOms.store.removeFromModelArrays(child)
-      )
+      @get('children').forEach(@get('children').removeObject, @get('children'))
 
     @_super()
 
   isProcessing: ->
     @get('isSaving') || @get('children').someProperty('isSaving', true)
 
-RightnowOms.CartItem.reopenClass
-  all: ->
-    RightnowOms.store.findAll(RightnowOms.CartItem)
+#RightnowOms.CartItem.reopenClass
+  #all: ->
+    #RightnowOms.store.findAll(RightnowOms.CartItem)
 
-  findById: (id) ->
-    @all().filterProperty('id', id)[0]
+  #findById: (id) ->
+    #@all().filterProperty('id', id)[0]
 
-  findByParentId: (parentId) ->
-    result = Ember.ArrayProxy.create({ content: Ember.A() })
+  #findByName: (name) ->
+    #@all().filterProperty('name', name)[0]
 
-    @all().filterProperty('parent_id', parentId).forEach (item) ->
-      result.pushObject(item)
-
-    result
-
-
-  findByName: (name) ->
-    @all().filterProperty('name', name)[0]
-
-  findByCartableAndParentId: (cartableId, cartableType, parentId) ->
-    Ember.get(@all().filter((item) ->
-      if item.get('cartable_id') == cartableId && item.get('cartable_type') == cartableType
-        if parentId?
-          return true if item.get('parent_id') == parentId
-        else
-          return true
-    ), 'firstObject')
+  #findByCartableAndParentId: (cartableId, cartableType, parentId) ->
+    #Ember.get(@all().filter((item) ->
+      #if item.get('cartable_id') == cartableId && item.get('cartable_type') == cartableType
+        #if parentId?
+          #return true if item.getPath('parent.id') == parentId
+        #else
+          #return true
+    #), 'firstObject')

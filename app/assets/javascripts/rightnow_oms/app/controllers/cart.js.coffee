@@ -1,6 +1,10 @@
 RightnowOms.cartController = Ember.Object.create
   store: RightnowOms.store
 
+  #find: (id) ->
+    #cart = @store.find(RightnowOms.Cart, id)
+    #@set('content', cart)
+
   load: (cart) ->
     RightnowOms.store.load(RightnowOms.Cart, cart.id, cart)
     @set('content', RightnowOms.store.find(RightnowOms.Cart, cart.id))
@@ -12,27 +16,7 @@ RightnowOms.cartController = Ember.Object.create
   addCartItem: (item) ->
     cartItem = @get('content').addCartItem(item)
     RightnowOms.commit()
-
-    return if !(item.children && item.children.length > 0)
-
-    self = @
-
-    addChildren = (parent, children) ->
-      children.forEach((c) ->
-        c.parent_id = parent.get('id')
-        self.addCartItem(c)
-      )
-
-    return addChildren(cartItem, item.children) if cartItem.get('id')?
-
-    afterCartItemCreated = ->
-      if (!cartItem.get('isDirty')) && (!cartItem.get('isDeleted'))
-        addChildren(cartItem, item.children)
-        cartItem.removeObserver('isDirty', afterCartItemCreated)
-        RightnowOms.commit(true) unless RightnowOms.config.get('autoCommit')
-
-    cartItem.addObserver('isDirty', afterCartItemCreated)
-
+  
   # @id: id of the cart item to be updated
   # @properties: a hash which is the new properties of the cart item.
   # 
@@ -43,7 +27,7 @@ RightnowOms.cartController = Ember.Object.create
   #   'quantity': 2
   # })
   updateCartItem: (id, properties) ->
-    if RightnowOms.CartItem.findById(id).isProcessing()
+    if @get('content').findCartItemById(id).isProcessing()
       alert('正在保存购物车，请稍后。。。')
       return
 
@@ -51,7 +35,7 @@ RightnowOms.cartController = Ember.Object.create
     RightnowOms.commit()
 
   increaseCartItem: (id) ->
-    if RightnowOms.CartItem.findById(id).isProcessing()
+    if @get('content').findCartItemById(id).isProcessing()
       alert('正在保存购物车，请稍后。。。')
       return
 
@@ -59,7 +43,7 @@ RightnowOms.cartController = Ember.Object.create
     RightnowOms.commit(true)
 
   decreaseCartItem: (id) ->
-    cartItem = RightnowOms.CartItem.findById(id)
+    cartItem = @get('content').findCartItemById(id)
 
     if cartItem.isProcessing()
       alert('正在保存购物车，请稍后。。。')

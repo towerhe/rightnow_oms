@@ -2,7 +2,7 @@
   {{ view RightnowOms.ShowCartableCountView cartableCountBinding="cart.cartableCount" }}
 </div>
 <div class="r-cart-items">
-  {{#each cart.cartItems}}
+  {{#each cart.cart_items}}
     {{ view RightnowOms.ShowCartItemView cartItemBinding="this" }}
   {{/each}}
   <div class="r-bottom-bar">
