@@ -32,7 +32,7 @@ module RightnowOms
         if @cart_item.update_attributes(params[:cart_item])
           format.json { render_for_api :default, json: @cart_item, root: :cart_item, status: :ok }
         else
-          format.json { render json: @cart_item, status: :unprocessable_entity }
+          format.json { render json: @cart_item.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -41,7 +41,7 @@ module RightnowOms
       @cart_item.destroy
 
       respond_to do |format|
-        format.json { render_for_api :default, json: @cart_item, root: :cart_item, status: :ok }
+        format.json { render json: nil, status: :ok }
       end
     end
 
