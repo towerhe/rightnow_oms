@@ -93,7 +93,7 @@ DS.RESTAdapter = DS.Adapter.extend({
     var data = {};
     data[root] = model.toJSON();
 
-    this.ajax("/" + this.pluralize(root), "POST", {
+    this.ajax(this.buildURL(root), "POST", {
       data: data,
       success: function(json) {
         this.sideload(store, type, json, root);
@@ -115,7 +115,7 @@ DS.RESTAdapter = DS.Adapter.extend({
       return model.toJSON();
     });
 
-    this.ajax("/" + this.pluralize(root), "POST", {
+    this.ajax(this.buildURL(root), "POST", {
       data: data,
 
       success: function(json) {
@@ -132,13 +132,11 @@ DS.RESTAdapter = DS.Adapter.extend({
     var data = {};
     data[root] = model.toJSON();
 
-    var url = ["", this.pluralize(root), id].join("/");
-
-    this.ajax(url, "PUT", {
+    this.ajax(this.buildURL(root, id), "PUT", {
       data: data,
       success: function(json) {
         this.sideload(store, type, json, root);
-        store.didUpdateRecord(model, json[root]);
+        store.didUpdateRecord(model, json && json[root]);
       }
     });
   },
@@ -156,7 +154,7 @@ DS.RESTAdapter = DS.Adapter.extend({
       return model.toJSON();
     });
 
-    this.ajax("/" + this.pluralize(root) + "/bulk", "PUT", {
+    this.ajax(this.buildURL(root, "bulk"), "PUT", {
       data: data,
       success: function(json) {
         this.sideload(store, type, json, plural);
@@ -169,9 +167,7 @@ DS.RESTAdapter = DS.Adapter.extend({
     var id = get(model, 'id');
     var root = this.rootForType(type);
 
-    var url = ["", this.pluralize(root), id].join("/");
-
-    this.ajax(url, "DELETE", {
+    this.ajax(this.buildURL(root, id), "DELETE", {
       success: function(json) {
         if (json) { this.sideload(store, type, json); }
         store.didDeleteRecord(model);
@@ -192,7 +188,7 @@ DS.RESTAdapter = DS.Adapter.extend({
       return get(model, 'id');
     });
 
-    this.ajax("/" + this.pluralize(root) + "/bulk", "DELETE", {
+    this.ajax(this.buildURL(root, 'bulk'), "DELETE", {
       data: data,
       success: function(json) {
         if (json) { this.sideload(store, type, json); }
@@ -204,9 +200,7 @@ DS.RESTAdapter = DS.Adapter.extend({
   find: function(store, type, id) {
     var root = this.rootForType(type);
 
-    var url = ["", this.pluralize(root), id].join("/");
-
-    this.ajax(url, "GET", {
+    this.ajax(this.buildURL(root, id), "GET", {
       success: function(json) {
         store.load(type, json[root]);
         this.sideload(store, type, json, root);
@@ -217,7 +211,7 @@ DS.RESTAdapter = DS.Adapter.extend({
   findMany: function(store, type, ids) {
     var root = this.rootForType(type), plural = this.pluralize(root);
 
-    this.ajax("/" + plural, "GET", {
+    this.ajax(this.buildURL(root), "GET", {
       data: { ids: ids },
       success: function(json) {
         store.loadMany(type, ids, json[plural]);
@@ -229,7 +223,7 @@ DS.RESTAdapter = DS.Adapter.extend({
   findAll: function(store, type) {
     var root = this.rootForType(type), plural = this.pluralize(root);
 
-    this.ajax("/" + plural, "GET", {
+    this.ajax(this.buildURL(root), "GET", {
       success: function(json) {
         store.loadMany(type, json[plural]);
         this.sideload(store, type, json, plural);
@@ -240,7 +234,7 @@ DS.RESTAdapter = DS.Adapter.extend({
   findQuery: function(store, type, query, modelArray) {
     var root = this.rootForType(type), plural = this.pluralize(root);
 
-    this.ajax("/" + plural, "GET", {
+    this.ajax(this.buildURL(root), "GET", {
       data: query,
       success: function(json) {
         modelArray.load(json[plural]);
@@ -311,6 +305,21 @@ DS.RESTAdapter = DS.Adapter.extend({
     } else {
       store.load(type, value);
     }
+  },
+
+  buildURL: function(model, suffix) {
+    var url = [""];
+
+    if (this.namespace !== undefined) {
+      url.push(this.namespace);
+    }
+
+    url.push(this.pluralize(model));
+    if (suffix !== undefined) {
+      url.push(suffix);
+    }
+
+    return url.join("/");
   }
 });
 
@@ -928,7 +937,14 @@ DS.Store = Ember.Object.extend({
     return array;
   },
 
-  filter: function(type, filter) {
+  filter: function(type, query, filter) {
+    // allow an optional server query
+    if (arguments.length === 3) {
+      this.findQuery(type, query);
+    } else if (arguments.length === 2) {
+      filter = query;
+    }
+
     var array = DS.FilteredModelArray.create({ type: type, content: Ember.A([]), store: this, filterFunction: filter });
 
     this.registerModelArray(array, type, filter);
@@ -956,7 +972,7 @@ DS.Store = Ember.Object.extend({
   },
 
   didUpdateRecords: function(array, hashes) {
-    if (arguments.length === 2) {
+    if (hashes) {
       array.forEach(function(model, idx) {
         this.didUpdateRecord(model, hashes[idx]);
       }, this);
@@ -968,7 +984,7 @@ DS.Store = Ember.Object.extend({
   },
 
   didUpdateRecord: function(model, hash) {
-    if (arguments.length === 2) {
+    if (hash) {
       var clientId = get(model, 'clientId');
       var data = this.clientIdToHashMap(model.constructor);
 
@@ -2060,9 +2076,14 @@ DS.Model = Ember.Object.extend({
     }
 
     attributes.forEach(function(name, meta) {
-      var key = meta.key || name;
+      var key = meta.options.key || name,
+          value = get(data, key)
 
-      result[key] = get(data, key);
+      if (value === undefined) {
+        value = meta.options.defaultValue;
+      }
+
+      result[key] = value;
     }, this);
 
     return result;
@@ -2178,10 +2199,7 @@ DS.Model.reopenClass({
     var map = Ember.Map.create();
 
     this.eachComputedProperty(function(name, meta) {
-      if (meta.isAttribute) {
-        meta.key = meta.key || name;
-        map.set(name, meta);
-      }
+      if (meta.isAttribute) { map.set(name, meta); }
     });
 
     return map;
@@ -2197,7 +2215,7 @@ DS.attr = function(type, options) {
 
   options = options || {};
 
-  var meta = { type: type, isAttribute: true, key: options.key };
+  var meta = { type: type, isAttribute: true, options: options };
 
   return Ember.computed(function(key, value) {
     var data;
@@ -2210,6 +2228,10 @@ DS.attr = function(type, options) {
     } else {
       data = get(this, 'data');
       value = get(data, key);
+
+      if (value === undefined) {
+        value = options.defaultValue;
+      }
     }
 
     return transformFrom(value);
