@@ -69,22 +69,3 @@ RightnowOms.CartItem = DS.Model.extend
 
   isProcessing: ->
     @get('isSaving') || @get('children').someProperty('isSaving', true)
-
-#RightnowOms.CartItem.reopenClass
-  #all: ->
-    #RightnowOms.store.findAll(RightnowOms.CartItem)
-
-  #findById: (id) ->
-    #@all().filterProperty('id', id)[0]
-
-  #findByName: (name) ->
-    #@all().filterProperty('name', name)[0]
-
-  #findByCartableAndParentId: (cartableId, cartableType, parentId) ->
-    #Ember.get(@all().filter((item) ->
-      #if item.get('cartable_id') == cartableId && item.get('cartable_type') == cartableType
-        #if parentId?
-          #return true if item.getPath('parent.id') == parentId
-        #else
-          #return true
-    #), 'firstObject')
