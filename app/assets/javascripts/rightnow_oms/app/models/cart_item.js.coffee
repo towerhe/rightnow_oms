@@ -68,4 +68,6 @@ RightnowOms.CartItem = DS.Model.extend
     @_super()
 
   isProcessing: ->
-    @get('isSaving') || @get('children').someProperty('isSaving', true)
+    @get('isSaving') ||
+      @get('children').someProperty('isSaving', true) ||
+      @get('children').someProperty('isDirty', true)
