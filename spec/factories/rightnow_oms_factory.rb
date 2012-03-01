@@ -20,6 +20,8 @@ FactoryGirl.define do
     receiver { Faker::Name.name }
     mobile { Faker::PhoneNumber.phone_number }
     payment_mode 'alipay'
+    required_arrival_time { Time.now + 2.hours }
+    user_id { rand(10) + 1 }
   end
 
   factory :order_item, class: RightnowOms::OrderItem do

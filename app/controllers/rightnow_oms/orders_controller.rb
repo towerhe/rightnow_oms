@@ -11,7 +11,7 @@ module RightnowOms
 
       respond_to do |format|
         if @order.save
-          @cart.destroy
+          @cart.destroy if @cart
 
           format.html { redirect_to @order }
           format.json { render_for_api :default, json: @order, root: :order, status: :ok }
@@ -24,9 +24,11 @@ module RightnowOms
 
     private
     def get_order_items
+      return params[:order][:order_items] if params[:order] && params[:order][:order_items]
+
       @cart.cart_items.inject([]) do |c, i|
         c << { name: i.name, price: i.price, quantity: i.quantity }
-      end
+      end if @cart
     end
   end
 end

@@ -14,6 +14,10 @@ RightnowOms.cartController = Ember.Object.create
 
   # item: a hash
   addCartItem: (item) ->
+    cartItem = @get('content').findCartItemByCartable(item.cartable_id, item.cartable_type)
+    if cartItem && cartItem.isProcessing()
+      return alert('正在保存购物车，请稍后。。。')
+
     cartItem = @get('content').addCartItem(item)
     RightnowOms.commit()
   
