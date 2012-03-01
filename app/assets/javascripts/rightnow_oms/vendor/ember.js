@@ -2037,7 +2037,7 @@ uuid         = 0;
 numberCache  = [];
 stringCache  = {};
 
-var GUID_DESC = {
+var GUID_DESC = Ember.GUID_DESC = {
   configurable: true,
   writable: true,
   enumerable: false
@@ -2218,6 +2218,8 @@ Ember.meta = function meta(obj, writable) {
     ret.lastSetValues = {};
     ret.cache    = {};
     ret.source   = obj;
+
+    o_defineProperty(obj, META_KEY, META_DESC);
     ret = obj[META_KEY] = createMeta(ret);
   }
   return ret;
@@ -8530,6 +8532,7 @@ var rewatch = Ember.rewatch;
 var classToString = Ember.Mixin.prototype.toString;
 var set = Ember.set, get = Ember.get;
 var o_create = Ember.platform.create,
+    o_defineProperty = Ember.platform.defineProperty,
     meta = Ember.meta;
 
 /** @private */
@@ -8552,9 +8555,12 @@ function makeCtor() {
       if (hasChains) {
         rewatch(this);
       } else {
-        this[Ember.GUID_KEY] = undefined;
+        Ember.GUID_DESC.value = undefined;
+        o_defineProperty(this, Ember.GUID_KEY, Ember.GUID_DESC);
       }
       if (init===false) { init = this.init; } // cache for later instantiations
+      Ember.GUID_DESC.value = undefined;
+      o_defineProperty(this, '_super', Ember.GUID_DESC);
       init.apply(this, arguments);
     }
   };
@@ -14996,9 +15002,10 @@ Ember.TextSupport = Ember.Mixin.create(
 
   value: "",
 
-  attributeBindings: ['placeholder', 'disabled'],
+  attributeBindings: ['placeholder', 'disabled', 'maxlength'],
   placeholder: null,
   disabled: false,
+  maxlength: null,
 
   insertNewline: Ember.K,
   cancel: Ember.K,
@@ -15058,9 +15065,9 @@ Ember.TextField = Ember.View.extend(Ember.TextSupport,
   classNames: ['ember-text-field'],
 
   tagName: "input",
-  attributeBindings: ['type', 'value'],
-  type: "text"
-
+  attributeBindings: ['type', 'value', 'size'],
+  type: "text",
+  size: null
 });
 
 })({});
@@ -15183,6 +15190,9 @@ Ember.TextArea = Ember.View.extend(Ember.TextSupport,
   classNames: ['ember-text-area'],
 
   tagName: "textarea",
+  attributeBindings: ['rows', 'cols'],
+  rows: null,
+  cols: null,
 
   /**
     @private
@@ -15840,7 +15850,7 @@ EmberHandlebars.registerHelper('bindAttr', function(options) {
 
       ember_assert(fmt("Attributes must be numbers, strings or booleans, not %@", [result]), result === null || result === undefined || typeof result === 'number' || typeof result === 'string' || typeof result === 'boolean');
 
-      var elem = view.$("[data-bindAttr-" + dataId + "='" + dataId + "']");
+      var elem = view.$("[data-bindattr-" + dataId + "='" + dataId + "']");
 
       // If we aren't able to find the element, it means the element
       // to which we were bound has been removed from the view.
@@ -15875,7 +15885,8 @@ EmberHandlebars.registerHelper('bindAttr', function(options) {
   }, this);
 
   // Add the unique identifier
-  ret.push('data-bindAttr-' + dataId + '="' + dataId + '"');
+  // NOTE: We use all lower-case since Firefox has problems with mixed case in SVG
+  ret.push('data-bindattr-' + dataId + '="' + dataId + '"');
   return new EmberHandlebars.SafeString(ret.join(' '));
 });
 
@@ -15959,7 +15970,7 @@ EmberHandlebars.bindClasses = function(context, classBindings, view, bindAttrId)
     observer = function() {
       // Get the current value of the property
       newClass = classStringForProperty(binding);
-      elem = bindAttrId ? view.$("[data-bindAttr-" + bindAttrId + "='" + bindAttrId + "']") : view.$();
+      elem = bindAttrId ? view.$("[data-bindattr-" + bindAttrId + "='" + bindAttrId + "']") : view.$();
 
       // If we can't find the element anymore, a parent template has been
       // re-rendered and we've been nuked. Remove the observer.
@@ -16047,15 +16058,14 @@ Ember.Handlebars.ViewHelper = Ember.Object.create({
       dup = true;
     }
 
-    if (options.attributeBindings) {
-      ember_assert("Setting 'attributeBindings' via Handlebars is not allowed. Please subclass Ember.View and set it there instead.");
-      extensions.attributeBindings = null;
+    if (options.classNameBindings) {
+      extensions.classNameBindings = options.classNameBindings.split(' ');
       dup = true;
     }
 
-    if (options.classNameBindings) {
-      ember_assert("Setting 'classNameBindings' via Handlebars is not allowed. Consider setting 'classNames' instead.");
-      extensions.classNameBindings = null;
+    if (options.attributeBindings) {
+      ember_assert("Setting 'attributeBindings' via Handlebars is not allowed. Please subclass Ember.View and set it there instead.");
+      extensions.attributeBindings = null;
       dup = true;
     }
 
@@ -16386,10 +16396,13 @@ ActionHelper.registerAction = function(actionName, eventName, target, view, cont
   ActionHelper.registeredActions[actionId] = {
     eventName: eventName,
     handler: function(event) {
+      event.view = view;
+      event.context = context;
+
       if ('function' === typeof target.send) {
-        return target.send(actionName, { view: view, event: event, context: context });
+        return target.send(actionName, event);
       } else {
-        return target[actionName].call(target, view, event, context);
+        return target[actionName].call(target, event);
       }
     }
   };
