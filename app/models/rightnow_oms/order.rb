@@ -50,6 +50,13 @@ module RightnowOms
           end
         end
       end
+
+      def create_with_items(order)
+        o = new_with_items(order)
+        o.save
+
+        o
+      end
     end
 
     private
