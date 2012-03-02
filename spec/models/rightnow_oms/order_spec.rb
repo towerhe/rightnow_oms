@@ -62,6 +62,28 @@ module RightnowOms
     end
   end
 
+  describe '.as_api_response' do
+    let(:order) do 
+      order = Order.new_with_items(fake_order_hash(1))
+      order.save
+      
+      order
+    end
+
+    subject { order.as_api_response(:default) }
+
+    %W(
+        id province city district street neighborhood room
+        receiver mobile tel
+        payment_mode remarks vbrk
+        user_id
+        required_arrival_time
+    ).each do |key|
+      it { should have_key key.to_sym }
+    end
+
+  end
+
   describe '.new_with_items' do
     let(:order_hash) do
       order = fake_order_hash
