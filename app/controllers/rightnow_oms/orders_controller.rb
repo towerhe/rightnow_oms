@@ -2,6 +2,15 @@ module RightnowOms
   class OrdersController < ApplicationController
     before_filter :load_cart, only: :create
 
+    def index
+      orders = Order.search(params[:q])
+      orders.sorts = "created_at desc"
+
+      respond_to do |format|
+        format.json { render_for_api :default, json: orders.result, root: :orders, status: :ok }
+      end
+    end
+
     def show
       @order = Order.find(params[:id])
     end

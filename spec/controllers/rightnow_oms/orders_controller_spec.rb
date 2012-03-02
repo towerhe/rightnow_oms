@@ -2,8 +2,18 @@ require 'spec_helper'
 
 module RightnowOms
   describe OrdersController do
-    describe 'POST create' do
+    describe 'GET index' do
+      before do
+        Order.should_receive(:search).and_return(Ransack::Search.new(Order))
+        
+        get :index, format: :json
+      end
 
+      it { should respond_with :ok }
+      it { should respond_with_content_type /json/ }
+    end
+
+    describe 'POST create' do
       shared_examples 'creating an order with params' do
         context 'with valid params' do
           before do
