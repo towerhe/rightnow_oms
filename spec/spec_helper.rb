@@ -10,6 +10,7 @@ require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 
+require 'ransack'
 require 'ffaker'
 require 'capybara/rails'
 require 'capybara/rspec'
