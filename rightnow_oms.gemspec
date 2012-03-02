@@ -24,5 +24,6 @@ Gem::Specification.new do |s|
   s.add_dependency "ember-rails"
   s.add_dependency "haml-rails"
   s.add_dependency "confstruct"
+  s.add_dependency "ransack"
 
 end
