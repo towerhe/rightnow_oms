@@ -2,7 +2,7 @@ def fake_room_no
   "#{rand(10)}#{'%02d%02d' % [rand(20), rand(50)]}"
 end
 
-def fake_order_hash(items_count = nil)
+def fake_order_hash(items_count = nil, opts = {})
   address = {
     province: 'Beijing', city: Faker::Address.city, district: 'Haidian',
     street: Faker::Address.street_name, neighborhood: Faker::Address.neighborhood, room: fake_room_no
@@ -23,9 +23,10 @@ def fake_order_hash(items_count = nil)
 
   order_items = items_count.times.inject([]) { |c| c << fake_order_item_hash }
 
-  order.merge(order_items: order_items)
+  order.merge(order_items: order_items).merge(opts || {})
 end
 
-def fake_order_item_hash
-  { name: Faker::Product.product_name, price: rand(100), quantity: rand(5) + 1 }
+def fake_order_item_hash(opts = {})
+  hash = { name: Faker::Product.product_name, price: rand(100), quantity: rand(5) + 1 }
+  hash.merge(opts || {})
 end
