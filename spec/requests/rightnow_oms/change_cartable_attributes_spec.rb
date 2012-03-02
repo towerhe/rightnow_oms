@@ -69,10 +69,11 @@ feature "Change the cartable's attributes", js: true do
           page.find('.r-cart-items').should_not have_content('child')
           page.find('.r-cart-items').should_not have_content('16')
 
+          sleep 5.second
           page.find('.r-cart-items').find('li', text: 'parent').click
 
-          page.should have_content('child')
-          page.should have_content('16')
+          page.find('.r-cart-items').should have_content('child')
+          page.find('.r-cart-items').should have_content('16')
         end
       end
 
@@ -95,6 +96,7 @@ feature "Change the cartable's attributes", js: true do
             sleep 1.second
 
             page.execute_script("$('.r-cart-items').css('display', 'block');")
+            sleep 5.second
             find('.r-cart-items li', text: 'parent').click
 
             page.find('#rightnow-oms').should have_cart_item({
