@@ -3,7 +3,7 @@ require 'spec_helper'
 module RightnowOms
   describe OrderItem do
     describe 'db columns' do
-      %W(id name price quantity parent_id).each do |column|
+      %W(id name price quantity parent_id tastes).each do |column|
         it { should have_db_column column }
       end
     end
