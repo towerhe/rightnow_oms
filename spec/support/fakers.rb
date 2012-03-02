@@ -27,5 +27,5 @@ def fake_order_hash(items_count = nil)
 end
 
 def fake_order_item_hash
-  { name: Faker::Product.name, price: rand(100), quantity: rand(5) + 1 }
+  { name: Faker::Product.product_name, price: rand(100), quantity: rand(5) + 1 }
 end

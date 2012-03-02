@@ -7,7 +7,7 @@ module RightnowOms
     end
 
     def create
-      @order = Order.new_with_items(params[:order], get_order_items)
+      @order = Order.new_with_items(prepare_order)
 
       respond_to do |format|
         if @order.save
@@ -23,12 +23,21 @@ module RightnowOms
     end
 
     private
-    def get_order_items
-      return params[:order][:order_items] if params[:order] && params[:order][:order_items]
+    def prepare_order
+      return params[:order] if params[:order].has_key?(:order_items) || @cart.nil?
 
-      @cart.cart_items.inject([]) do |c, i|
-        c << { name: i.name, price: i.price, quantity: i.quantity }
-      end if @cart
+      items = @cart.cart_items.inject([]) do |c, i|
+        item = { name: i.name, price: i.price, quantity: i.quantity }
+        unless i.children.empty?
+          children = i.children.inject([]) { |m, v| m << { name: v.name, price: v.price, quantity: v.quantity }}
+          item[:children] = children
+        end
+
+        c << item
+      end
+      params[:order][:order_items] = items
+
+      params[:order]
     end
   end
 end

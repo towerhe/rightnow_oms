@@ -38,8 +38,10 @@ module RightnowOms
     end
 
     class << self
-      def new_with_items(base, items)
-        Order.new(base) do |o|
+      def new_with_items(order)
+        items = order.delete(:order_items)
+
+        Order.new(order) do |o|
           items.each do |i|
             children = i.delete(:children)
 

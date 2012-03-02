@@ -63,10 +63,16 @@ module RightnowOms
   end
 
   describe '.new_with_items' do
-    let(:order_hash) { fake_order_hash }
+    let(:order_hash) do
+      order = fake_order_hash
+      order[:order_items] = order_items_hashes
+
+      order
+    end
+
     let(:order_items_hashes) { 2.times.inject([]) { |c| c << fake_order_item_hash } }
 
-    subject { Order.new_with_items(order_hash, order_items_hashes) }
+    subject { Order.new_with_items(order_hash) }
 
     its(:order_items) { should have(2).items }
 

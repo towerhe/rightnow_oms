@@ -32,7 +32,7 @@ module RightnowOms
 
       context 'when given a cart' do
         let(:cart) { FactoryGirl.build(:cart) }
-        let(:params) { {} }
+        let(:params) { { order: {} } }
         
         before do
           Cart.should_receive(:find_by_id).and_return(cart)

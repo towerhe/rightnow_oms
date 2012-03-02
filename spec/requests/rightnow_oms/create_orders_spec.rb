@@ -33,18 +33,10 @@ feature 'Creating orders' do
   end
 
   describe "when posted the arrtibutes" do
-    before do
-      @cart = FactoryGirl.create(:cart)
-      @cart_item = FactoryGirl.create(:cart_item, cart: @cart)
-    end
-
-    let(:order_hash) { fake_order_hash }
+    let(:order_hash) { fake_order_hash(2) }
 
     scenario "creates an order and redirects to the order's show page" do
-      get "/orders/new"
-      response.should render_template(:new)
-
-      post "/rightnow_oms/orders", order: order_hash, cart_items: @cart_item
+      post "/rightnow_oms/orders", order: order_hash
       follow_redirect!
 
       response.should render_template("orders")
