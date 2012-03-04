@@ -1,11 +1,11 @@
-<h2>我的购物车</h2>
+<h2>{{t titles.cart}}</h2>
 <div class="r-cart-items">
   <ul class='title'>
-    <li class="name">名称</li>
+    <li class="name">{{t cart_item.name}}</li>
     <li class="others">
-      <div class="price">价格</div>
-      <div class="quantity">数量</div>
-      <div class="subtotal">小计</div>
+      <div class="price">{{t cart_item.price}}</div>
+      <div class="quantity">{{t cart_item.quantity tagName="div"}}</div>
+      <div class="subtotal">{{t cart_item.total}}</div>
       <div class="delete"></div>
     </li>
   </ul>
@@ -17,11 +17,14 @@
 </div>
 <div class="r-bottom-bar">
   <div class="left-conner">
-    <span class="r-cleanup-cart"><a href="#" {{ action cleanUp }}>清空购物车</a></span>
+    <span class="r-cleanup-cart"><a href="#" {{ action cleanUp }}>{{t
+        buttons.clean_cart}}</a></span>
   </div>
   <div class="right-conner">
-    <span>总价：<span class="r-money">￥{{ cart.total }}</span></span>
-    <span class="r-continue-to-shop"><a href="/"><< 继续购物</a></span>
-    <span class="r-checkout"><a {{ bindAttr href="newOrderUrl" }}>去结算 >></a></span>
+    <span>{{t cart.total}} <span class="r-money">{{t currency.unit}}{{ cart.total }}</span></span>
+    <span class="r-continue-to-shop"><a href="/"><< {{t
+        buttons.continue_to_shop}}</a></span>
+    <span class="r-checkout"><a {{ bindAttr href="newOrderUrl" }}>{{t
+        buttons.new_order}}>></a></span>
   </div>
 </div>

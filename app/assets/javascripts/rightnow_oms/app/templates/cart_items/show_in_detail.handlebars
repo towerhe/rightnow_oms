@@ -3,7 +3,7 @@
     <ul>
       <li class="name" {{ action "toggleChildren" }}>{{ cartItem.name }}</li>
       <li class="others">
-        <div class='price'>￥{{ cartItem.priceString }}</div>
+        <div class='price'>{{t currency.unit}}{{ cartItem.priceString }}</div>
         <div class="quantity">
           {{#if hasParent }}
             <span class="quantity-only">{{ cartItem.quantity }}</span>
@@ -13,10 +13,10 @@
             <span class="increase"><a href="#" {{ action "increase" }}>+</a></span>
           {{/if}}
         </div>
-        <div class="subtotal r-money">￥{{ cartItem.subtotalString }}</div>
+        <div class="subtotal r-money">{{t currency.unit}}{{ cartItem.subtotalString }}</div>
         <div class="delete">
           {{#unless cartItem.hasParent }}
-            <a href="#" {{ action "deleteRecord" }}>删除</a>
+            <a href="#" {{ action "deleteRecord" }}>{{t buttons.delete}}</a>
           {{/unless}}
         </div>
       </li>
