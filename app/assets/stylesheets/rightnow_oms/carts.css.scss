@@ -116,8 +116,15 @@
     font-size: 20px;
     line-height: 36px;
     span { padding: 8px; }
-    .left-conner { float: left; }
-    .right-conner { float: right; }
+    .left-conner {
+      float: left;
+      text-align: left;
+    }
+    .right-conner {
+      float: right;
+      width: 550px;
+      text-align: right;
+    }
   }
 }
 
@@ -133,7 +140,7 @@
       line-height: 16px;
     }
     padding: 5px 10px;
-    width: 100px;
+    width: 120px;
     text-align: center;
     border: 1px solid #ccc;
   }
@@ -167,5 +174,7 @@
     float: right;
     padding: 5px 10px;
     span { margin: 2px; }
+    width: 180px;
+    text-align: right;
   }
 }

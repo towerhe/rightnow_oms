@@ -16,7 +16,7 @@ RightnowOms.cartController = Ember.Object.create
   addCartItem: (item) ->
     cartItem = @get('content').findCartItemByCartable(item.cartable_id, item.cartable_type)
     if cartItem && cartItem.isProcessing()
-      return alert('正在保存购物车，请稍后。。。')
+      return alert(Em.I18n.t('alerts.saving_cart'))
 
     cartItem = @get('content').addCartItem(item)
     RightnowOms.commit()
@@ -32,16 +32,14 @@ RightnowOms.cartController = Ember.Object.create
   # })
   updateCartItem: (id, properties) ->
     if @get('content').findCartItemById(id).isProcessing()
-      alert('正在保存购物车，请稍后。。。')
-      return
+      return alert(Em.I18n.t('alerts.saving_cart'))
 
     @get('content').updateCartItem(id, properties)
     RightnowOms.commit()
 
   increaseCartItem: (id) ->
     if @get('content').findCartItemById(id).isProcessing()
-      alert('正在保存购物车，请稍后。。。')
-      return
+      return alert(Em.I18n.t('alerts.saving_cart'))
 
     cartItem = @get('content').increaseCartItem(id)
     RightnowOms.commit(true)
@@ -50,8 +48,7 @@ RightnowOms.cartController = Ember.Object.create
     cartItem = @get('content').findCartItemById(id)
 
     if cartItem.isProcessing()
-      alert('正在保存购物车，请稍后。。。')
-      return
+      return alert(Em.I18n.t('alerts.saving_cart'))
 
     if cartItem.get('isDecreasable')
       @get('content').decreaseCartItem(id)
@@ -61,14 +58,14 @@ RightnowOms.cartController = Ember.Object.create
 
   removeCartItem: (id, silent) ->
     remove = true
-    remove = confirm('您确定要删除该商品吗？') unless silent
+    remove = confirm(Em.I18n.t('confirmations.delete_cart_item')) unless silent
 
     if remove
       @get('content').removeCartItem(id)
       RightnowOms.commit(true)
 
   cleanUp: ->
-    if confirm('您确定要清空您的购物车吗？')
+    if confirm(Em.I18n.t('confirmations.clean_up_cart'))
       @get('content').cleanUp()
       RightnowOms.commit(true)
 
