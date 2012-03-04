@@ -20,10 +20,10 @@ Gem::Specification.new do |s|
   s.add_dependency "coffee-rails", ">= 3.1.1"
   s.add_dependency "sass-rails", ">= 3.1.5"
   s.add_dependency 'validates_timeliness', '>= 3.0.2'
-  s.add_dependency "acts_as_api"
-  s.add_dependency "ember-rails"
-  s.add_dependency "haml-rails"
-  s.add_dependency "confstruct"
-  s.add_dependency "ransack"
+  s.add_dependency "acts_as_api", '>= 0.3.11'
+  s.add_dependency "ember-rails", '>= 0.2.4'
+  s.add_dependency "haml-rails", '>= 0.3.4'
+  s.add_dependency "confstruct", '>= 0.2.2'
+  s.add_dependency "ransack", '>= 0.6.0'
 
 end
