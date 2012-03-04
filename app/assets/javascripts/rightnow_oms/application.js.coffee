@@ -1,5 +1,6 @@
 #= require_tree ./lib
 #
+#= require ./app/app
 #= require ./config/app
 #= require_tree ./config/locales
 #= require ./app/models/cart_item
