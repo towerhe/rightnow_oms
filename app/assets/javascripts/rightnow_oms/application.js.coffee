@@ -2,7 +2,6 @@
 #
 #= require ./app/app
 #= require ./config/app
-#= require_tree ./config/locales
 #= require ./app/models/cart_item
 #= require ./app/models/cart
 #= require_tree ./app/controllers
