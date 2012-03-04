@@ -4,7 +4,7 @@ module RightnowOms
   describe OrderNoGenerator do
     describe '#generate' do
       before do
-        @order =  Order.new_with_items(fake_order_hash, [fake_order_item_hash])
+        @order =  Order.new_with_items(fake_order_hash(1))
         @order.save
 
         @generator = OrderNoGenerator.new(@order)

@@ -2,10 +2,10 @@ App.Product = DS.Model.extend
   name: DS.attr('string')
   price: DS.attr('string')
 
-  hasChildren: (->
+  hasChildren: Ember.computed(->
     @get("children").length > 0
   ).property("children")
 
-  hasAncestry: (->
+  hasAncestry: Ember.computed(->
     @get("ancestry")?
   ).property("ancestry")

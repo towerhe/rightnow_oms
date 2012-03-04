@@ -17,6 +17,7 @@ module RightnowOms
     api_accessible :default do |t|
       t.add :id
       t.add :parent_id
+      t.add :children, template: :default
       t.add :cartable_id
       t.add :cartable_type
       t.add :name

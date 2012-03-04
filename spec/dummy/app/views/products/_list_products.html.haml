@@ -17,4 +17,6 @@
   - p = product.as_json.merge(child_ids: product.children.map(&:id))
   %button.buy-btn{ id: "#{product.id}", info: p.to_json }
     购买
+  %button.buy-single{ info: p.to_json }
+    单独购买
 

@@ -8,6 +8,7 @@ module RightnowOms
     api_accessible :default do |t|
       t.add :id
       t.add :state
+      t.add :cart_items, template: :default
     end
 
     def total

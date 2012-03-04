@@ -1,0 +1,24 @@
+.r-cart-items
+  %dl
+    - items.each do |item|
+      - unless item.parent
+        %dt
+          %ul
+            %li.name= item.name
+            %li.others
+              .price= "￥#{ item.price }"
+              .quantity= item.quantity
+              .subtotal= "￥#{ item.total }"
+            .r-clear
+        - unless item.children.empty?
+          %dd
+            - item.children.each do |child|
+              %ul
+                %li.name= child.name
+                %li.others
+                  .price= "￥#{ child.price }"
+                  .quantity= child.quantity
+                  .subtotal= "￥#{ child.total }"
+                .r-clear
+  .r-bottom-bar
+    %span= "总计：￥#{ @cart.total }"

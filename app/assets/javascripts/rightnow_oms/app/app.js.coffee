@@ -10,6 +10,7 @@ window.RightnowOms = Ember.Application.create
   _commitTimer: null
 
 window.RightnowOms.store = DS.Store.create
+  revision: 2
   adapter:
     DS.MyRESTAdapter.create
       bulkCommit: false

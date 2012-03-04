@@ -1,46 +1,44 @@
 RightnowOms.CartItem = DS.Model.extend
-  cartable_id: DS.attr('integer')
+  cartable_id: DS.attr('number')
   cartable_type: DS.attr('string')
   name: DS.attr('string')
   original_price: DS.attr('string')
-  base_quantity: DS.attr('integer')
+  base_quantity: DS.attr('number')
   price: DS.attr('money')
-  quantity: DS.attr('integer')
+  quantity: DS.attr('number')
   group: DS.attr('string')
-  parent_id: DS.attr('integer')
   mergable: DS.attr('boolean')
+  parent_id: DS.attr('number')
+  cart: DS.belongsTo('RightnowOms.Cart')
+  parent: DS.belongsTo('RightnowOms.CartItem', { key: 'parent_id' })
+  children: DS.hasMany('RightnowOms.CartItem', { embedded: true })
 
-  priceString: (->
+  priceString: Ember.computed(->
     round(@get('price'), 2)
   ).property('price')
 
-  subtotal: (->
+  subtotal: Ember.computed(->
     @get('price') * @get('quantity')
   ).property('price', 'quantity')
 
-  subtotalString: (->
+  subtotalString: Ember.computed(->
     round(@get('subtotal'), 2)
   ).property('subtotal')
 
-  children: (->
-    RightnowOms.CartItem.findByParentId(@get('id'))
-  ).property().cacheable()
+  hasChildren: Ember.computed(->
+    @get('children')? && @getPath('children.length') > 0
+  ).property('children')
 
-  parent: (->
-    if @get('parent_id')?
-      RightnowOms.CartItem.all().filterProperty('id', @get('parent_id'))
-  ).property('parent_id')
+  hasParent: Ember.computed(->
+    @get('parent')?
+  ).property('parent')
 
-  hasChildren: (->
-    @set('children', RightnowOms.CartItem.findByParentId(@get('id')))
-    @get('children') && @getPath('children.length') > 0
-  ).property()
+  addChild: (child) ->
+    child.parent_id = @get('id')
+    childItem = RightnowOms.CartItem.createRecord(child)
+    @get('children').pushObject(childItem)
 
-  hasParent: (->
-    @get('parent_id')?
-  ).property('parent_id')
-
-  isDecreasable: (->
+  isDecreasable: Ember.computed(->
     @get('quantity') > 1
   ).property('quantity')
 
@@ -61,34 +59,15 @@ RightnowOms.CartItem = DS.Model.extend
     @set('quantity', @get('quantity') - @get('base_quantity'))
 
   deleteRecord: ->
+    # If having children, remove the children from the local store.
+    # No use to delete the children explicitly since it will be remove
+    # automatically on remote.
     if @get('hasChildren')
-      @get('children').forEach((child) ->
-        child.deleteRecord()
-      )
+      @get('children').forEach(@get('children').removeObject, @get('children'))
 
     @_super()
 
   isProcessing: ->
-    @get('isSaving') || @get('children').someProperty('isSaving', true)
-
-RightnowOms.CartItem.reopenClass
-  all: ->
-    RightnowOms.store.findAll(RightnowOms.CartItem)
-
-  findById: (id) ->
-    @all().filterProperty('id', id).get('firstObject')
-
-  findByParentId: (parentId) ->
-    @all().filterProperty('parent_id', parentId)
-
-  findByName: (name) ->
-    @all().filterProperty('name', name).get('firstObject')
-
-  findByCartableAndParentId: (cartableId, cartableType, parentId) ->
-    @all().filter((item) ->
-      if item.get('cartable_id') == cartableId && item.get('cartable_type') == cartableType
-        if parentId?
-          return true if item.get('parent_id') == parentId
-        else
-          return true
-    ).get('firstObject')
+    @get('isSaving') ||
+      @get('children').someProperty('isSaving', true) ||
+      @get('children').someProperty('isDirty', true)
