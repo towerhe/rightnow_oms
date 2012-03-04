@@ -9,12 +9,14 @@ window.RightnowOms = Ember.Application.create
 
   _commitTimer: null
 
-window.RightnowOms.store = DS.Store.create
+  configure: (reconfigure) ->
+    RightnowOms.config = Em.Object.create locales: {} unless RightnowOms.config?
+
+    reconfigure(RightnowOms.config) if reconfigure
+
+RightnowOms.store = DS.Store.create
   revision: 2
   adapter:
     DS.MyRESTAdapter.create
       bulkCommit: false
       namespace: 'rightnow_oms'
-
-window.RightnowOms.config = Em.Object.create()
-window.RightnowOms.config.set('autoCommit', true)
