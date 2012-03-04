@@ -14,6 +14,7 @@ Add the following gems to your Gemfile:
   gem 'acts_as_api'
   gem 'haml-rails'
   gem 'confstruct'
+  gem 'ransack'
 
   group :assets do
     gem 'uglifier'
@@ -201,9 +202,48 @@ WIP
 
 ## I18n
 
-WIP
+`rightnow_oms` supports I18n now. By default it only includes two
+locales: en and zh_CN, but you can create your own locales easily.
+First, you need to define your translations, for example:
 
-Now you have all things done. Wish you have a good day.
+```javascript
+  var zh_CN = { 
+    'cart.cartable.counter': '购物车'
+    'cart.total': '总计'
+
+    'cart_item.name': '名称'
+    'cart_item.price': '价格'
+    'cart_item.quantity': '数量'
+    'cart_item.total': '小计'
+
+    'currency.unit': '￥'
+    
+    'buttons.check_cart': '查看我的购物车'
+    'buttons.delete': '删除'
+    'buttons.clean_cart': '清空购物车'
+    'buttons.continue_to_shop': '继续购物'
+    'buttons.new_order': '提交订单'
+
+    'titles.cart': '我的购物车'
+
+    'alerts.saving_cart': '正在保存购物车，请稍后。。。'
+
+    'confirmations.delete_cart_item': '您确定要删除该商品吗？'
+    'confirmations.clean_up_cart': '您确定要清空您的购物车吗？'
+  };
+```
+
+And then add your translations to `rightnow_oms` and set it as the
+default locale:
+
+```javascript
+  RightnowOms.configure(function(config) {
+    config.set('locales.zh_CN', zh_CN);
+    config.set('defaultLocale', 'zh_CN');
+  });
+```
+
+It's welcome to create a pull request for your locale.
 
 ## Development
 
