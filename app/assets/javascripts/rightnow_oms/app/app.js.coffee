@@ -9,10 +9,15 @@ window.RightnowOms = Ember.Application.create
 
   _commitTimer: null
 
-  configure: (reconfigure) ->
-    RightnowOms.config = Em.Object.create locales: {} unless RightnowOms.config?
+  config: Em.Object.create()
 
+  configure: (reconfigure) ->
     reconfigure(RightnowOms.config) if reconfigure
+    
+    defaultLocale = RightnowOms.config.get('defaultLocale') || 'en'
+    locale = 'locales.' + defaultLocale
+    Em.I18n.translations = RightnowOms.config.get(locale)
+
 
 RightnowOms.store = DS.Store.create
   revision: 2
