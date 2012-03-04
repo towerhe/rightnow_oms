@@ -6,7 +6,8 @@
     {{ view RightnowOms.ShowCartItemView cartItemBinding="this" }}
   {{/each}}
   <div class="r-bottom-bar">
-    <span>总计：<span class="r-money">￥{{ cart.total }}</span></span>
-    <span><a href="/rightnow_oms/cart">查看我的购物车</a></span>
+    <span>{{t cart.total}} <span class="r-money">{{t
+        currency.unit}}{{ cart.total }}</span></span>
+    <span><a href="/rightnow_oms/cart">{{t buttons.check_cart}}</a></span>
   </div>
 </div>

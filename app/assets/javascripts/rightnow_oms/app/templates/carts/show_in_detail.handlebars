@@ -1,0 +1,30 @@
+<h2>{{t titles.cart}}</h2>
+<div class="r-cart-items">
+  <ul class='title'>
+    <li class="name">{{t cart_item.name}}</li>
+    <li class="others">
+      <div class="price">{{t cart_item.price}}</div>
+      <div class="quantity">{{t cart_item.quantity tagName="div"}}</div>
+      <div class="subtotal">{{t cart_item.total}}</div>
+      <div class="delete"></div>
+    </li>
+  </ul>
+  <div class='r-clear'></div>
+  {{#each cart.cartItems}}
+    {{ view RightnowOms.ShowCartItemInDetailView cartItemBinding="this" }}
+  {{/each}}
+  <div class='r-clear'></div>
+</div>
+<div class="r-bottom-bar">
+  <div class="left-conner">
+    <span class="r-cleanup-cart"><a href="#" {{ action cleanUp }}>{{t
+        buttons.clean_cart}}</a></span>
+  </div>
+  <div class="right-conner">
+    <span>{{t cart.total}} <span class="r-money">{{t currency.unit}}{{ cart.total }}</span></span>
+    <span class="r-continue-to-shop"><a href="/"><< {{t
+        buttons.continue_to_shop}}</a></span>
+    <span class="r-checkout"><a {{ bindAttr href="newOrderUrl" }}>{{t
+        buttons.new_order}}>></a></span>
+  </div>
+</div>
