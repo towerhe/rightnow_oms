@@ -162,12 +162,14 @@
       border-top: none;
     }
 
-    li.others div.price {
-      width: 50px;
-      margin-right: 12px;
-    }
-    li.others > div.delete {
-      width: 30px;
+    ul {
+      li.others div.price {
+        width: 50px;
+        margin-right: 12px;
+      }
+      li.others > div.delete {
+        width: 30px;
+      }
     }
   }
   .r-bottom-bar {
