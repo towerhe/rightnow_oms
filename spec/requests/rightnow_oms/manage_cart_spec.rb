@@ -13,7 +13,7 @@ feature "Manage my shopping cart", js: true do
     scenario 'delete cart item' do
       page.set_rack_session(current_cart_id: @cart.id)
       visit '/rightnow_oms/cart'
-      page.click_link('删除')
+      page.click_link('Delete')
 
       page.find('.r-cart-items').should_not have_content(@cart_item.name)
     end
@@ -33,7 +33,7 @@ feature "Manage my shopping cart", js: true do
       page.set_rack_session(current_cart_id: @cart.id)
       visit '/rightnow_oms/cart'
 
-      page.click_link('删除')
+      page.click_link('Delete')
 
       page.find('.r-cart-items').should_not have_content('parent')
       page.find('.r-cart-items').should_not have_content('child')
@@ -56,7 +56,7 @@ feature "Manage my shopping cart", js: true do
       page.should have_content('test1')
       page.should have_content('test2')
 
-      page.click_link('清空购物车')
+      page.click_link('Clean Up')
 
       page.find('.r-cart-items').should_not have_content('test1')
       page.find('.r-cart-items').should_not have_content('test2')
@@ -75,7 +75,7 @@ feature "Manage my shopping cart", js: true do
       page.set_rack_session(current_cart_id: @cart.id)
       visit '/rightnow_oms/cart'
 
-      page.click_link('继续购物')
+      page.click_link('Continue To Shop')
 
       page.find('#rightnow-oms').should have_cart(cartable_count: 1, total: 10)
       page.find('.r-cart-items dl').should have_cart_item({

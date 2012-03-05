@@ -1,18 +1,27 @@
+#content {
+  margin: 0 auto;
+  max-width: 940px;
+}
+#operations {
+  float: right;
+  margin-right: 50px;
+}
 .mini-cart {
   float: right;
 }
 #products {
-  width: 62%;
   background-color: white;
   padding: 0;
-  margin: 10px;
+  margin: 20px;
+  clear: both;
   ul {
     margin: 10px;
     li {
       border: 1px solid gray;
       padding: 3px;
       margin: 5px 6px;
-      width: 220px;
+      width: 240px;
+      height: 320px;
       display: block;
       float: left;
       text-align: left;
@@ -20,11 +29,14 @@
         width: 140px;
       }
       ul.list-children {
+        margin: 0px;
+        padding: 0px;
         li {
           border: 0 solid gray;
           padding: 2px;
           margin: 2px 2px;
-      }
+          height: 100%;
+        }
       }
       button {
        position: relative;

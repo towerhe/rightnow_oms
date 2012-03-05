@@ -111,12 +111,12 @@ feature "Add cart items to cart", js: true do
         FactoryGirl.create(:product, name: 'product', price: 3)
       end
 
-      scenario 'add as singleton' do
+      scenario 'add a umergable one' do
         visit '/products'
 
         find('.buy-btn').click
         sleep 1.seconds
-        find('.buy-single').click
+        find('.buy-unmergable').click
         sleep 1.seconds
 
         page.find('#rightnow-oms').should have_cart_items([{
@@ -132,12 +132,12 @@ feature "Add cart items to cart", js: true do
         @child_product  = FactoryGirl.create(:product, name: 'child', price: 2, parent: @parent_product)
       end
 
-      scenario 'add as singleton' do
+      scenario 'add a unmergable one' do
         visit '/products'
 
         find('.buy-btn').click
         sleep 1.seconds
-        find('.buy-single').click
+        find('.buy-unmergable').click
         sleep 1.seconds
 
         page.find('#rightnow-oms').should have_cart_items([{
@@ -148,17 +148,19 @@ feature "Add cart items to cart", js: true do
     end
   end
 
-  describe "add two or more cartables at a time " do
+  describe "add instant products" do
     background(:all) do
-      @product1 = FactoryGirl.create(:product, name: 'test1', group: "无厘头", price: 5)
-      @product2 = FactoryGirl.create(:product, name: 'test2', group: "无厘头", price: 5)
-      @product3 = FactoryGirl.create(:product, name: 'test3', group: "无厘头", price: 5)
-      @product4 = FactoryGirl.create(:product, name: 'test4', group: "无厘头", price: 5)
+      @product1 = FactoryGirl.create(:product, name: 'test1', group: "Instant", price: 5)
+      @product2 = FactoryGirl.create(:product, name: 'test2', group: "Instant", price: 5)
+      @product3 = FactoryGirl.create(:product, name: 'test3', group: "Instant", price: 5)
+      @product4 = FactoryGirl.create(:product, name: 'test4', group: "Instant", price: 5)
     end
 
     scenario 'add to cart' do
       visit '/products'
       find('.group-btn').click
+
+      sleep(3)
 
       page.find('#rightnow-oms').should have_cart_item({
         name: 'test1', price: @product1.price, quantity: 1, deletable: true

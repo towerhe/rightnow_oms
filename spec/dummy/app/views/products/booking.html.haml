@@ -8,7 +8,6 @@
       = render partial: 'products/list_products', locals: { product: p }
   =link_to 'instant', '/instant'
   =link_to 'products', '/products'
-  - p = Product.where(group: "无厘头")
 
 :javascript
   $(function() {
@@ -20,14 +19,14 @@
       var item = {
         cartable_id: productInfo.id,
         cartable_type: 'Product',
-        group: 'booking',
+        group: productInfo.group,
         children: []
       }
       for(var i = 0; i < productInfo.child_ids.length; i++) {
         item.children.push({
           cartable_id: parseInt(productInfo.child_ids[i]),
           cartable_type: 'Product',
-          group: 'booking'
+          group: productInfo.group
         })
       }
 

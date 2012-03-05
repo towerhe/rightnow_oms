@@ -1,20 +1,19 @@
-#rightnow-oms{ class: 'mini-cart' } 
-  %script{ type: 'text/x-handlebars'}
-    {{ view RightnowOms.ShowCartView }}
+#content
+  #rightnow-oms{ class: 'mini-cart' } 
+    %script{ type: 'text/x-handlebars'}
+      {{ view RightnowOms.ShowCartView }}
+  #operations
+    %button.discount All Cart Items 50% Off
+    %button.increase All Cart Items +1
+    %button.decrease All Cart Items -1
+    - p = Product.roots.where(group: "Instant")
+    %button.group-btn{ info: p.to_json } Add All Products in Instant Group
 
-#products
-  %ul
-    - @products.each do |p|
-      = render partial: 'products/list_products', locals: { product: p }
-  %button.descount
-    折后价
-  %button.increase
-    加1
-  %button.decrease
-    减1
-  - p = Product.where(group: "无厘头")
-  %button.group-btn{ info: p.to_json }
-    add by group
+  #products
+    %h1 Product List
+    %ul
+      - @products.each do |p|
+        = render partial: 'products/list_products', locals: { product: p }
 
 :javascript
   $(function() {
@@ -26,28 +25,28 @@
       var item = {
         cartable_id: productInfo.id,
         cartable_type: 'Product',
-        group: 'booking',
+        group: productInfo.group,
         children: []
       }
       for(var i = 0; i < productInfo.child_ids.length; i++) {
         item.children.push({
           cartable_id: parseInt(productInfo.child_ids[i]),
           cartable_type: 'Product',
-          group: 'booking'
+          group: productInfo.group,
         })
       }
 
       RightnowOms.cartController.addCartItem(item);
     });
 
-    $('.buy-single').click(function() {
+    $('.buy-unmergable').click(function() {
       var productInfo = $.parseJSON($(this).attr('info'));
 
       var item = {
         cartable_id: productInfo.id,
         cartable_type: 'Product',
         mergable: false,
-        group: 'booking',
+        group: productInfo.group,
         children: []
       }
       for(var i = 0; i < productInfo.child_ids.length; i++) {
@@ -55,41 +54,42 @@
           cartable_id: parseInt(productInfo.child_ids[i]),
           cartable_type: 'Product',
           mergable: false,
-          group: 'booking'
+          group: productInfo.group,
           })
         }
 
       RightnowOms.cartController.addCartItem(item);
     });
 
-    $('.descount').click(function() {
-      var cartItems = RightnowOms.cartController.findCartItemsByGroup('booking');
+    $('.discount').click(function() {
+      var cartItems = RightnowOms.cartController.getPath('content.cart_items');
 
-      for(var i = 0; i < cartItems.length; i++) {
-        RightnowOms.cartController.updateCartItem(cartItems[i].id, {
-        'price': 11
+      cartItems.forEach(function(item) {
+        RightnowOms.cartController.updateCartItem(item.get('id'), {
+          'price': 0.5 * item.get('price')
+        });
       });
-      }
     });
 
     $('.increase').click(function() {
-      var cartItems = RightnowOms.cartController.findCartItemsByGroup('booking');
+      var cartItems = RightnowOms.cartController.getPath('content.cart_items');
 
-      for(var i = 0; i < cartItems.length; i++) {
-        if (cartItems[i].parent_id == null) {
-          RightnowOms.cartController.increaseCartItem(cartItems[i].id)
+      cartItems.forEach(function(item) {
+        if (!item.get('hasParent')) {
+          RightnowOms.cartController.increaseCartItem(item.get('id'))
         }
-      }
+      });
     });
 
     $('.decrease').click(function() {
-      var cartItems = RightnowOms.cartController.findCartItemsByGroup('booking');
+      // For test only
+      var cartItems = RightnowOms.cartController.getPath('content.cart_items');
 
-      for(var i = 0; i < cartItems.length; i++) {
-        if (cartItems[i].parent_id == null) {
-          RightnowOms.cartController.decreaseCartItem(cartItems[i].id)
+      cartItems.forEach(function(item) {
+        if (!item.get('hasParent')) {
+          RightnowOms.cartController.decreaseCartItem(item.get('id'))
         }
-      }
+      });
     });
 
     $('.group-btn').click(function() {
@@ -99,7 +99,7 @@
         var item = {
           cartable_id: products[i].id,
           cartable_type: 'Product',
-          group: 'booking',
+          group: products[i].group,
           children: []
         }
 

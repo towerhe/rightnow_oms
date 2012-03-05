@@ -13,15 +13,15 @@ feature "Change the cartable's attributes", js: true do
       scenario "should change the price" do
         page.set_rack_session(current_cart_id: @cart.id)
         visit '/products'
-        find('.descount').click
+        find('.discount').click
 
         page.execute_script("$('.r-cart-items').css('display', 'block');")
 
         page.find('#rightnow-oms').should have_cart_item({
-          name: 'first', price: 11, quantity: 1, deletable: true
+          name: 'first', price: @item1.price * 0.5, quantity: 1, deletable: true
         })
 
-        page.find('#rightnow-oms').should have_content('22')
+        page.find('#rightnow-oms').should have_content(@cart.total * 0.5)
       end
     end
 
@@ -35,15 +35,15 @@ feature "Change the cartable's attributes", js: true do
       scenario "should change the price" do
         page.set_rack_session(current_cart_id: @cart.id)
         visit '/products'
-        find('.descount').click
+        find('.discount').click
 
         page.execute_script("$('.r-cart-items').css('display', 'block');")
 
         page.find('#rightnow-oms').should have_cart_item({
-          name: 'parent', price: 11, quantity: 1, deletable: true
+          name: 'parent', price: @parent.price * 0.5, quantity: 1, deletable: true
         })
 
-        page.find('#rightnow-oms').should have_content('11')
+        page.find('#rightnow-oms').should have_content("#{@parent.price * 0.5}")
       end
     end
   end

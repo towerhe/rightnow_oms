@@ -15,7 +15,7 @@ feature 'show cart_items in cart', js:true do
       visit '/products'
 
       page.execute_script("$('.r-cart-items').css('display', 'block');")
-      page.click_link('查看我的购物车')
+      page.click_link('Check Cart')
 
       page.should have_content('product')
       page.should have_content('3.1')
@@ -36,7 +36,7 @@ feature 'show cart_items in cart', js:true do
       visit '/products'
 
       page.execute_script("$('.r-cart-items').css('display', 'block');")
-      page.click_link('查看我的购物车')
+      page.click_link('Check Cart')
 
       page.should have_content('parent')
       page.should have_content('3.1')

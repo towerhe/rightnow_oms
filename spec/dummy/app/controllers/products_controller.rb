@@ -1,5 +1,7 @@
 class ProductsController < ApplicationController
+  before_filter :load_product_roots
   before_filter :load_or_create_cart, only: :index
+
   before_filter only: :booking do |c|
     c.load_or_create_cart :booking
   end
@@ -9,8 +11,6 @@ class ProductsController < ApplicationController
   end
 
   def index
-    @products = Product.all
-
     respond_to do |format|
       format.html
       format.json { render_for_api :default, json: @products, status: :ok, root: :products }
@@ -18,8 +18,6 @@ class ProductsController < ApplicationController
   end
 
   def booking
-    @products = Product.all
-
     respond_to do |format|
       format.html
       format.json { render_for_api :default, json: @products, status: :ok }
@@ -27,11 +25,14 @@ class ProductsController < ApplicationController
   end
 
   def instant
-    @products = Product.all
-
     respond_to do |format|
       format.html
       format.json { render_for_api :default, json: @products, status: :ok }
     end
+  end
+
+  private
+  def load_product_roots
+    @products = Product.roots
   end
 end
