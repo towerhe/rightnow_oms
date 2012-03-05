@@ -30,11 +30,11 @@
           <ul>
             <li class="name">{{ name }}</li>
             <li class="others">
-              <div class="price">￥{{ priceString }}</div>
+              <div class="price">{{t currency.unit}}{{ priceString }}</div>
               <div class="quantity">
                 <span class="quantity-only">{{ quantity }}</span>
               </div>
-              <div class="subtotal r-money">￥{{ subtotalString }}</div>
+              <div class="subtotal r-money">{{t currency.unit}}{{ subtotalString }}</div>
               <div class="delete"></div>
             </li>
             <div class="r-clear"></div>
