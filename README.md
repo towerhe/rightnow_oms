@@ -206,6 +206,8 @@ WIP
 locales: en and zh_CN, but you can create your own locales easily.
 First, you need to define your translations, for example:
 
+### For Javascript
+
 ```javascript
   var zh_CN = { 
     'cart.cartable.counter': '购物车'
@@ -241,6 +243,32 @@ default locale:
     config.set('locales.zh_CN', zh_CN);
     config.set('defaultLocale', 'zh_CN');
   });
+```
+
+### For Rails
+
+```yml
+# config/locales/rightnow_oms.zh-CN.yml
+'zh-CN':
+  order:
+    total: '总计'
+    serial_no: '订单号'
+    address: '送货地址'
+    contact:
+      title: '联系方式'
+      receiver: '收货人'
+      mobile: '手机'
+      tel: '电话'
+      required_arrival_time: '要求送达时间'
+    payment_mode: '支付方式'
+    order_items: '商品清单'
+    remarks: '备注'
+    vbrk: '发票抬头'
+  order_item:
+    name: '名称'
+    price: '价格'
+    quantity: '数量'
+    total: '小计'
 ```
 
 It's welcome to create a pull request for your locale.
