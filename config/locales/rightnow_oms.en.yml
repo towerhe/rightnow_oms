@@ -1,0 +1,20 @@
+en:
+  order:
+    total: 'Total'
+    serial_no: 'Serial No.'
+    address: 'Address'
+    contact:
+      title: 'Contact'
+      receiver: 'Receiver'
+      mobile: 'Mobile'
+      tel: 'Tel'
+      required_arrival_time: 'Required Arrival Time'
+    payment_mode: 'Payment Mode'
+    order_items: 'Order Items'
+    remarks: 'Remarks'
+    vbrk: 'VBRK'
+  order_item:
+    name: 'Name'
+    price: 'Price'
+    quantity: 'Quantity'
+    total: 'Total'

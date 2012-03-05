@@ -6,9 +6,9 @@
           %ul
             %li.name= item.name
             %li.others
-              .price= "￥#{ item.price }"
+              .price=number_to_currency item.price
               .quantity= item.quantity
-              .subtotal= "￥#{ item.total }"
+              .subtotal=number_to_currency item.total
             .r-clear
         - unless item.children.empty?
           %dd
@@ -16,9 +16,9 @@
               %ul
                 %li.name= child.name
                 %li.others
-                  .price= "￥#{ child.price }"
+                  .price=number_to_currency child.price
                   .quantity= child.quantity
-                  .subtotal= "￥#{ child.total }"
+                  .subtotal=number_to_currency child.total
                 .r-clear
   .r-bottom-bar
-    %span= "总计：￥#{ @cart.total }"
+    %span= "#{t "order.total"} #{number_to_currency @cart.total}"

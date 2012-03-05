@@ -1,47 +1,47 @@
 .r-order
   .r-order-no
-    %h3 订单号
+    %h3=t 'order.serial_no'
     %p= @order.order_no
   .r-order-address
-    %h3 送货地址
+    %h3=t 'order.address'
     %p= @order.delivery_address
   .r-order-contact
-    %h3 联系方式
+    %h3=t 'order.contact.title'
     %p
-      %label 收货人姓名：
+      %label=t 'order.contact.receiver'
       = @order.receiver
       - unless @order.mobile.blank?
-        %label 手机：
+        %label=t 'order.contact.mobile'
         = @order.mobile
       - unless @order.tel.blank?
-        %label 电话：
+        %label=t 'order.contact.tel'
         = @order.tel
-      %label 要求送达时间：
+      %label=t 'order.contact.required_arrival_time'
       = @order.required_arrival_time
   .r-order-payment
-    %h3 支付方式
+    %h3=t 'order.payment_mode'
     %p= @order.payment_mode
   .r-order-items
-    %h3 商品清单
+    %h3=t 'order.order_items'
     %table
       %thead
         %tr
-          %th 名称
-          %th 价格
-          %th 数量
-          %th 小计
+          %th=t 'order_item.name'
+          %th=t 'order_item.price'
+          %th=t 'order_item.quantity'
+          %th=t 'order_item.total'
       %tbody
         - @order.order_items.each do |oi|
           %tr
             %td.name= oi.name
-            %td.price= "￥#{oi.price}"
+            %td.price=number_to_currency oi.price
             %td.quantity= oi.quantity
-            %td.subtotal= "￥#{oi.total}"
+            %td.subtotal=number_to_currency oi.total
   - unless @order.remarks.blank?
     .r-order-remarks
-      %h3 备注
+      %h3=t 'order.remarks'
       %p= @order.remarks
   - unless @order.vbrk.blank?
     .r-order-vbrk
-      %h3 发票抬头
+      %h3=t 'order.vbrk'
       %p= @order.vbrk
