@@ -1,11 +1,21 @@
 #encoding: utf-8
 require 'ffaker'
 
-(rand(6) + 1).times { Product.create!(name: Faker::LoremCN.word, price: rand(100), group: '无厘头') }
+(rand(6) + 1).times do
+  name = Faker::Product.product_name
+  Product.find_or_create_by_name(name, price: rand(100), group: 'Instant')
+end
 
 (rand(6) + 1).times do |i|
-  p = Product.create!(name: Faker::LoremCN.word, price: rand(100), group: '行云')
-  (rand(4) + 1).times do |i|
-    Product.create!(name: Faker::LoremCN.word, price: rand(100), parent: p, group: Faker::LoremCN.word)
+  name = Faker::Product.product_name
+
+  unless Product.exists?(name: name)
+    p = Product.create!(name: name, price: rand(100), group: 'Booking')
+    (rand(4) + 1).times do |i|
+      n = Faker::Product.product_name
+      Product.find_or_create_by_name(n, price: rand(100), parent: p, group: 'Booking')
+    end
+    p.update_attribute(:price, p.children.sum(&:price))
   end
+
 end
