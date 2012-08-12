@@ -4,6 +4,11 @@
 
 A common gem for managing your carts and orders. RightnowOms is a rails mountable engine. It gets a lot of benifits from [Ember.JS](http://emberjs.com)
 
+## NOTE
+
+RightNow OMS is not maintained. The successor to RightNow OMS is
+[EmberCart](https://github.com/ichid/ember-cart).
+
 ## Requirements
 
 Add the following gems to your Gemfile:
